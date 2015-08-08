@@ -11,7 +11,7 @@
 
 #include <thrift/TToString.h>
 
-namespace algotrade { namespace api {
+namespace sharp { namespace api {
 
 
 PingRequest::~PingRequest() throw() {

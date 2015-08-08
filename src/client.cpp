@@ -1,12 +1,12 @@
-#include "PosixTestClient.h"
+#include "sharp.h"
 #include <chrono>
 #include <thread>
 
-using namespace algotrade;
+using namespace sharp;
 
 int main(int argc, char const *argv[])
 {
-    AlgoTradeClientService * test_client = make_client();
+    SharpClientService * test_client = make_client();
 
 
     Contract contract;

@@ -16,7 +16,7 @@ from thrift.transport import TSSLSocket
 from thrift.transport import THttpClient
 from thrift.protocol import TBinaryProtocol
 
-from ib import AlgoTrade
+from ib import Sharp
 from ib.ttypes import *
 
 if len(sys.argv) <= 1 or sys.argv[1] == '--help':
@@ -82,7 +82,7 @@ else:
   else:
     transport = TTransport.TBufferedTransport(socket)
 protocol = TBinaryProtocol.TBinaryProtocol(transport)
-client = AlgoTrade.Client(protocol)
+client = Sharp.Client(protocol)
 transport.open()
 
 if cmd == 'ping':

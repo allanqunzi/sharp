@@ -6,7 +6,7 @@
  */
 #include "ib_constants.h"
 
-namespace algotrade { namespace api {
+namespace sharp { namespace api {
 
 const ibConstants g_ib_constants;
 

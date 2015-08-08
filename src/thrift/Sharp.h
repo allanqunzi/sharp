@@ -4,17 +4,17 @@
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  *  @generated
  */
-#ifndef AlgoTrade_H
-#define AlgoTrade_H
+#ifndef Sharp_H
+#define Sharp_H
 
 #include <thrift/TDispatchProcessor.h>
 #include "ib_types.h"
 
-namespace algotrade { namespace api {
+namespace sharp { namespace api {
 
-class AlgoTradeIf {
+class SharpIf {
  public:
-  virtual ~AlgoTradeIf() {}
+  virtual ~SharpIf() {}
   virtual void ping(PingResponse& _return, const PingRequest& request) = 0;
   virtual int64_t getOrderID() = 0;
   virtual void placeOrder(OrderResponse& _return, const ContractRequest& c_req, const OrderRequest& o_req) = 0;
@@ -22,33 +22,33 @@ class AlgoTradeIf {
   virtual void orderStatus(OrderResponse& _return, const int64_t o_id) = 0;
 };
 
-class AlgoTradeIfFactory {
+class SharpIfFactory {
  public:
-  typedef AlgoTradeIf Handler;
+  typedef SharpIf Handler;
 
-  virtual ~AlgoTradeIfFactory() {}
+  virtual ~SharpIfFactory() {}
 
-  virtual AlgoTradeIf* getHandler(const ::apache::thrift::TConnectionInfo& connInfo) = 0;
-  virtual void releaseHandler(AlgoTradeIf* /* handler */) = 0;
+  virtual SharpIf* getHandler(const ::apache::thrift::TConnectionInfo& connInfo) = 0;
+  virtual void releaseHandler(SharpIf* /* handler */) = 0;
 };
 
-class AlgoTradeIfSingletonFactory : virtual public AlgoTradeIfFactory {
+class SharpIfSingletonFactory : virtual public SharpIfFactory {
  public:
-  AlgoTradeIfSingletonFactory(const boost::shared_ptr<AlgoTradeIf>& iface) : iface_(iface) {}
-  virtual ~AlgoTradeIfSingletonFactory() {}
+  SharpIfSingletonFactory(const boost::shared_ptr<SharpIf>& iface) : iface_(iface) {}
+  virtual ~SharpIfSingletonFactory() {}
 
-  virtual AlgoTradeIf* getHandler(const ::apache::thrift::TConnectionInfo&) {
+  virtual SharpIf* getHandler(const ::apache::thrift::TConnectionInfo&) {
     return iface_.get();
   }
-  virtual void releaseHandler(AlgoTradeIf* /* handler */) {}
+  virtual void releaseHandler(SharpIf* /* handler */) {}
 
  protected:
-  boost::shared_ptr<AlgoTradeIf> iface_;
+  boost::shared_ptr<SharpIf> iface_;
 };
 
-class AlgoTradeNull : virtual public AlgoTradeIf {
+class SharpNull : virtual public SharpIf {
  public:
-  virtual ~AlgoTradeNull() {}
+  virtual ~SharpNull() {}
   void ping(PingResponse& /* _return */, const PingRequest& /* request */) {
     return;
   }
@@ -68,240 +68,240 @@ class AlgoTradeNull : virtual public AlgoTradeIf {
 };
 
 
-class AlgoTrade_ping_args {
+class Sharp_ping_args {
  public:
 
   static const char* ascii_fingerprint; // = "2C32A565725135A023CB591D1A993CFD";
   static const uint8_t binary_fingerprint[16]; // = {0x2C,0x32,0xA5,0x65,0x72,0x51,0x35,0xA0,0x23,0xCB,0x59,0x1D,0x1A,0x99,0x3C,0xFD};
 
-  AlgoTrade_ping_args(const AlgoTrade_ping_args&);
-  AlgoTrade_ping_args& operator=(const AlgoTrade_ping_args&);
-  AlgoTrade_ping_args() {
+  Sharp_ping_args(const Sharp_ping_args&);
+  Sharp_ping_args& operator=(const Sharp_ping_args&);
+  Sharp_ping_args() {
   }
 
-  virtual ~AlgoTrade_ping_args() throw();
+  virtual ~Sharp_ping_args() throw();
   PingRequest request;
 
   void __set_request(const PingRequest& val);
 
-  bool operator == (const AlgoTrade_ping_args & rhs) const
+  bool operator == (const Sharp_ping_args & rhs) const
   {
     if (!(request == rhs.request))
       return false;
     return true;
   }
-  bool operator != (const AlgoTrade_ping_args &rhs) const {
+  bool operator != (const Sharp_ping_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const AlgoTrade_ping_args & ) const;
+  bool operator < (const Sharp_ping_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
-  friend std::ostream& operator<<(std::ostream& out, const AlgoTrade_ping_args& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_ping_args& obj);
 };
 
 
-class AlgoTrade_ping_pargs {
+class Sharp_ping_pargs {
  public:
 
   static const char* ascii_fingerprint; // = "2C32A565725135A023CB591D1A993CFD";
   static const uint8_t binary_fingerprint[16]; // = {0x2C,0x32,0xA5,0x65,0x72,0x51,0x35,0xA0,0x23,0xCB,0x59,0x1D,0x1A,0x99,0x3C,0xFD};
 
 
-  virtual ~AlgoTrade_ping_pargs() throw();
+  virtual ~Sharp_ping_pargs() throw();
   const PingRequest* request;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
-  friend std::ostream& operator<<(std::ostream& out, const AlgoTrade_ping_pargs& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_ping_pargs& obj);
 };
 
-typedef struct _AlgoTrade_ping_result__isset {
-  _AlgoTrade_ping_result__isset() : success(false) {}
+typedef struct _Sharp_ping_result__isset {
+  _Sharp_ping_result__isset() : success(false) {}
   bool success :1;
-} _AlgoTrade_ping_result__isset;
+} _Sharp_ping_result__isset;
 
-class AlgoTrade_ping_result {
+class Sharp_ping_result {
  public:
 
   static const char* ascii_fingerprint; // = "3A26B8DD823AB72F2FE94404F3D36070";
   static const uint8_t binary_fingerprint[16]; // = {0x3A,0x26,0xB8,0xDD,0x82,0x3A,0xB7,0x2F,0x2F,0xE9,0x44,0x04,0xF3,0xD3,0x60,0x70};
 
-  AlgoTrade_ping_result(const AlgoTrade_ping_result&);
-  AlgoTrade_ping_result& operator=(const AlgoTrade_ping_result&);
-  AlgoTrade_ping_result() {
+  Sharp_ping_result(const Sharp_ping_result&);
+  Sharp_ping_result& operator=(const Sharp_ping_result&);
+  Sharp_ping_result() {
   }
 
-  virtual ~AlgoTrade_ping_result() throw();
+  virtual ~Sharp_ping_result() throw();
   PingResponse success;
 
-  _AlgoTrade_ping_result__isset __isset;
+  _Sharp_ping_result__isset __isset;
 
   void __set_success(const PingResponse& val);
 
-  bool operator == (const AlgoTrade_ping_result & rhs) const
+  bool operator == (const Sharp_ping_result & rhs) const
   {
     if (!(success == rhs.success))
       return false;
     return true;
   }
-  bool operator != (const AlgoTrade_ping_result &rhs) const {
+  bool operator != (const Sharp_ping_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const AlgoTrade_ping_result & ) const;
+  bool operator < (const Sharp_ping_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
-  friend std::ostream& operator<<(std::ostream& out, const AlgoTrade_ping_result& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_ping_result& obj);
 };
 
-typedef struct _AlgoTrade_ping_presult__isset {
-  _AlgoTrade_ping_presult__isset() : success(false) {}
+typedef struct _Sharp_ping_presult__isset {
+  _Sharp_ping_presult__isset() : success(false) {}
   bool success :1;
-} _AlgoTrade_ping_presult__isset;
+} _Sharp_ping_presult__isset;
 
-class AlgoTrade_ping_presult {
+class Sharp_ping_presult {
  public:
 
   static const char* ascii_fingerprint; // = "3A26B8DD823AB72F2FE94404F3D36070";
   static const uint8_t binary_fingerprint[16]; // = {0x3A,0x26,0xB8,0xDD,0x82,0x3A,0xB7,0x2F,0x2F,0xE9,0x44,0x04,0xF3,0xD3,0x60,0x70};
 
 
-  virtual ~AlgoTrade_ping_presult() throw();
+  virtual ~Sharp_ping_presult() throw();
   PingResponse* success;
 
-  _AlgoTrade_ping_presult__isset __isset;
+  _Sharp_ping_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
-  friend std::ostream& operator<<(std::ostream& out, const AlgoTrade_ping_presult& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_ping_presult& obj);
 };
 
 
-class AlgoTrade_getOrderID_args {
+class Sharp_getOrderID_args {
  public:
 
   static const char* ascii_fingerprint; // = "99914B932BD37A50B983C5E7C90AE93B";
   static const uint8_t binary_fingerprint[16]; // = {0x99,0x91,0x4B,0x93,0x2B,0xD3,0x7A,0x50,0xB9,0x83,0xC5,0xE7,0xC9,0x0A,0xE9,0x3B};
 
-  AlgoTrade_getOrderID_args(const AlgoTrade_getOrderID_args&);
-  AlgoTrade_getOrderID_args& operator=(const AlgoTrade_getOrderID_args&);
-  AlgoTrade_getOrderID_args() {
+  Sharp_getOrderID_args(const Sharp_getOrderID_args&);
+  Sharp_getOrderID_args& operator=(const Sharp_getOrderID_args&);
+  Sharp_getOrderID_args() {
   }
 
-  virtual ~AlgoTrade_getOrderID_args() throw();
+  virtual ~Sharp_getOrderID_args() throw();
 
-  bool operator == (const AlgoTrade_getOrderID_args & /* rhs */) const
+  bool operator == (const Sharp_getOrderID_args & /* rhs */) const
   {
     return true;
   }
-  bool operator != (const AlgoTrade_getOrderID_args &rhs) const {
+  bool operator != (const Sharp_getOrderID_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const AlgoTrade_getOrderID_args & ) const;
+  bool operator < (const Sharp_getOrderID_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
-  friend std::ostream& operator<<(std::ostream& out, const AlgoTrade_getOrderID_args& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_getOrderID_args& obj);
 };
 
 
-class AlgoTrade_getOrderID_pargs {
+class Sharp_getOrderID_pargs {
  public:
 
   static const char* ascii_fingerprint; // = "99914B932BD37A50B983C5E7C90AE93B";
   static const uint8_t binary_fingerprint[16]; // = {0x99,0x91,0x4B,0x93,0x2B,0xD3,0x7A,0x50,0xB9,0x83,0xC5,0xE7,0xC9,0x0A,0xE9,0x3B};
 
 
-  virtual ~AlgoTrade_getOrderID_pargs() throw();
+  virtual ~Sharp_getOrderID_pargs() throw();
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
-  friend std::ostream& operator<<(std::ostream& out, const AlgoTrade_getOrderID_pargs& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_getOrderID_pargs& obj);
 };
 
-typedef struct _AlgoTrade_getOrderID_result__isset {
-  _AlgoTrade_getOrderID_result__isset() : success(false) {}
+typedef struct _Sharp_getOrderID_result__isset {
+  _Sharp_getOrderID_result__isset() : success(false) {}
   bool success :1;
-} _AlgoTrade_getOrderID_result__isset;
+} _Sharp_getOrderID_result__isset;
 
-class AlgoTrade_getOrderID_result {
+class Sharp_getOrderID_result {
  public:
 
   static const char* ascii_fingerprint; // = "1CF279170B7E876D4ABB450CC8994359";
   static const uint8_t binary_fingerprint[16]; // = {0x1C,0xF2,0x79,0x17,0x0B,0x7E,0x87,0x6D,0x4A,0xBB,0x45,0x0C,0xC8,0x99,0x43,0x59};
 
-  AlgoTrade_getOrderID_result(const AlgoTrade_getOrderID_result&);
-  AlgoTrade_getOrderID_result& operator=(const AlgoTrade_getOrderID_result&);
-  AlgoTrade_getOrderID_result() : success(0) {
+  Sharp_getOrderID_result(const Sharp_getOrderID_result&);
+  Sharp_getOrderID_result& operator=(const Sharp_getOrderID_result&);
+  Sharp_getOrderID_result() : success(0) {
   }
 
-  virtual ~AlgoTrade_getOrderID_result() throw();
+  virtual ~Sharp_getOrderID_result() throw();
   int64_t success;
 
-  _AlgoTrade_getOrderID_result__isset __isset;
+  _Sharp_getOrderID_result__isset __isset;
 
   void __set_success(const int64_t val);
 
-  bool operator == (const AlgoTrade_getOrderID_result & rhs) const
+  bool operator == (const Sharp_getOrderID_result & rhs) const
   {
     if (!(success == rhs.success))
       return false;
     return true;
   }
-  bool operator != (const AlgoTrade_getOrderID_result &rhs) const {
+  bool operator != (const Sharp_getOrderID_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const AlgoTrade_getOrderID_result & ) const;
+  bool operator < (const Sharp_getOrderID_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
-  friend std::ostream& operator<<(std::ostream& out, const AlgoTrade_getOrderID_result& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_getOrderID_result& obj);
 };
 
-typedef struct _AlgoTrade_getOrderID_presult__isset {
-  _AlgoTrade_getOrderID_presult__isset() : success(false) {}
+typedef struct _Sharp_getOrderID_presult__isset {
+  _Sharp_getOrderID_presult__isset() : success(false) {}
   bool success :1;
-} _AlgoTrade_getOrderID_presult__isset;
+} _Sharp_getOrderID_presult__isset;
 
-class AlgoTrade_getOrderID_presult {
+class Sharp_getOrderID_presult {
  public:
 
   static const char* ascii_fingerprint; // = "1CF279170B7E876D4ABB450CC8994359";
   static const uint8_t binary_fingerprint[16]; // = {0x1C,0xF2,0x79,0x17,0x0B,0x7E,0x87,0x6D,0x4A,0xBB,0x45,0x0C,0xC8,0x99,0x43,0x59};
 
 
-  virtual ~AlgoTrade_getOrderID_presult() throw();
+  virtual ~Sharp_getOrderID_presult() throw();
   int64_t* success;
 
-  _AlgoTrade_getOrderID_presult__isset __isset;
+  _Sharp_getOrderID_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
-  friend std::ostream& operator<<(std::ostream& out, const AlgoTrade_getOrderID_presult& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_getOrderID_presult& obj);
 };
 
 
-class AlgoTrade_placeOrder_args {
+class Sharp_placeOrder_args {
  public:
 
   static const char* ascii_fingerprint; // = "107A0333194C3287B8F93A371EF11C3F";
   static const uint8_t binary_fingerprint[16]; // = {0x10,0x7A,0x03,0x33,0x19,0x4C,0x32,0x87,0xB8,0xF9,0x3A,0x37,0x1E,0xF1,0x1C,0x3F};
 
-  AlgoTrade_placeOrder_args(const AlgoTrade_placeOrder_args&);
-  AlgoTrade_placeOrder_args& operator=(const AlgoTrade_placeOrder_args&);
-  AlgoTrade_placeOrder_args() {
+  Sharp_placeOrder_args(const Sharp_placeOrder_args&);
+  Sharp_placeOrder_args& operator=(const Sharp_placeOrder_args&);
+  Sharp_placeOrder_args() {
   }
 
-  virtual ~AlgoTrade_placeOrder_args() throw();
+  virtual ~Sharp_placeOrder_args() throw();
   ContractRequest c_req;
   OrderRequest o_req;
 
@@ -309,7 +309,7 @@ class AlgoTrade_placeOrder_args {
 
   void __set_o_req(const OrderRequest& val);
 
-  bool operator == (const AlgoTrade_placeOrder_args & rhs) const
+  bool operator == (const Sharp_placeOrder_args & rhs) const
   {
     if (!(c_req == rhs.c_req))
       return false;
@@ -317,63 +317,63 @@ class AlgoTrade_placeOrder_args {
       return false;
     return true;
   }
-  bool operator != (const AlgoTrade_placeOrder_args &rhs) const {
+  bool operator != (const Sharp_placeOrder_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const AlgoTrade_placeOrder_args & ) const;
+  bool operator < (const Sharp_placeOrder_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
-  friend std::ostream& operator<<(std::ostream& out, const AlgoTrade_placeOrder_args& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_placeOrder_args& obj);
 };
 
 
-class AlgoTrade_placeOrder_pargs {
+class Sharp_placeOrder_pargs {
  public:
 
   static const char* ascii_fingerprint; // = "107A0333194C3287B8F93A371EF11C3F";
   static const uint8_t binary_fingerprint[16]; // = {0x10,0x7A,0x03,0x33,0x19,0x4C,0x32,0x87,0xB8,0xF9,0x3A,0x37,0x1E,0xF1,0x1C,0x3F};
 
 
-  virtual ~AlgoTrade_placeOrder_pargs() throw();
+  virtual ~Sharp_placeOrder_pargs() throw();
   const ContractRequest* c_req;
   const OrderRequest* o_req;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
-  friend std::ostream& operator<<(std::ostream& out, const AlgoTrade_placeOrder_pargs& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_placeOrder_pargs& obj);
 };
 
-typedef struct _AlgoTrade_placeOrder_result__isset {
-  _AlgoTrade_placeOrder_result__isset() : success(false), e(false) {}
+typedef struct _Sharp_placeOrder_result__isset {
+  _Sharp_placeOrder_result__isset() : success(false), e(false) {}
   bool success :1;
   bool e :1;
-} _AlgoTrade_placeOrder_result__isset;
+} _Sharp_placeOrder_result__isset;
 
-class AlgoTrade_placeOrder_result {
+class Sharp_placeOrder_result {
  public:
 
   static const char* ascii_fingerprint; // = "DC1C3122B8F2BEF805647403197F0FF3";
   static const uint8_t binary_fingerprint[16]; // = {0xDC,0x1C,0x31,0x22,0xB8,0xF2,0xBE,0xF8,0x05,0x64,0x74,0x03,0x19,0x7F,0x0F,0xF3};
 
-  AlgoTrade_placeOrder_result(const AlgoTrade_placeOrder_result&);
-  AlgoTrade_placeOrder_result& operator=(const AlgoTrade_placeOrder_result&);
-  AlgoTrade_placeOrder_result() {
+  Sharp_placeOrder_result(const Sharp_placeOrder_result&);
+  Sharp_placeOrder_result& operator=(const Sharp_placeOrder_result&);
+  Sharp_placeOrder_result() {
   }
 
-  virtual ~AlgoTrade_placeOrder_result() throw();
+  virtual ~Sharp_placeOrder_result() throw();
   OrderResponse success;
   Exception e;
 
-  _AlgoTrade_placeOrder_result__isset __isset;
+  _Sharp_placeOrder_result__isset __isset;
 
   void __set_success(const OrderResponse& val);
 
   void __set_e(const Exception& val);
 
-  bool operator == (const AlgoTrade_placeOrder_result & rhs) const
+  bool operator == (const Sharp_placeOrder_result & rhs) const
   {
     if (!(success == rhs.success))
       return false;
@@ -381,121 +381,121 @@ class AlgoTrade_placeOrder_result {
       return false;
     return true;
   }
-  bool operator != (const AlgoTrade_placeOrder_result &rhs) const {
+  bool operator != (const Sharp_placeOrder_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const AlgoTrade_placeOrder_result & ) const;
+  bool operator < (const Sharp_placeOrder_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
-  friend std::ostream& operator<<(std::ostream& out, const AlgoTrade_placeOrder_result& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_placeOrder_result& obj);
 };
 
-typedef struct _AlgoTrade_placeOrder_presult__isset {
-  _AlgoTrade_placeOrder_presult__isset() : success(false), e(false) {}
+typedef struct _Sharp_placeOrder_presult__isset {
+  _Sharp_placeOrder_presult__isset() : success(false), e(false) {}
   bool success :1;
   bool e :1;
-} _AlgoTrade_placeOrder_presult__isset;
+} _Sharp_placeOrder_presult__isset;
 
-class AlgoTrade_placeOrder_presult {
+class Sharp_placeOrder_presult {
  public:
 
   static const char* ascii_fingerprint; // = "DC1C3122B8F2BEF805647403197F0FF3";
   static const uint8_t binary_fingerprint[16]; // = {0xDC,0x1C,0x31,0x22,0xB8,0xF2,0xBE,0xF8,0x05,0x64,0x74,0x03,0x19,0x7F,0x0F,0xF3};
 
 
-  virtual ~AlgoTrade_placeOrder_presult() throw();
+  virtual ~Sharp_placeOrder_presult() throw();
   OrderResponse* success;
   Exception e;
 
-  _AlgoTrade_placeOrder_presult__isset __isset;
+  _Sharp_placeOrder_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
-  friend std::ostream& operator<<(std::ostream& out, const AlgoTrade_placeOrder_presult& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_placeOrder_presult& obj);
 };
 
 
-class AlgoTrade_cancelOrder_args {
+class Sharp_cancelOrder_args {
  public:
 
   static const char* ascii_fingerprint; // = "56A59CE7FFAF82BCA8A19FAACDE4FB75";
   static const uint8_t binary_fingerprint[16]; // = {0x56,0xA5,0x9C,0xE7,0xFF,0xAF,0x82,0xBC,0xA8,0xA1,0x9F,0xAA,0xCD,0xE4,0xFB,0x75};
 
-  AlgoTrade_cancelOrder_args(const AlgoTrade_cancelOrder_args&);
-  AlgoTrade_cancelOrder_args& operator=(const AlgoTrade_cancelOrder_args&);
-  AlgoTrade_cancelOrder_args() : o_id(0) {
+  Sharp_cancelOrder_args(const Sharp_cancelOrder_args&);
+  Sharp_cancelOrder_args& operator=(const Sharp_cancelOrder_args&);
+  Sharp_cancelOrder_args() : o_id(0) {
   }
 
-  virtual ~AlgoTrade_cancelOrder_args() throw();
+  virtual ~Sharp_cancelOrder_args() throw();
   int64_t o_id;
 
   void __set_o_id(const int64_t val);
 
-  bool operator == (const AlgoTrade_cancelOrder_args & rhs) const
+  bool operator == (const Sharp_cancelOrder_args & rhs) const
   {
     if (!(o_id == rhs.o_id))
       return false;
     return true;
   }
-  bool operator != (const AlgoTrade_cancelOrder_args &rhs) const {
+  bool operator != (const Sharp_cancelOrder_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const AlgoTrade_cancelOrder_args & ) const;
+  bool operator < (const Sharp_cancelOrder_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
-  friend std::ostream& operator<<(std::ostream& out, const AlgoTrade_cancelOrder_args& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_cancelOrder_args& obj);
 };
 
 
-class AlgoTrade_cancelOrder_pargs {
+class Sharp_cancelOrder_pargs {
  public:
 
   static const char* ascii_fingerprint; // = "56A59CE7FFAF82BCA8A19FAACDE4FB75";
   static const uint8_t binary_fingerprint[16]; // = {0x56,0xA5,0x9C,0xE7,0xFF,0xAF,0x82,0xBC,0xA8,0xA1,0x9F,0xAA,0xCD,0xE4,0xFB,0x75};
 
 
-  virtual ~AlgoTrade_cancelOrder_pargs() throw();
+  virtual ~Sharp_cancelOrder_pargs() throw();
   const int64_t* o_id;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
-  friend std::ostream& operator<<(std::ostream& out, const AlgoTrade_cancelOrder_pargs& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_cancelOrder_pargs& obj);
 };
 
-typedef struct _AlgoTrade_cancelOrder_result__isset {
-  _AlgoTrade_cancelOrder_result__isset() : success(false), e(false) {}
+typedef struct _Sharp_cancelOrder_result__isset {
+  _Sharp_cancelOrder_result__isset() : success(false), e(false) {}
   bool success :1;
   bool e :1;
-} _AlgoTrade_cancelOrder_result__isset;
+} _Sharp_cancelOrder_result__isset;
 
-class AlgoTrade_cancelOrder_result {
+class Sharp_cancelOrder_result {
  public:
 
   static const char* ascii_fingerprint; // = "DC1C3122B8F2BEF805647403197F0FF3";
   static const uint8_t binary_fingerprint[16]; // = {0xDC,0x1C,0x31,0x22,0xB8,0xF2,0xBE,0xF8,0x05,0x64,0x74,0x03,0x19,0x7F,0x0F,0xF3};
 
-  AlgoTrade_cancelOrder_result(const AlgoTrade_cancelOrder_result&);
-  AlgoTrade_cancelOrder_result& operator=(const AlgoTrade_cancelOrder_result&);
-  AlgoTrade_cancelOrder_result() {
+  Sharp_cancelOrder_result(const Sharp_cancelOrder_result&);
+  Sharp_cancelOrder_result& operator=(const Sharp_cancelOrder_result&);
+  Sharp_cancelOrder_result() {
   }
 
-  virtual ~AlgoTrade_cancelOrder_result() throw();
+  virtual ~Sharp_cancelOrder_result() throw();
   OrderResponse success;
   Exception e;
 
-  _AlgoTrade_cancelOrder_result__isset __isset;
+  _Sharp_cancelOrder_result__isset __isset;
 
   void __set_success(const OrderResponse& val);
 
   void __set_e(const Exception& val);
 
-  bool operator == (const AlgoTrade_cancelOrder_result & rhs) const
+  bool operator == (const Sharp_cancelOrder_result & rhs) const
   {
     if (!(success == rhs.success))
       return false;
@@ -503,121 +503,121 @@ class AlgoTrade_cancelOrder_result {
       return false;
     return true;
   }
-  bool operator != (const AlgoTrade_cancelOrder_result &rhs) const {
+  bool operator != (const Sharp_cancelOrder_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const AlgoTrade_cancelOrder_result & ) const;
+  bool operator < (const Sharp_cancelOrder_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
-  friend std::ostream& operator<<(std::ostream& out, const AlgoTrade_cancelOrder_result& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_cancelOrder_result& obj);
 };
 
-typedef struct _AlgoTrade_cancelOrder_presult__isset {
-  _AlgoTrade_cancelOrder_presult__isset() : success(false), e(false) {}
+typedef struct _Sharp_cancelOrder_presult__isset {
+  _Sharp_cancelOrder_presult__isset() : success(false), e(false) {}
   bool success :1;
   bool e :1;
-} _AlgoTrade_cancelOrder_presult__isset;
+} _Sharp_cancelOrder_presult__isset;
 
-class AlgoTrade_cancelOrder_presult {
+class Sharp_cancelOrder_presult {
  public:
 
   static const char* ascii_fingerprint; // = "DC1C3122B8F2BEF805647403197F0FF3";
   static const uint8_t binary_fingerprint[16]; // = {0xDC,0x1C,0x31,0x22,0xB8,0xF2,0xBE,0xF8,0x05,0x64,0x74,0x03,0x19,0x7F,0x0F,0xF3};
 
 
-  virtual ~AlgoTrade_cancelOrder_presult() throw();
+  virtual ~Sharp_cancelOrder_presult() throw();
   OrderResponse* success;
   Exception e;
 
-  _AlgoTrade_cancelOrder_presult__isset __isset;
+  _Sharp_cancelOrder_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
-  friend std::ostream& operator<<(std::ostream& out, const AlgoTrade_cancelOrder_presult& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_cancelOrder_presult& obj);
 };
 
 
-class AlgoTrade_orderStatus_args {
+class Sharp_orderStatus_args {
  public:
 
   static const char* ascii_fingerprint; // = "56A59CE7FFAF82BCA8A19FAACDE4FB75";
   static const uint8_t binary_fingerprint[16]; // = {0x56,0xA5,0x9C,0xE7,0xFF,0xAF,0x82,0xBC,0xA8,0xA1,0x9F,0xAA,0xCD,0xE4,0xFB,0x75};
 
-  AlgoTrade_orderStatus_args(const AlgoTrade_orderStatus_args&);
-  AlgoTrade_orderStatus_args& operator=(const AlgoTrade_orderStatus_args&);
-  AlgoTrade_orderStatus_args() : o_id(0) {
+  Sharp_orderStatus_args(const Sharp_orderStatus_args&);
+  Sharp_orderStatus_args& operator=(const Sharp_orderStatus_args&);
+  Sharp_orderStatus_args() : o_id(0) {
   }
 
-  virtual ~AlgoTrade_orderStatus_args() throw();
+  virtual ~Sharp_orderStatus_args() throw();
   int64_t o_id;
 
   void __set_o_id(const int64_t val);
 
-  bool operator == (const AlgoTrade_orderStatus_args & rhs) const
+  bool operator == (const Sharp_orderStatus_args & rhs) const
   {
     if (!(o_id == rhs.o_id))
       return false;
     return true;
   }
-  bool operator != (const AlgoTrade_orderStatus_args &rhs) const {
+  bool operator != (const Sharp_orderStatus_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const AlgoTrade_orderStatus_args & ) const;
+  bool operator < (const Sharp_orderStatus_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
-  friend std::ostream& operator<<(std::ostream& out, const AlgoTrade_orderStatus_args& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_orderStatus_args& obj);
 };
 
 
-class AlgoTrade_orderStatus_pargs {
+class Sharp_orderStatus_pargs {
  public:
 
   static const char* ascii_fingerprint; // = "56A59CE7FFAF82BCA8A19FAACDE4FB75";
   static const uint8_t binary_fingerprint[16]; // = {0x56,0xA5,0x9C,0xE7,0xFF,0xAF,0x82,0xBC,0xA8,0xA1,0x9F,0xAA,0xCD,0xE4,0xFB,0x75};
 
 
-  virtual ~AlgoTrade_orderStatus_pargs() throw();
+  virtual ~Sharp_orderStatus_pargs() throw();
   const int64_t* o_id;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
-  friend std::ostream& operator<<(std::ostream& out, const AlgoTrade_orderStatus_pargs& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_orderStatus_pargs& obj);
 };
 
-typedef struct _AlgoTrade_orderStatus_result__isset {
-  _AlgoTrade_orderStatus_result__isset() : success(false), e(false) {}
+typedef struct _Sharp_orderStatus_result__isset {
+  _Sharp_orderStatus_result__isset() : success(false), e(false) {}
   bool success :1;
   bool e :1;
-} _AlgoTrade_orderStatus_result__isset;
+} _Sharp_orderStatus_result__isset;
 
-class AlgoTrade_orderStatus_result {
+class Sharp_orderStatus_result {
  public:
 
   static const char* ascii_fingerprint; // = "DC1C3122B8F2BEF805647403197F0FF3";
   static const uint8_t binary_fingerprint[16]; // = {0xDC,0x1C,0x31,0x22,0xB8,0xF2,0xBE,0xF8,0x05,0x64,0x74,0x03,0x19,0x7F,0x0F,0xF3};
 
-  AlgoTrade_orderStatus_result(const AlgoTrade_orderStatus_result&);
-  AlgoTrade_orderStatus_result& operator=(const AlgoTrade_orderStatus_result&);
-  AlgoTrade_orderStatus_result() {
+  Sharp_orderStatus_result(const Sharp_orderStatus_result&);
+  Sharp_orderStatus_result& operator=(const Sharp_orderStatus_result&);
+  Sharp_orderStatus_result() {
   }
 
-  virtual ~AlgoTrade_orderStatus_result() throw();
+  virtual ~Sharp_orderStatus_result() throw();
   OrderResponse success;
   Exception e;
 
-  _AlgoTrade_orderStatus_result__isset __isset;
+  _Sharp_orderStatus_result__isset __isset;
 
   void __set_success(const OrderResponse& val);
 
   void __set_e(const Exception& val);
 
-  bool operator == (const AlgoTrade_orderStatus_result & rhs) const
+  bool operator == (const Sharp_orderStatus_result & rhs) const
   {
     if (!(success == rhs.success))
       return false;
@@ -625,48 +625,48 @@ class AlgoTrade_orderStatus_result {
       return false;
     return true;
   }
-  bool operator != (const AlgoTrade_orderStatus_result &rhs) const {
+  bool operator != (const Sharp_orderStatus_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const AlgoTrade_orderStatus_result & ) const;
+  bool operator < (const Sharp_orderStatus_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
-  friend std::ostream& operator<<(std::ostream& out, const AlgoTrade_orderStatus_result& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_orderStatus_result& obj);
 };
 
-typedef struct _AlgoTrade_orderStatus_presult__isset {
-  _AlgoTrade_orderStatus_presult__isset() : success(false), e(false) {}
+typedef struct _Sharp_orderStatus_presult__isset {
+  _Sharp_orderStatus_presult__isset() : success(false), e(false) {}
   bool success :1;
   bool e :1;
-} _AlgoTrade_orderStatus_presult__isset;
+} _Sharp_orderStatus_presult__isset;
 
-class AlgoTrade_orderStatus_presult {
+class Sharp_orderStatus_presult {
  public:
 
   static const char* ascii_fingerprint; // = "DC1C3122B8F2BEF805647403197F0FF3";
   static const uint8_t binary_fingerprint[16]; // = {0xDC,0x1C,0x31,0x22,0xB8,0xF2,0xBE,0xF8,0x05,0x64,0x74,0x03,0x19,0x7F,0x0F,0xF3};
 
 
-  virtual ~AlgoTrade_orderStatus_presult() throw();
+  virtual ~Sharp_orderStatus_presult() throw();
   OrderResponse* success;
   Exception e;
 
-  _AlgoTrade_orderStatus_presult__isset __isset;
+  _Sharp_orderStatus_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
-  friend std::ostream& operator<<(std::ostream& out, const AlgoTrade_orderStatus_presult& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_orderStatus_presult& obj);
 };
 
-class AlgoTradeClient : virtual public AlgoTradeIf {
+class SharpClient : virtual public SharpIf {
  public:
-  AlgoTradeClient(boost::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
+  SharpClient(boost::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
     setProtocol(prot);
   }
-  AlgoTradeClient(boost::shared_ptr< ::apache::thrift::protocol::TProtocol> iprot, boost::shared_ptr< ::apache::thrift::protocol::TProtocol> oprot) {
+  SharpClient(boost::shared_ptr< ::apache::thrift::protocol::TProtocol> iprot, boost::shared_ptr< ::apache::thrift::protocol::TProtocol> oprot) {
     setProtocol(iprot,oprot);
   }
  private:
@@ -708,12 +708,12 @@ class AlgoTradeClient : virtual public AlgoTradeIf {
   ::apache::thrift::protocol::TProtocol* oprot_;
 };
 
-class AlgoTradeProcessor : public ::apache::thrift::TDispatchProcessor {
+class SharpProcessor : public ::apache::thrift::TDispatchProcessor {
  protected:
-  boost::shared_ptr<AlgoTradeIf> iface_;
+  boost::shared_ptr<SharpIf> iface_;
   virtual bool dispatchCall(::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, const std::string& fname, int32_t seqid, void* callContext);
  private:
-  typedef  void (AlgoTradeProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
+  typedef  void (SharpProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
   void process_ping(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -722,38 +722,38 @@ class AlgoTradeProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_cancelOrder(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_orderStatus(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
-  AlgoTradeProcessor(boost::shared_ptr<AlgoTradeIf> iface) :
+  SharpProcessor(boost::shared_ptr<SharpIf> iface) :
     iface_(iface) {
-    processMap_["ping"] = &AlgoTradeProcessor::process_ping;
-    processMap_["getOrderID"] = &AlgoTradeProcessor::process_getOrderID;
-    processMap_["placeOrder"] = &AlgoTradeProcessor::process_placeOrder;
-    processMap_["cancelOrder"] = &AlgoTradeProcessor::process_cancelOrder;
-    processMap_["orderStatus"] = &AlgoTradeProcessor::process_orderStatus;
+    processMap_["ping"] = &SharpProcessor::process_ping;
+    processMap_["getOrderID"] = &SharpProcessor::process_getOrderID;
+    processMap_["placeOrder"] = &SharpProcessor::process_placeOrder;
+    processMap_["cancelOrder"] = &SharpProcessor::process_cancelOrder;
+    processMap_["orderStatus"] = &SharpProcessor::process_orderStatus;
   }
 
-  virtual ~AlgoTradeProcessor() {}
+  virtual ~SharpProcessor() {}
 };
 
-class AlgoTradeProcessorFactory : public ::apache::thrift::TProcessorFactory {
+class SharpProcessorFactory : public ::apache::thrift::TProcessorFactory {
  public:
-  AlgoTradeProcessorFactory(const ::boost::shared_ptr< AlgoTradeIfFactory >& handlerFactory) :
+  SharpProcessorFactory(const ::boost::shared_ptr< SharpIfFactory >& handlerFactory) :
       handlerFactory_(handlerFactory) {}
 
   ::boost::shared_ptr< ::apache::thrift::TProcessor > getProcessor(const ::apache::thrift::TConnectionInfo& connInfo);
 
  protected:
-  ::boost::shared_ptr< AlgoTradeIfFactory > handlerFactory_;
+  ::boost::shared_ptr< SharpIfFactory > handlerFactory_;
 };
 
-class AlgoTradeMultiface : virtual public AlgoTradeIf {
+class SharpMultiface : virtual public SharpIf {
  public:
-  AlgoTradeMultiface(std::vector<boost::shared_ptr<AlgoTradeIf> >& ifaces) : ifaces_(ifaces) {
+  SharpMultiface(std::vector<boost::shared_ptr<SharpIf> >& ifaces) : ifaces_(ifaces) {
   }
-  virtual ~AlgoTradeMultiface() {}
+  virtual ~SharpMultiface() {}
  protected:
-  std::vector<boost::shared_ptr<AlgoTradeIf> > ifaces_;
-  AlgoTradeMultiface() {}
-  void add(boost::shared_ptr<AlgoTradeIf> iface) {
+  std::vector<boost::shared_ptr<SharpIf> > ifaces_;
+  SharpMultiface() {}
+  void add(boost::shared_ptr<SharpIf> iface) {
     ifaces_.push_back(iface);
   }
  public:

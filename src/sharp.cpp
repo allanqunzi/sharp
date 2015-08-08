@@ -1,7 +1,7 @@
 /* Copyright (C) 2013 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
-#include "PosixTestClient.h"
+#include "sharp.h"
 #include "EPosixClientSocket.h"
 #include "EPosixClientSocketPlatform.h"
 #define DEBUG 1
@@ -14,7 +14,7 @@ const int SLEEP_BETWEEN_PINGS = 30; // seconds
 
 ///////////////////////////////////////////////////////////
 // member funcs
-PosixTestClient::PosixTestClient()
+EWrapperImpl::EWrapperImpl()
 	: m_pClient(new EPosixClientSocket(this))
 	, m_state(ST_CONNECT)
 	, m_sleepDeadline(0)
@@ -25,11 +25,11 @@ PosixTestClient::PosixTestClient()
 {
 }
 
-PosixTestClient::~PosixTestClient()
+EWrapperImpl::~EWrapperImpl()
 {
 }
 
-bool PosixTestClient::connect(const char *host, unsigned int port, int clientId)
+bool EWrapperImpl::connect(const char *host, unsigned int port, int clientId)
 {
 	// trying to connect
 	printf( "Connecting to %s:%d clientId:%d\n", !( host && *host) ? "127.0.0.1" : host, port, clientId);
@@ -45,19 +45,19 @@ bool PosixTestClient::connect(const char *host, unsigned int port, int clientId)
 	return bRes;
 }
 
-void PosixTestClient::disconnect() const
+void EWrapperImpl::disconnect() const
 {
 	m_pClient->eDisconnect();
 
 	printf ( "Disconnected\n");
 }
 
-bool PosixTestClient::isConnected() const
+bool EWrapperImpl::isConnected() const
 {
 	return m_pClient->isConnected();
 }
 
-void PosixTestClient::monitor()
+void EWrapperImpl::monitor()
 {
 	fd_set readSet, writeSet, errorSet;
 
@@ -160,7 +160,7 @@ void PosixTestClient::monitor()
 
 //////////////////////////////////////////////////////////////////
 // methods
-void PosixTestClient::reqCurrentTime()
+void EWrapperImpl::reqCurrentTime()
 {
 	printf( "Requesting Current Time\n");
 
@@ -172,7 +172,7 @@ void PosixTestClient::reqCurrentTime()
 	m_pClient->reqCurrentTime();
 }
 
-void PosixTestClient::placeOrder(ContractOrder & contract_order)
+void EWrapperImpl::placeOrder(ContractOrder & contract_order)
 {
 	/***
 	Contract contract;
@@ -208,7 +208,7 @@ void PosixTestClient::placeOrder(ContractOrder & contract_order)
 	placed_contract_orders.update(contract_order.orderId, contract_order);
 }
 
-bool PosixTestClient::cancelOrder(OrderId orderId)
+bool EWrapperImpl::cancelOrder(OrderId orderId)
 {
 	printf( "Cancelling Order %ld\n", orderId);
 
@@ -226,7 +226,7 @@ bool PosixTestClient::cancelOrder(OrderId orderId)
 }
 ///////////////////////////////////////////////////////////////////
 // events
-void PosixTestClient::orderStatus( OrderId orderId, const IBString &status, int filled,
+void EWrapperImpl::orderStatus( OrderId orderId, const IBString &status, int filled,
 	   int remaining, double avgFillPrice, int permId, int parentId,
 	   double lastFillPrice, int clientId, const IBString& whyHeld)
 
@@ -265,7 +265,7 @@ void PosixTestClient::orderStatus( OrderId orderId, const IBString &status, int 
 
 
 
-void PosixTestClient::nextValidId( OrderId orderId)
+void EWrapperImpl::nextValidId( OrderId orderId)
 {
 	m_orderId = orderId;
 	order_ids.push_back(orderId);
@@ -273,7 +273,7 @@ void PosixTestClient::nextValidId( OrderId orderId)
 	m_state = ST_PLACEORDER;
 }
 
-void PosixTestClient::currentTime( long time)
+void EWrapperImpl::currentTime( long time)
 {
 	if ( m_state == ST_PING_ACK) {
 		time_t t = ( time_t)time;
@@ -287,7 +287,7 @@ void PosixTestClient::currentTime( long time)
 	}
 }
 
-void PosixTestClient::error(const int id, const int errorCode, const IBString errorString)
+void EWrapperImpl::error(const int id, const int errorCode, const IBString errorString)
 {
 //	printf( "Error id=%d, errorCode=%d, msg=%s\n", id, errorCode, errorString.c_str());
 
@@ -295,67 +295,67 @@ void PosixTestClient::error(const int id, const int errorCode, const IBString er
 		disconnect();
 }
 
-void PosixTestClient::tickPrice( TickerId tickerId, TickType field, double price, int canAutoExecute) {}
-void PosixTestClient::tickSize( TickerId tickerId, TickType field, int size) {}
-void PosixTestClient::tickOptionComputation( TickerId tickerId, TickType tickType, double impliedVol, double delta,
+void EWrapperImpl::tickPrice( TickerId tickerId, TickType field, double price, int canAutoExecute) {}
+void EWrapperImpl::tickSize( TickerId tickerId, TickType field, int size) {}
+void EWrapperImpl::tickOptionComputation( TickerId tickerId, TickType tickType, double impliedVol, double delta,
 											 double optPrice, double pvDividend,
 											 double gamma, double vega, double theta, double undPrice) {}
-void PosixTestClient::tickGeneric(TickerId tickerId, TickType tickType, double value) {}
-void PosixTestClient::tickString(TickerId tickerId, TickType tickType, const IBString& value) {}
-void PosixTestClient::tickEFP(TickerId tickerId, TickType tickType, double basisPoints, const IBString& formattedBasisPoints,
+void EWrapperImpl::tickGeneric(TickerId tickerId, TickType tickType, double value) {}
+void EWrapperImpl::tickString(TickerId tickerId, TickType tickType, const IBString& value) {}
+void EWrapperImpl::tickEFP(TickerId tickerId, TickType tickType, double basisPoints, const IBString& formattedBasisPoints,
 							   double totalDividends, int holdDays, const IBString& futureExpiry, double dividendImpact, double dividendsToExpiry) {}
-void PosixTestClient::openOrder( OrderId orderId, const Contract&, const Order&, const OrderState& ostate) {}
-void PosixTestClient::openOrderEnd() {}
-void PosixTestClient::winError( const IBString &str, int lastError) {}
-void PosixTestClient::connectionClosed() {}
-void PosixTestClient::updateAccountValue(const IBString& key, const IBString& val,
+void EWrapperImpl::openOrder( OrderId orderId, const Contract&, const Order&, const OrderState& ostate) {}
+void EWrapperImpl::openOrderEnd() {}
+void EWrapperImpl::winError( const IBString &str, int lastError) {}
+void EWrapperImpl::connectionClosed() {}
+void EWrapperImpl::updateAccountValue(const IBString& key, const IBString& val,
 										  const IBString& currency, const IBString& accountName) {}
-void PosixTestClient::updatePortfolio(const Contract& contract, int position,
+void EWrapperImpl::updatePortfolio(const Contract& contract, int position,
 		double marketPrice, double marketValue, double averageCost,
 		double unrealizedPNL, double realizedPNL, const IBString& accountName){}
-void PosixTestClient::updateAccountTime(const IBString& timeStamp) {}
-void PosixTestClient::accountDownloadEnd(const IBString& accountName) {}
-void PosixTestClient::contractDetails( int reqId, const ContractDetails& contractDetails) {}
-void PosixTestClient::bondContractDetails( int reqId, const ContractDetails& contractDetails) {}
-void PosixTestClient::contractDetailsEnd( int reqId) {}
-void PosixTestClient::execDetails( int reqId, const Contract& contract, const Execution& execution) {}
-void PosixTestClient::execDetailsEnd( int reqId) {}
+void EWrapperImpl::updateAccountTime(const IBString& timeStamp) {}
+void EWrapperImpl::accountDownloadEnd(const IBString& accountName) {}
+void EWrapperImpl::contractDetails( int reqId, const ContractDetails& contractDetails) {}
+void EWrapperImpl::bondContractDetails( int reqId, const ContractDetails& contractDetails) {}
+void EWrapperImpl::contractDetailsEnd( int reqId) {}
+void EWrapperImpl::execDetails( int reqId, const Contract& contract, const Execution& execution) {}
+void EWrapperImpl::execDetailsEnd( int reqId) {}
 
-void PosixTestClient::updateMktDepth(TickerId id, int position, int operation, int side,
+void EWrapperImpl::updateMktDepth(TickerId id, int position, int operation, int side,
 									  double price, int size) {}
-void PosixTestClient::updateMktDepthL2(TickerId id, int position, IBString marketMaker, int operation,
+void EWrapperImpl::updateMktDepthL2(TickerId id, int position, IBString marketMaker, int operation,
 										int side, double price, int size) {}
-void PosixTestClient::updateNewsBulletin(int msgId, int msgType, const IBString& newsMessage, const IBString& originExch) {}
-void PosixTestClient::managedAccounts( const IBString& accountsList) {}
-void PosixTestClient::receiveFA(faDataType pFaDataType, const IBString& cxml) {}
-void PosixTestClient::historicalData(TickerId reqId, const IBString& date, double open, double high,
+void EWrapperImpl::updateNewsBulletin(int msgId, int msgType, const IBString& newsMessage, const IBString& originExch) {}
+void EWrapperImpl::managedAccounts( const IBString& accountsList) {}
+void EWrapperImpl::receiveFA(faDataType pFaDataType, const IBString& cxml) {}
+void EWrapperImpl::historicalData(TickerId reqId, const IBString& date, double open, double high,
 									  double low, double close, int volume, int barCount, double WAP, int hasGaps) {}
-void PosixTestClient::scannerParameters(const IBString &xml) {}
-void PosixTestClient::scannerData(int reqId, int rank, const ContractDetails &contractDetails,
+void EWrapperImpl::scannerParameters(const IBString &xml) {}
+void EWrapperImpl::scannerData(int reqId, int rank, const ContractDetails &contractDetails,
 	   const IBString &distance, const IBString &benchmark, const IBString &projection,
 	   const IBString &legsStr) {}
-void PosixTestClient::scannerDataEnd(int reqId) {}
-void PosixTestClient::realtimeBar(TickerId reqId, long time, double open, double high, double low, double close,
+void EWrapperImpl::scannerDataEnd(int reqId) {}
+void EWrapperImpl::realtimeBar(TickerId reqId, long time, double open, double high, double low, double close,
 								   long volume, double wap, int count) {}
-void PosixTestClient::fundamentalData(TickerId reqId, const IBString& data) {}
-void PosixTestClient::deltaNeutralValidation(int reqId, const UnderComp& underComp) {}
-void PosixTestClient::tickSnapshotEnd(int reqId) {}
-void PosixTestClient::marketDataType(TickerId reqId, int marketDataType) {}
-void PosixTestClient::commissionReport( const CommissionReport& commissionReport) {}
-void PosixTestClient::position( const IBString& account, const Contract& contract, int position, double avgCost) {}
-void PosixTestClient::positionEnd() {}
-void PosixTestClient::accountSummary( int reqId, const IBString& account, const IBString& tag, const IBString& value, const IBString& curency) {}
-void PosixTestClient::accountSummaryEnd( int reqId) {}
-void PosixTestClient::verifyMessageAPI( const IBString& apiData) {}
-void PosixTestClient::verifyCompleted( bool isSuccessful, const IBString& errorText) {}
-void PosixTestClient::displayGroupList( int reqId, const IBString& groups) {}
-void PosixTestClient::displayGroupUpdated( int reqId, const IBString& contractInfo) {}
+void EWrapperImpl::fundamentalData(TickerId reqId, const IBString& data) {}
+void EWrapperImpl::deltaNeutralValidation(int reqId, const UnderComp& underComp) {}
+void EWrapperImpl::tickSnapshotEnd(int reqId) {}
+void EWrapperImpl::marketDataType(TickerId reqId, int marketDataType) {}
+void EWrapperImpl::commissionReport( const CommissionReport& commissionReport) {}
+void EWrapperImpl::position( const IBString& account, const Contract& contract, int position, double avgCost) {}
+void EWrapperImpl::positionEnd() {}
+void EWrapperImpl::accountSummary( int reqId, const IBString& account, const IBString& tag, const IBString& value, const IBString& curency) {}
+void EWrapperImpl::accountSummaryEnd( int reqId) {}
+void EWrapperImpl::verifyMessageAPI( const IBString& apiData) {}
+void EWrapperImpl::verifyCompleted( bool isSuccessful, const IBString& errorText) {}
+void EWrapperImpl::displayGroupList( int reqId, const IBString& groups) {}
+void EWrapperImpl::displayGroupUpdated( int reqId, const IBString& contractInfo) {}
 
 
 
 //  the following code is defined by Aiqun Huang
 
-bool PosixTestClient::checkValidId( OrderId orderId){
+bool EWrapperImpl::checkValidId( OrderId orderId){
 	int count = std::count(order_ids.begin(), order_ids.end(), orderId);
 	if( count == 1 )return true;
 	else return false;

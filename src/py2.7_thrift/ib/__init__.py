@@ -1,1 +1,1 @@
-__all__ = ['ttypes', 'constants', 'AlgoTrade']
+__all__ = ['ttypes', 'constants', 'Sharp']

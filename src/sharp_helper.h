@@ -1,7 +1,7 @@
 #include <functional>
 #include <string>
 
-namespace algotrade{
+namespace sharp{
 
 using std::runtime_error;
 

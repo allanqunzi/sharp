@@ -1,4 +1,4 @@
-namespace cpp algotrade.api
+namespace cpp sharp.api
 
 struct PingRequest {
 }
@@ -39,7 +39,7 @@ exception Exception {
       2: string why;
 }
 
-service AlgoTrade {
+service Sharp {
     PingResponse ping (1:required PingRequest request);
     i64 getOrderID();
     OrderResponse placeOrder (1:required ContractRequest c_req, 2:required OrderRequest o_req) throws (1:Exception e);

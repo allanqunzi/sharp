@@ -9,7 +9,7 @@
 
 #include "ib_types.h"
 
-namespace algotrade { namespace api {
+namespace sharp { namespace api {
 
 class ibConstants {
  public:

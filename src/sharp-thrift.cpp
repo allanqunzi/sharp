@@ -12,11 +12,11 @@
 #include <thrift/transport/TServerSocket.h>
 #include <thrift/transport/TSocket.h>
 #include <thrift/transport/TTransportUtils.h>
-#include "PosixTestClient.h"
-#include "algotrade_helper.h"
-#include "./thrift/AlgoTrade.h"
+#include "sharp.h"
+#include "sharp_helper.h"
+#include "./thrift/Sharp.h"
 
-namespace algotrade{
+namespace sharp{
 
 using namespace apache::thrift;
 using namespace apache::thrift::protocol;
@@ -24,9 +24,9 @@ using namespace apache::thrift::transport;
 using namespace apache::thrift::concurrency;
 using namespace apache::thrift::server;
 
-class AlgoTradeHandler : virtual public api::AlgoTradeIf {
+class SharpHandler : virtual public api::SharpIf {
 
-    PosixTestClient & trader;
+    EWrapperImpl & trader;
 
     void protect (std::function<void()> const &callback) {
         try {
@@ -51,7 +51,7 @@ class AlgoTradeHandler : virtual public api::AlgoTradeIf {
         }
     }
 public:
-    AlgoTradeHandler(PosixTestClient & trader_): trader(trader_){}
+    SharpHandler(EWrapperImpl & trader_): trader(trader_){}
 
     void ping(api::PingResponse& response, const api::PingRequest& request) {
     }
@@ -151,13 +151,13 @@ public:
 
 
 
-void run_server (PosixTestClient & ibtrader) {
+void run_server (EWrapperImpl & ibtrader) {
     std::cout << "Starting the server..."<<std::endl;
     int worker_count = 4;
     boost::shared_ptr<TProtocolFactory> apiFactory(new TBinaryProtocolFactory());
     //boost::shared_ptr<TProtocolFactory> apiFactory(new TCompactProtocolFactory());
-    boost::shared_ptr<AlgoTradeHandler> handler(new AlgoTradeHandler(ibtrader));
-    boost::shared_ptr<TProcessor> processor(new api::AlgoTradeProcessor(handler));
+    boost::shared_ptr<SharpHandler> handler(new SharpHandler(ibtrader));
+    boost::shared_ptr<TProcessor> processor(new api::SharpProcessor(handler));
     boost::shared_ptr<TServerTransport> serverTransport(new TServerSocket(9090));
     boost::shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
 
@@ -214,12 +214,12 @@ void translate_response(OrderResponse & response, const api::OrderResponse & res
 }
 
 
-class AlgoTradeClientImpl: public AlgoTradeClientService
+class SharpClientImpl: public SharpClientService
 {
     mutable boost::shared_ptr<TTransport> socket;
     mutable boost::shared_ptr<TTransport> transport;
     mutable boost::shared_ptr<TProtocol> protocol;
-    mutable api::AlgoTradeClient client;
+    mutable api::SharpClient client;
 
     void protect (std::function<void()> const &callback) {
         try {
@@ -245,7 +245,7 @@ class AlgoTradeClientImpl: public AlgoTradeClientService
         }
     }
 public:
-    AlgoTradeClientImpl()
+    SharpClientImpl()
     : socket(new TSocket("localhost", 9090)),
     transport(new TBufferedTransport(socket)),
     protocol(new TBinaryProtocol(transport)),
@@ -254,7 +254,7 @@ public:
     {
         transport->open();
     }
-    ~AlgoTradeClientImpl(){
+    ~SharpClientImpl(){
         transport->close();
     };
 
@@ -301,8 +301,8 @@ public:
 
 };
 
-AlgoTradeClientService *make_client () {
-    return new AlgoTradeClientImpl();
+SharpClientService *make_client () {
+    return new SharpClientImpl();
 }
 
 
@@ -322,4 +322,4 @@ AlgoTradeClientService *make_client () {
 
 
 
-} // end of namespace algotrade
+} // end of namespace sharp

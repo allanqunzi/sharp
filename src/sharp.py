@@ -7,7 +7,7 @@ sys.path.insert(0, glob.glob('/home/qunzi/Downloads/thrift-0.9.2/lib/py/build/li
 #sys.path.append('/home/qunzi/Projects/IBJts_test/sample_TestPosix/py3.4_thrift/')
 #sys.path.insert(0, glob.glob('/home/qunzi/Downloads/thrift-0.9.2/lib/py/build/lib.linux-x86_64-3.4')[0])
 
-from ib import AlgoTrade
+from ib import Sharp
 from ib.ttypes import *
 from ib.constants import *
 
@@ -29,7 +29,7 @@ try:
   #protocol = TCompactProtocol.TCompactProtocol(transport)
 
   # Create a client to use the protocol encoder
-  client = AlgoTrade.Client(protocol)
+  client = Sharp.Client(protocol)
 
   # Connect!
   transport.open()

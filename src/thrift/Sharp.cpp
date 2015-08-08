@@ -4,16 +4,16 @@
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  *  @generated
  */
-#include "AlgoTrade.h"
+#include "Sharp.h"
 
-namespace algotrade { namespace api {
+namespace sharp { namespace api {
 
 
-AlgoTrade_ping_args::~AlgoTrade_ping_args() throw() {
+Sharp_ping_args::~Sharp_ping_args() throw() {
 }
 
 
-uint32_t AlgoTrade_ping_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Sharp_ping_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   uint32_t xfer = 0;
   std::string fname;
@@ -56,10 +56,10 @@ uint32_t AlgoTrade_ping_args::read(::apache::thrift::protocol::TProtocol* iprot)
   return xfer;
 }
 
-uint32_t AlgoTrade_ping_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Sharp_ping_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   oprot->incrementRecursionDepth();
-  xfer += oprot->writeStructBegin("AlgoTrade_ping_args");
+  xfer += oprot->writeStructBegin("Sharp_ping_args");
 
   xfer += oprot->writeFieldBegin("request", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += this->request.write(oprot);
@@ -72,14 +72,14 @@ uint32_t AlgoTrade_ping_args::write(::apache::thrift::protocol::TProtocol* oprot
 }
 
 
-AlgoTrade_ping_pargs::~AlgoTrade_ping_pargs() throw() {
+Sharp_ping_pargs::~Sharp_ping_pargs() throw() {
 }
 
 
-uint32_t AlgoTrade_ping_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Sharp_ping_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   oprot->incrementRecursionDepth();
-  xfer += oprot->writeStructBegin("AlgoTrade_ping_pargs");
+  xfer += oprot->writeStructBegin("Sharp_ping_pargs");
 
   xfer += oprot->writeFieldBegin("request", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->request)).write(oprot);
@@ -92,11 +92,11 @@ uint32_t AlgoTrade_ping_pargs::write(::apache::thrift::protocol::TProtocol* opro
 }
 
 
-AlgoTrade_ping_result::~AlgoTrade_ping_result() throw() {
+Sharp_ping_result::~Sharp_ping_result() throw() {
 }
 
 
-uint32_t AlgoTrade_ping_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Sharp_ping_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   uint32_t xfer = 0;
   std::string fname;
@@ -136,11 +136,11 @@ uint32_t AlgoTrade_ping_result::read(::apache::thrift::protocol::TProtocol* ipro
   return xfer;
 }
 
-uint32_t AlgoTrade_ping_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Sharp_ping_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("AlgoTrade_ping_result");
+  xfer += oprot->writeStructBegin("Sharp_ping_result");
 
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
@@ -153,11 +153,11 @@ uint32_t AlgoTrade_ping_result::write(::apache::thrift::protocol::TProtocol* opr
 }
 
 
-AlgoTrade_ping_presult::~AlgoTrade_ping_presult() throw() {
+Sharp_ping_presult::~Sharp_ping_presult() throw() {
 }
 
 
-uint32_t AlgoTrade_ping_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Sharp_ping_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   uint32_t xfer = 0;
   std::string fname;
@@ -198,11 +198,11 @@ uint32_t AlgoTrade_ping_presult::read(::apache::thrift::protocol::TProtocol* ipr
 }
 
 
-AlgoTrade_getOrderID_args::~AlgoTrade_getOrderID_args() throw() {
+Sharp_getOrderID_args::~Sharp_getOrderID_args() throw() {
 }
 
 
-uint32_t AlgoTrade_getOrderID_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Sharp_getOrderID_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   uint32_t xfer = 0;
   std::string fname;
@@ -229,10 +229,10 @@ uint32_t AlgoTrade_getOrderID_args::read(::apache::thrift::protocol::TProtocol* 
   return xfer;
 }
 
-uint32_t AlgoTrade_getOrderID_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Sharp_getOrderID_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   oprot->incrementRecursionDepth();
-  xfer += oprot->writeStructBegin("AlgoTrade_getOrderID_args");
+  xfer += oprot->writeStructBegin("Sharp_getOrderID_args");
 
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
@@ -241,14 +241,14 @@ uint32_t AlgoTrade_getOrderID_args::write(::apache::thrift::protocol::TProtocol*
 }
 
 
-AlgoTrade_getOrderID_pargs::~AlgoTrade_getOrderID_pargs() throw() {
+Sharp_getOrderID_pargs::~Sharp_getOrderID_pargs() throw() {
 }
 
 
-uint32_t AlgoTrade_getOrderID_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Sharp_getOrderID_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   oprot->incrementRecursionDepth();
-  xfer += oprot->writeStructBegin("AlgoTrade_getOrderID_pargs");
+  xfer += oprot->writeStructBegin("Sharp_getOrderID_pargs");
 
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
@@ -257,11 +257,11 @@ uint32_t AlgoTrade_getOrderID_pargs::write(::apache::thrift::protocol::TProtocol
 }
 
 
-AlgoTrade_getOrderID_result::~AlgoTrade_getOrderID_result() throw() {
+Sharp_getOrderID_result::~Sharp_getOrderID_result() throw() {
 }
 
 
-uint32_t AlgoTrade_getOrderID_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Sharp_getOrderID_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   uint32_t xfer = 0;
   std::string fname;
@@ -301,11 +301,11 @@ uint32_t AlgoTrade_getOrderID_result::read(::apache::thrift::protocol::TProtocol
   return xfer;
 }
 
-uint32_t AlgoTrade_getOrderID_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Sharp_getOrderID_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("AlgoTrade_getOrderID_result");
+  xfer += oprot->writeStructBegin("Sharp_getOrderID_result");
 
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I64, 0);
@@ -318,11 +318,11 @@ uint32_t AlgoTrade_getOrderID_result::write(::apache::thrift::protocol::TProtoco
 }
 
 
-AlgoTrade_getOrderID_presult::~AlgoTrade_getOrderID_presult() throw() {
+Sharp_getOrderID_presult::~Sharp_getOrderID_presult() throw() {
 }
 
 
-uint32_t AlgoTrade_getOrderID_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Sharp_getOrderID_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   uint32_t xfer = 0;
   std::string fname;
@@ -363,11 +363,11 @@ uint32_t AlgoTrade_getOrderID_presult::read(::apache::thrift::protocol::TProtoco
 }
 
 
-AlgoTrade_placeOrder_args::~AlgoTrade_placeOrder_args() throw() {
+Sharp_placeOrder_args::~Sharp_placeOrder_args() throw() {
 }
 
 
-uint32_t AlgoTrade_placeOrder_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Sharp_placeOrder_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   uint32_t xfer = 0;
   std::string fname;
@@ -421,10 +421,10 @@ uint32_t AlgoTrade_placeOrder_args::read(::apache::thrift::protocol::TProtocol* 
   return xfer;
 }
 
-uint32_t AlgoTrade_placeOrder_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Sharp_placeOrder_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   oprot->incrementRecursionDepth();
-  xfer += oprot->writeStructBegin("AlgoTrade_placeOrder_args");
+  xfer += oprot->writeStructBegin("Sharp_placeOrder_args");
 
   xfer += oprot->writeFieldBegin("c_req", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += this->c_req.write(oprot);
@@ -441,14 +441,14 @@ uint32_t AlgoTrade_placeOrder_args::write(::apache::thrift::protocol::TProtocol*
 }
 
 
-AlgoTrade_placeOrder_pargs::~AlgoTrade_placeOrder_pargs() throw() {
+Sharp_placeOrder_pargs::~Sharp_placeOrder_pargs() throw() {
 }
 
 
-uint32_t AlgoTrade_placeOrder_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Sharp_placeOrder_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   oprot->incrementRecursionDepth();
-  xfer += oprot->writeStructBegin("AlgoTrade_placeOrder_pargs");
+  xfer += oprot->writeStructBegin("Sharp_placeOrder_pargs");
 
   xfer += oprot->writeFieldBegin("c_req", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->c_req)).write(oprot);
@@ -465,11 +465,11 @@ uint32_t AlgoTrade_placeOrder_pargs::write(::apache::thrift::protocol::TProtocol
 }
 
 
-AlgoTrade_placeOrder_result::~AlgoTrade_placeOrder_result() throw() {
+Sharp_placeOrder_result::~Sharp_placeOrder_result() throw() {
 }
 
 
-uint32_t AlgoTrade_placeOrder_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Sharp_placeOrder_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   uint32_t xfer = 0;
   std::string fname;
@@ -517,11 +517,11 @@ uint32_t AlgoTrade_placeOrder_result::read(::apache::thrift::protocol::TProtocol
   return xfer;
 }
 
-uint32_t AlgoTrade_placeOrder_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Sharp_placeOrder_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("AlgoTrade_placeOrder_result");
+  xfer += oprot->writeStructBegin("Sharp_placeOrder_result");
 
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
@@ -538,11 +538,11 @@ uint32_t AlgoTrade_placeOrder_result::write(::apache::thrift::protocol::TProtoco
 }
 
 
-AlgoTrade_placeOrder_presult::~AlgoTrade_placeOrder_presult() throw() {
+Sharp_placeOrder_presult::~Sharp_placeOrder_presult() throw() {
 }
 
 
-uint32_t AlgoTrade_placeOrder_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Sharp_placeOrder_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   uint32_t xfer = 0;
   std::string fname;
@@ -591,11 +591,11 @@ uint32_t AlgoTrade_placeOrder_presult::read(::apache::thrift::protocol::TProtoco
 }
 
 
-AlgoTrade_cancelOrder_args::~AlgoTrade_cancelOrder_args() throw() {
+Sharp_cancelOrder_args::~Sharp_cancelOrder_args() throw() {
 }
 
 
-uint32_t AlgoTrade_cancelOrder_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Sharp_cancelOrder_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   uint32_t xfer = 0;
   std::string fname;
@@ -638,10 +638,10 @@ uint32_t AlgoTrade_cancelOrder_args::read(::apache::thrift::protocol::TProtocol*
   return xfer;
 }
 
-uint32_t AlgoTrade_cancelOrder_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Sharp_cancelOrder_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   oprot->incrementRecursionDepth();
-  xfer += oprot->writeStructBegin("AlgoTrade_cancelOrder_args");
+  xfer += oprot->writeStructBegin("Sharp_cancelOrder_args");
 
   xfer += oprot->writeFieldBegin("o_id", ::apache::thrift::protocol::T_I64, 1);
   xfer += oprot->writeI64(this->o_id);
@@ -654,14 +654,14 @@ uint32_t AlgoTrade_cancelOrder_args::write(::apache::thrift::protocol::TProtocol
 }
 
 
-AlgoTrade_cancelOrder_pargs::~AlgoTrade_cancelOrder_pargs() throw() {
+Sharp_cancelOrder_pargs::~Sharp_cancelOrder_pargs() throw() {
 }
 
 
-uint32_t AlgoTrade_cancelOrder_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Sharp_cancelOrder_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   oprot->incrementRecursionDepth();
-  xfer += oprot->writeStructBegin("AlgoTrade_cancelOrder_pargs");
+  xfer += oprot->writeStructBegin("Sharp_cancelOrder_pargs");
 
   xfer += oprot->writeFieldBegin("o_id", ::apache::thrift::protocol::T_I64, 1);
   xfer += oprot->writeI64((*(this->o_id)));
@@ -674,11 +674,11 @@ uint32_t AlgoTrade_cancelOrder_pargs::write(::apache::thrift::protocol::TProtoco
 }
 
 
-AlgoTrade_cancelOrder_result::~AlgoTrade_cancelOrder_result() throw() {
+Sharp_cancelOrder_result::~Sharp_cancelOrder_result() throw() {
 }
 
 
-uint32_t AlgoTrade_cancelOrder_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Sharp_cancelOrder_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   uint32_t xfer = 0;
   std::string fname;
@@ -726,11 +726,11 @@ uint32_t AlgoTrade_cancelOrder_result::read(::apache::thrift::protocol::TProtoco
   return xfer;
 }
 
-uint32_t AlgoTrade_cancelOrder_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Sharp_cancelOrder_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("AlgoTrade_cancelOrder_result");
+  xfer += oprot->writeStructBegin("Sharp_cancelOrder_result");
 
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
@@ -747,11 +747,11 @@ uint32_t AlgoTrade_cancelOrder_result::write(::apache::thrift::protocol::TProtoc
 }
 
 
-AlgoTrade_cancelOrder_presult::~AlgoTrade_cancelOrder_presult() throw() {
+Sharp_cancelOrder_presult::~Sharp_cancelOrder_presult() throw() {
 }
 
 
-uint32_t AlgoTrade_cancelOrder_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Sharp_cancelOrder_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   uint32_t xfer = 0;
   std::string fname;
@@ -800,11 +800,11 @@ uint32_t AlgoTrade_cancelOrder_presult::read(::apache::thrift::protocol::TProtoc
 }
 
 
-AlgoTrade_orderStatus_args::~AlgoTrade_orderStatus_args() throw() {
+Sharp_orderStatus_args::~Sharp_orderStatus_args() throw() {
 }
 
 
-uint32_t AlgoTrade_orderStatus_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Sharp_orderStatus_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   uint32_t xfer = 0;
   std::string fname;
@@ -847,10 +847,10 @@ uint32_t AlgoTrade_orderStatus_args::read(::apache::thrift::protocol::TProtocol*
   return xfer;
 }
 
-uint32_t AlgoTrade_orderStatus_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Sharp_orderStatus_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   oprot->incrementRecursionDepth();
-  xfer += oprot->writeStructBegin("AlgoTrade_orderStatus_args");
+  xfer += oprot->writeStructBegin("Sharp_orderStatus_args");
 
   xfer += oprot->writeFieldBegin("o_id", ::apache::thrift::protocol::T_I64, 1);
   xfer += oprot->writeI64(this->o_id);
@@ -863,14 +863,14 @@ uint32_t AlgoTrade_orderStatus_args::write(::apache::thrift::protocol::TProtocol
 }
 
 
-AlgoTrade_orderStatus_pargs::~AlgoTrade_orderStatus_pargs() throw() {
+Sharp_orderStatus_pargs::~Sharp_orderStatus_pargs() throw() {
 }
 
 
-uint32_t AlgoTrade_orderStatus_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Sharp_orderStatus_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   oprot->incrementRecursionDepth();
-  xfer += oprot->writeStructBegin("AlgoTrade_orderStatus_pargs");
+  xfer += oprot->writeStructBegin("Sharp_orderStatus_pargs");
 
   xfer += oprot->writeFieldBegin("o_id", ::apache::thrift::protocol::T_I64, 1);
   xfer += oprot->writeI64((*(this->o_id)));
@@ -883,11 +883,11 @@ uint32_t AlgoTrade_orderStatus_pargs::write(::apache::thrift::protocol::TProtoco
 }
 
 
-AlgoTrade_orderStatus_result::~AlgoTrade_orderStatus_result() throw() {
+Sharp_orderStatus_result::~Sharp_orderStatus_result() throw() {
 }
 
 
-uint32_t AlgoTrade_orderStatus_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Sharp_orderStatus_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   uint32_t xfer = 0;
   std::string fname;
@@ -935,11 +935,11 @@ uint32_t AlgoTrade_orderStatus_result::read(::apache::thrift::protocol::TProtoco
   return xfer;
 }
 
-uint32_t AlgoTrade_orderStatus_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Sharp_orderStatus_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("AlgoTrade_orderStatus_result");
+  xfer += oprot->writeStructBegin("Sharp_orderStatus_result");
 
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
@@ -956,11 +956,11 @@ uint32_t AlgoTrade_orderStatus_result::write(::apache::thrift::protocol::TProtoc
 }
 
 
-AlgoTrade_orderStatus_presult::~AlgoTrade_orderStatus_presult() throw() {
+Sharp_orderStatus_presult::~Sharp_orderStatus_presult() throw() {
 }
 
 
-uint32_t AlgoTrade_orderStatus_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Sharp_orderStatus_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   uint32_t xfer = 0;
   std::string fname;
@@ -1008,18 +1008,18 @@ uint32_t AlgoTrade_orderStatus_presult::read(::apache::thrift::protocol::TProtoc
   return xfer;
 }
 
-void AlgoTradeClient::ping(PingResponse& _return, const PingRequest& request)
+void SharpClient::ping(PingResponse& _return, const PingRequest& request)
 {
   send_ping(request);
   recv_ping(_return);
 }
 
-void AlgoTradeClient::send_ping(const PingRequest& request)
+void SharpClient::send_ping(const PingRequest& request)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("ping", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  AlgoTrade_ping_pargs args;
+  Sharp_ping_pargs args;
   args.request = &request;
   args.write(oprot_);
 
@@ -1028,7 +1028,7 @@ void AlgoTradeClient::send_ping(const PingRequest& request)
   oprot_->getTransport()->flush();
 }
 
-void AlgoTradeClient::recv_ping(PingResponse& _return)
+void SharpClient::recv_ping(PingResponse& _return)
 {
 
   int32_t rseqid = 0;
@@ -1053,7 +1053,7 @@ void AlgoTradeClient::recv_ping(PingResponse& _return)
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  AlgoTrade_ping_presult result;
+  Sharp_ping_presult result;
   result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
@@ -1066,18 +1066,18 @@ void AlgoTradeClient::recv_ping(PingResponse& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "ping failed: unknown result");
 }
 
-int64_t AlgoTradeClient::getOrderID()
+int64_t SharpClient::getOrderID()
 {
   send_getOrderID();
   return recv_getOrderID();
 }
 
-void AlgoTradeClient::send_getOrderID()
+void SharpClient::send_getOrderID()
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("getOrderID", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  AlgoTrade_getOrderID_pargs args;
+  Sharp_getOrderID_pargs args;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -1085,7 +1085,7 @@ void AlgoTradeClient::send_getOrderID()
   oprot_->getTransport()->flush();
 }
 
-int64_t AlgoTradeClient::recv_getOrderID()
+int64_t SharpClient::recv_getOrderID()
 {
 
   int32_t rseqid = 0;
@@ -1111,7 +1111,7 @@ int64_t AlgoTradeClient::recv_getOrderID()
     iprot_->getTransport()->readEnd();
   }
   int64_t _return;
-  AlgoTrade_getOrderID_presult result;
+  Sharp_getOrderID_presult result;
   result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
@@ -1123,18 +1123,18 @@ int64_t AlgoTradeClient::recv_getOrderID()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getOrderID failed: unknown result");
 }
 
-void AlgoTradeClient::placeOrder(OrderResponse& _return, const ContractRequest& c_req, const OrderRequest& o_req)
+void SharpClient::placeOrder(OrderResponse& _return, const ContractRequest& c_req, const OrderRequest& o_req)
 {
   send_placeOrder(c_req, o_req);
   recv_placeOrder(_return);
 }
 
-void AlgoTradeClient::send_placeOrder(const ContractRequest& c_req, const OrderRequest& o_req)
+void SharpClient::send_placeOrder(const ContractRequest& c_req, const OrderRequest& o_req)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("placeOrder", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  AlgoTrade_placeOrder_pargs args;
+  Sharp_placeOrder_pargs args;
   args.c_req = &c_req;
   args.o_req = &o_req;
   args.write(oprot_);
@@ -1144,7 +1144,7 @@ void AlgoTradeClient::send_placeOrder(const ContractRequest& c_req, const OrderR
   oprot_->getTransport()->flush();
 }
 
-void AlgoTradeClient::recv_placeOrder(OrderResponse& _return)
+void SharpClient::recv_placeOrder(OrderResponse& _return)
 {
 
   int32_t rseqid = 0;
@@ -1169,7 +1169,7 @@ void AlgoTradeClient::recv_placeOrder(OrderResponse& _return)
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  AlgoTrade_placeOrder_presult result;
+  Sharp_placeOrder_presult result;
   result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
@@ -1185,18 +1185,18 @@ void AlgoTradeClient::recv_placeOrder(OrderResponse& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "placeOrder failed: unknown result");
 }
 
-void AlgoTradeClient::cancelOrder(OrderResponse& _return, const int64_t o_id)
+void SharpClient::cancelOrder(OrderResponse& _return, const int64_t o_id)
 {
   send_cancelOrder(o_id);
   recv_cancelOrder(_return);
 }
 
-void AlgoTradeClient::send_cancelOrder(const int64_t o_id)
+void SharpClient::send_cancelOrder(const int64_t o_id)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("cancelOrder", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  AlgoTrade_cancelOrder_pargs args;
+  Sharp_cancelOrder_pargs args;
   args.o_id = &o_id;
   args.write(oprot_);
 
@@ -1205,7 +1205,7 @@ void AlgoTradeClient::send_cancelOrder(const int64_t o_id)
   oprot_->getTransport()->flush();
 }
 
-void AlgoTradeClient::recv_cancelOrder(OrderResponse& _return)
+void SharpClient::recv_cancelOrder(OrderResponse& _return)
 {
 
   int32_t rseqid = 0;
@@ -1230,7 +1230,7 @@ void AlgoTradeClient::recv_cancelOrder(OrderResponse& _return)
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  AlgoTrade_cancelOrder_presult result;
+  Sharp_cancelOrder_presult result;
   result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
@@ -1246,18 +1246,18 @@ void AlgoTradeClient::recv_cancelOrder(OrderResponse& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "cancelOrder failed: unknown result");
 }
 
-void AlgoTradeClient::orderStatus(OrderResponse& _return, const int64_t o_id)
+void SharpClient::orderStatus(OrderResponse& _return, const int64_t o_id)
 {
   send_orderStatus(o_id);
   recv_orderStatus(_return);
 }
 
-void AlgoTradeClient::send_orderStatus(const int64_t o_id)
+void SharpClient::send_orderStatus(const int64_t o_id)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("orderStatus", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  AlgoTrade_orderStatus_pargs args;
+  Sharp_orderStatus_pargs args;
   args.o_id = &o_id;
   args.write(oprot_);
 
@@ -1266,7 +1266,7 @@ void AlgoTradeClient::send_orderStatus(const int64_t o_id)
   oprot_->getTransport()->flush();
 }
 
-void AlgoTradeClient::recv_orderStatus(OrderResponse& _return)
+void SharpClient::recv_orderStatus(OrderResponse& _return)
 {
 
   int32_t rseqid = 0;
@@ -1291,7 +1291,7 @@ void AlgoTradeClient::recv_orderStatus(OrderResponse& _return)
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  AlgoTrade_orderStatus_presult result;
+  Sharp_orderStatus_presult result;
   result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
@@ -1307,7 +1307,7 @@ void AlgoTradeClient::recv_orderStatus(OrderResponse& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "orderStatus failed: unknown result");
 }
 
-bool AlgoTradeProcessor::dispatchCall(::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, const std::string& fname, int32_t seqid, void* callContext) {
+bool SharpProcessor::dispatchCall(::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, const std::string& fname, int32_t seqid, void* callContext) {
   ProcessMap::iterator pfn;
   pfn = processMap_.find(fname);
   if (pfn == processMap_.end()) {
@@ -1326,34 +1326,34 @@ bool AlgoTradeProcessor::dispatchCall(::apache::thrift::protocol::TProtocol* ipr
   return true;
 }
 
-void AlgoTradeProcessor::process_ping(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void SharpProcessor::process_ping(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("AlgoTrade.ping", callContext);
+    ctx = this->eventHandler_->getContext("Sharp.ping", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "AlgoTrade.ping");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Sharp.ping");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "AlgoTrade.ping");
+    this->eventHandler_->preRead(ctx, "Sharp.ping");
   }
 
-  AlgoTrade_ping_args args;
+  Sharp_ping_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "AlgoTrade.ping", bytes);
+    this->eventHandler_->postRead(ctx, "Sharp.ping", bytes);
   }
 
-  AlgoTrade_ping_result result;
+  Sharp_ping_result result;
   try {
     iface_->ping(result.success, args.request);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "AlgoTrade.ping");
+      this->eventHandler_->handlerError(ctx, "Sharp.ping");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
@@ -1366,7 +1366,7 @@ void AlgoTradeProcessor::process_ping(int32_t seqid, ::apache::thrift::protocol:
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "AlgoTrade.ping");
+    this->eventHandler_->preWrite(ctx, "Sharp.ping");
   }
 
   oprot->writeMessageBegin("ping", ::apache::thrift::protocol::T_REPLY, seqid);
@@ -1376,38 +1376,38 @@ void AlgoTradeProcessor::process_ping(int32_t seqid, ::apache::thrift::protocol:
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "AlgoTrade.ping", bytes);
+    this->eventHandler_->postWrite(ctx, "Sharp.ping", bytes);
   }
 }
 
-void AlgoTradeProcessor::process_getOrderID(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void SharpProcessor::process_getOrderID(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("AlgoTrade.getOrderID", callContext);
+    ctx = this->eventHandler_->getContext("Sharp.getOrderID", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "AlgoTrade.getOrderID");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Sharp.getOrderID");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "AlgoTrade.getOrderID");
+    this->eventHandler_->preRead(ctx, "Sharp.getOrderID");
   }
 
-  AlgoTrade_getOrderID_args args;
+  Sharp_getOrderID_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "AlgoTrade.getOrderID", bytes);
+    this->eventHandler_->postRead(ctx, "Sharp.getOrderID", bytes);
   }
 
-  AlgoTrade_getOrderID_result result;
+  Sharp_getOrderID_result result;
   try {
     result.success = iface_->getOrderID();
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "AlgoTrade.getOrderID");
+      this->eventHandler_->handlerError(ctx, "Sharp.getOrderID");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
@@ -1420,7 +1420,7 @@ void AlgoTradeProcessor::process_getOrderID(int32_t seqid, ::apache::thrift::pro
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "AlgoTrade.getOrderID");
+    this->eventHandler_->preWrite(ctx, "Sharp.getOrderID");
   }
 
   oprot->writeMessageBegin("getOrderID", ::apache::thrift::protocol::T_REPLY, seqid);
@@ -1430,32 +1430,32 @@ void AlgoTradeProcessor::process_getOrderID(int32_t seqid, ::apache::thrift::pro
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "AlgoTrade.getOrderID", bytes);
+    this->eventHandler_->postWrite(ctx, "Sharp.getOrderID", bytes);
   }
 }
 
-void AlgoTradeProcessor::process_placeOrder(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void SharpProcessor::process_placeOrder(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("AlgoTrade.placeOrder", callContext);
+    ctx = this->eventHandler_->getContext("Sharp.placeOrder", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "AlgoTrade.placeOrder");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Sharp.placeOrder");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "AlgoTrade.placeOrder");
+    this->eventHandler_->preRead(ctx, "Sharp.placeOrder");
   }
 
-  AlgoTrade_placeOrder_args args;
+  Sharp_placeOrder_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "AlgoTrade.placeOrder", bytes);
+    this->eventHandler_->postRead(ctx, "Sharp.placeOrder", bytes);
   }
 
-  AlgoTrade_placeOrder_result result;
+  Sharp_placeOrder_result result;
   try {
     iface_->placeOrder(result.success, args.c_req, args.o_req);
     result.__isset.success = true;
@@ -1464,7 +1464,7 @@ void AlgoTradeProcessor::process_placeOrder(int32_t seqid, ::apache::thrift::pro
     result.__isset.e = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "AlgoTrade.placeOrder");
+      this->eventHandler_->handlerError(ctx, "Sharp.placeOrder");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
@@ -1477,7 +1477,7 @@ void AlgoTradeProcessor::process_placeOrder(int32_t seqid, ::apache::thrift::pro
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "AlgoTrade.placeOrder");
+    this->eventHandler_->preWrite(ctx, "Sharp.placeOrder");
   }
 
   oprot->writeMessageBegin("placeOrder", ::apache::thrift::protocol::T_REPLY, seqid);
@@ -1487,32 +1487,32 @@ void AlgoTradeProcessor::process_placeOrder(int32_t seqid, ::apache::thrift::pro
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "AlgoTrade.placeOrder", bytes);
+    this->eventHandler_->postWrite(ctx, "Sharp.placeOrder", bytes);
   }
 }
 
-void AlgoTradeProcessor::process_cancelOrder(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void SharpProcessor::process_cancelOrder(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("AlgoTrade.cancelOrder", callContext);
+    ctx = this->eventHandler_->getContext("Sharp.cancelOrder", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "AlgoTrade.cancelOrder");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Sharp.cancelOrder");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "AlgoTrade.cancelOrder");
+    this->eventHandler_->preRead(ctx, "Sharp.cancelOrder");
   }
 
-  AlgoTrade_cancelOrder_args args;
+  Sharp_cancelOrder_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "AlgoTrade.cancelOrder", bytes);
+    this->eventHandler_->postRead(ctx, "Sharp.cancelOrder", bytes);
   }
 
-  AlgoTrade_cancelOrder_result result;
+  Sharp_cancelOrder_result result;
   try {
     iface_->cancelOrder(result.success, args.o_id);
     result.__isset.success = true;
@@ -1521,7 +1521,7 @@ void AlgoTradeProcessor::process_cancelOrder(int32_t seqid, ::apache::thrift::pr
     result.__isset.e = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "AlgoTrade.cancelOrder");
+      this->eventHandler_->handlerError(ctx, "Sharp.cancelOrder");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
@@ -1534,7 +1534,7 @@ void AlgoTradeProcessor::process_cancelOrder(int32_t seqid, ::apache::thrift::pr
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "AlgoTrade.cancelOrder");
+    this->eventHandler_->preWrite(ctx, "Sharp.cancelOrder");
   }
 
   oprot->writeMessageBegin("cancelOrder", ::apache::thrift::protocol::T_REPLY, seqid);
@@ -1544,32 +1544,32 @@ void AlgoTradeProcessor::process_cancelOrder(int32_t seqid, ::apache::thrift::pr
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "AlgoTrade.cancelOrder", bytes);
+    this->eventHandler_->postWrite(ctx, "Sharp.cancelOrder", bytes);
   }
 }
 
-void AlgoTradeProcessor::process_orderStatus(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void SharpProcessor::process_orderStatus(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("AlgoTrade.orderStatus", callContext);
+    ctx = this->eventHandler_->getContext("Sharp.orderStatus", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "AlgoTrade.orderStatus");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Sharp.orderStatus");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "AlgoTrade.orderStatus");
+    this->eventHandler_->preRead(ctx, "Sharp.orderStatus");
   }
 
-  AlgoTrade_orderStatus_args args;
+  Sharp_orderStatus_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "AlgoTrade.orderStatus", bytes);
+    this->eventHandler_->postRead(ctx, "Sharp.orderStatus", bytes);
   }
 
-  AlgoTrade_orderStatus_result result;
+  Sharp_orderStatus_result result;
   try {
     iface_->orderStatus(result.success, args.o_id);
     result.__isset.success = true;
@@ -1578,7 +1578,7 @@ void AlgoTradeProcessor::process_orderStatus(int32_t seqid, ::apache::thrift::pr
     result.__isset.e = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "AlgoTrade.orderStatus");
+      this->eventHandler_->handlerError(ctx, "Sharp.orderStatus");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
@@ -1591,7 +1591,7 @@ void AlgoTradeProcessor::process_orderStatus(int32_t seqid, ::apache::thrift::pr
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "AlgoTrade.orderStatus");
+    this->eventHandler_->preWrite(ctx, "Sharp.orderStatus");
   }
 
   oprot->writeMessageBegin("orderStatus", ::apache::thrift::protocol::T_REPLY, seqid);
@@ -1601,14 +1601,14 @@ void AlgoTradeProcessor::process_orderStatus(int32_t seqid, ::apache::thrift::pr
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "AlgoTrade.orderStatus", bytes);
+    this->eventHandler_->postWrite(ctx, "Sharp.orderStatus", bytes);
   }
 }
 
-::boost::shared_ptr< ::apache::thrift::TProcessor > AlgoTradeProcessorFactory::getProcessor(const ::apache::thrift::TConnectionInfo& connInfo) {
-  ::apache::thrift::ReleaseHandler< AlgoTradeIfFactory > cleanup(handlerFactory_);
-  ::boost::shared_ptr< AlgoTradeIf > handler(handlerFactory_->getHandler(connInfo), cleanup);
-  ::boost::shared_ptr< ::apache::thrift::TProcessor > processor(new AlgoTradeProcessor(handler));
+::boost::shared_ptr< ::apache::thrift::TProcessor > SharpProcessorFactory::getProcessor(const ::apache::thrift::TConnectionInfo& connInfo) {
+  ::apache::thrift::ReleaseHandler< SharpIfFactory > cleanup(handlerFactory_);
+  ::boost::shared_ptr< SharpIf > handler(handlerFactory_->getHandler(connInfo), cleanup);
+  ::boost::shared_ptr< ::apache::thrift::TProcessor > processor(new SharpProcessor(handler));
   return processor;
 }
 }} // namespace

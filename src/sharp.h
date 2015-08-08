@@ -103,12 +103,12 @@ FindorCreate(K key, std::map<K, std::unique_ptr<V> > & signal_map){
 	}
 }
 
-class PosixTestClient : public EWrapper
+class EWrapperImpl : public EWrapper
 {
 public:
 
-	PosixTestClient();
-	~PosixTestClient();
+	EWrapperImpl();
+	~EWrapperImpl();
 
 	void monitor();
 
@@ -208,16 +208,16 @@ public:
 	// so these functions should be synchronized.
 	std::map<OrderId, std::unique_ptr<OrderResponse> > order_statuses;
 	ContractOrder contract_order_request;
-	PlacedOrderContracts placed_contract_orders; // written only by PosixTestClient::placeOrder(ContractOrder & contract_order)
-	std::vector<OrderId> order_ids; // written only by PosixTestClient::nextValidId( OrderId orderId)
+	PlacedOrderContracts placed_contract_orders; // written only by EWrapperImpl::placeOrder(ContractOrder & contract_order)
+	std::vector<OrderId> order_ids; // written only by EWrapperImpl::nextValidId( OrderId orderId)
 };
 
-namespace algotrade{
-	void run_server (PosixTestClient & ibtrader);
+namespace sharp{
+	void run_server (EWrapperImpl & ibtrader);
 
-	class AlgoTradeClientService{
+	class SharpClientService{
 	public:
-		virtual ~AlgoTradeClientService() = default;
+		virtual ~SharpClientService() = default;
 		virtual void ping () = 0;
 		virtual void placeOrder(OrderResponse& response, const Contract& c_request, const Order& o_request) = 0;
         virtual int64_t getOrderID() = 0;
@@ -225,7 +225,7 @@ namespace algotrade{
         virtual void orderStatus(OrderResponse & response, const int64_t o_id) = 0;
 	};
 
-	AlgoTradeClientService *make_client ();
+	SharpClientService *make_client ();
 }
 
 #endif

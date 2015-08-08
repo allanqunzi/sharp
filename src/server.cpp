@@ -10,13 +10,13 @@
 #endif
 */
 #include <unistd.h>
-#include "PosixTestClient.h"
+#include "sharp.h"
 
 
 const unsigned MAX_ATTEMPTS = 50;
 const unsigned SLEEP_TIME = 10;
 
-using namespace algotrade;
+using namespace sharp;
 
 int main(int argc, char** argv)
 {
@@ -32,7 +32,7 @@ int main(int argc, char** argv)
 		++attempt;
 		printf( "Attempt %u of %u\n", attempt, MAX_ATTEMPTS);
 
-		PosixTestClient client;
+		EWrapperImpl client;
 
 		client.connect( client.host, client.port, client.clientId);
 
@@ -51,7 +51,7 @@ int main(int argc, char** argv)
 
 	printf ( "End of POSIX Socket Client Test\n");
 */
-	PosixTestClient ibtrader;
+	EWrapperImpl ibtrader;
 	run_server(ibtrader);
 	return 0;
 }

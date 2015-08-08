@@ -11,15 +11,15 @@ TARGET=server
 
 
 
-$(TARGET): server.cpp PosixTestClient.cpp
+$(TARGET): server.cpp sharp.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o EClientSocketBase.o -c $(BASE_SRC_DIR)/EClientSocketBase.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o EPosixClientSocket.o -c $(BASE_SRC_DIR)/EPosixClientSocket.cpp
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -o PosixTestClient.o -c PosixTestClient.cpp
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -o algotrade-thrift.o -c algotrade-thrift.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -o sharp.o -c sharp.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -o sharp-thrift.o -c sharp-thrift.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o server.o -c server.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o client.o -c client.cpp
-	$(CXX) $(LDFLAGS) server.o PosixTestClient.o EClientSocketBase.o EPosixClientSocket.o $(PROTOCOL_OBJS) -o $@ $(LDLIBS)
-	$(CXX) $(LDFLAGS) client.o PosixTestClient.o EClientSocketBase.o EPosixClientSocket.o $(PROTOCOL_OBJS) -o client $(LDLIBS)
+	$(CXX) $(LDFLAGS) server.o sharp.o EClientSocketBase.o EPosixClientSocket.o $(PROTOCOL_OBJS) -o $@ $(LDLIBS)
+	$(CXX) $(LDFLAGS) client.o sharp.o EClientSocketBase.o EPosixClientSocket.o $(PROTOCOL_OBJS) -o client $(LDLIBS)
 
 clean:
 	rm -f $(TARGET) *.o
