@@ -205,7 +205,7 @@ public:
 	void displayGroupUpdated( int reqId, const IBString& contractInfo);
 
 private:
-	std::auto_ptr<EPosixClientSocket> m_pClient;
+	std::unique_ptr<EPosixClientSocket> m_pClient;
 	State m_state;
 	time_t m_sleepDeadline;
 
@@ -232,9 +232,9 @@ public:
 		virtual ~SharpClientService() = default;
 		virtual void ping () = 0;
 		virtual void placeOrder(OrderResponse& response, const Contract& c_request, const Order& o_request) = 0;
-        virtual int64_t getOrderID() = 0;
-        virtual void cancelOrder(OrderResponse & response, const int64_t o_id) = 0;
-        virtual void orderStatus(OrderResponse & response, const int64_t o_id) = 0;
+		virtual int64_t getOrderID() = 0;
+		virtual void cancelOrder(OrderResponse & response, const int64_t o_id) = 0;
+		virtual void orderStatus(OrderResponse & response, const int64_t o_id) = 0;
 	};
 
 	SharpClientService *make_client ();
