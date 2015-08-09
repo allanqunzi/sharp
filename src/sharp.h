@@ -15,6 +15,7 @@
 #include <chrono>
 #include <memory>
 #include <vector>
+#include <string>
 #include <utility>
 #include <cassert>
 #include <mutex>
@@ -213,7 +214,7 @@ public:
 	OrderId m_orderId;
 
 public:
-	const char *host;
+	std::string host;
 	unsigned int port;
 	int clientId;
 	std::mutex mutex;

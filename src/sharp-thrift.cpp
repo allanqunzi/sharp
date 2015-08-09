@@ -183,7 +183,7 @@ void run_server (EWrapperImpl & ibtrader) {
     for (;;)
     {
         ++attempt;
-        ibtrader.connect( ibtrader.host, ibtrader.port, ibtrader.clientId);
+        ibtrader.connect( ibtrader.host.c_str(), ibtrader.port, ibtrader.clientId);
         while( ibtrader.isConnected() ) {
             ibtrader.monitor();
             std::this_thread::sleep_for(MONITOR_WAITING_TIME);
