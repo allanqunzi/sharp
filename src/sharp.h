@@ -125,26 +125,22 @@ struct PlacedOrderContracts
 class EWrapperImpl : public EWrapper
 {
 public:
-
 	EWrapperImpl();
 	~EWrapperImpl();
 
-	void monitor();
-
 public:
-
 	bool connect(const char * host, unsigned int port, int clientId = 0);
 	void disconnect() const;
 	bool isConnected() const;
+
 public:
-    void placeOrder();
-    bool checkValidId( OrderId orderId);
+	void monitor();
+	void placeOrder();
+	bool checkValidId( OrderId orderId);
 	bool cancelOrder(OrderId orderId);
 
 private:
-
 	void reqCurrentTime();
-
 
 public:
 	// events
@@ -209,7 +205,6 @@ public:
 	void displayGroupUpdated( int reqId, const IBString& contractInfo);
 
 private:
-
 	std::auto_ptr<EPosixClientSocket> m_pClient;
 	State m_state;
 	time_t m_sleepDeadline;
