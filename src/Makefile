@@ -11,7 +11,7 @@ TARGET=server
 
 
 
-$(TARGET): server.cpp sharp.cpp
+$(TARGET): server.cpp client.cpp sharp.cpp sharp.h
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o EClientSocketBase.o -c $(BASE_SRC_DIR)/EClientSocketBase.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o EPosixClientSocket.o -c $(BASE_SRC_DIR)/EPosixClientSocket.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o sharp.o -c sharp.cpp

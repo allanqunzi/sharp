@@ -2,18 +2,10 @@
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
 #include "sharp.h"
-#include "EPosixClientSocket.h"
-#include "EPosixClientSocketPlatform.h"
 #define DEBUG 1
 
-const int PING_DEADLINE = 2; // seconds
-const int SLEEP_BETWEEN_PINGS = 30; // seconds
+namespace sharp{
 
-/* the following is by Aiqun Huang */
-
-
-///////////////////////////////////////////////////////////
-// member funcs
 EWrapperImpl::EWrapperImpl()
 	: m_pClient(new EPosixClientSocket(this))
 	, m_state(ST_CONNECT)
@@ -66,35 +58,7 @@ void EWrapperImpl::monitor()
 	tval.tv_sec = 0;
 
 	time_t now = time(NULL);
-/*
-	switch (m_state) {
-		case ST_PLACEORDER:
-			//placeOrder();
-			break;
-		case ST_PLACEORDER_ACK:
-			break;
-		case ST_CANCELORDER:
-			//cancelOrder();
-			break;
-		case ST_CANCELORDER_ACK:
-			break;
-		case ST_PING:
-			reqCurrentTime();
-			break;
-		case ST_PING_ACK:
-			if( m_sleepDeadline < now) {
-				disconnect();
-				return;
-			}
-			break;
-		case ST_IDLE:
-			if( m_sleepDeadline < now) {
-				m_state = ST_PING;
-				return;
-			}
-			break;
-	}
-*/
+
 	if( m_sleepDeadline > 0) {
 		// initialize timeout with m_sleepDeadline - now
 		tval.tv_sec = m_sleepDeadline - now;
@@ -135,11 +99,13 @@ void EWrapperImpl::monitor()
 			return;
 
 		if( FD_ISSET( m_pClient->fd(), &writeSet)) {
-			// socket is ready for writing
-			// onSend() checks error by calling handleSocketError(), then calls
-			// sendBufferedData(), sendBufferedData() calls EPosixClientSocket::send
-			// (which calls ::send),  then sendBufferedData() clears m_outBuffer and returns
-			// an int nResult.
+			/**
+			* socket is ready for writing
+			* onSend() checks error by calling handleSocketError(), then calls
+			* sendBufferedData(), sendBufferedData() calls EPosixClientSocket::send
+			* (which calls ::send),  then sendBufferedData() clears m_outBuffer and returns
+			* an int nResult.
+			*/
 			m_pClient->onSend();
 		}
 
@@ -147,144 +113,110 @@ void EWrapperImpl::monitor()
 			return;
 
 		if( FD_ISSET( m_pClient->fd(), &readSet)) {
-			// socket is ready for reading
-			// onReceive() checks error by calling handleSocketError(), then calls
-			// checkMessages(), checkMessages() first calls bufferedRead(), bufferedRead()
-			// calls receive(which calls ::recv) and fills the m_inBuffer, then checkMessages()
-			// calls processMsg() if m_connected is true,
-			// ortherwise calls processConnectAck
+			/**
+			* socket is ready for reading
+			* onReceive() checks error by calling handleSocketError(), then calls
+			* checkMessages(), checkMessages() first calls bufferedRead(), bufferedRead()
+			* calls receive(which calls ::recv) and fills the m_inBuffer, then checkMessages()
+			* calls processMsg() if m_connected is true,
+			* ortherwise calls processConnectAck
+			*/
 			m_pClient->onReceive();
 		}
 	}
 }
 
-//////////////////////////////////////////////////////////////////
-// methods
 void EWrapperImpl::reqCurrentTime()
 {
 	printf( "Requesting Current Time\n");
-
 	// set ping deadline to "now + n seconds"
 	m_sleepDeadline = time( NULL) + PING_DEADLINE;
-
-	m_state = ST_PING_ACK;
-
 	m_pClient->reqCurrentTime();
 }
 
-void EWrapperImpl::placeOrder(ContractOrder & contract_order)
+void EWrapperImpl::placeOrder()
 {
-	/***
-	Contract contract;
-	Order order;
+	auto & req = contract_order_request;
+	req.orderId = m_orderId;
+	printf( "Placing Order %ld: %s %ld %s at %f\n", req.orderId,
+		req.order.action.c_str(), req.order.totalQuantity,
+		req.contract.symbol.c_str(), req.order.lmtPrice);
 
-	contract.symbol = "IBM";
-	contract.secType = "STK";
-	contract.exchange = "SMART";
-	contract.currency = "USD";
-
-	order.action = "BUY";
-	order.totalQuantity = 1000;
-	order.orderType = "LMT";
-	order.lmtPrice = 0.01;
-	*/
-
-	printf( "Placing Order %ld: %s %ld %s at %f\n", m_orderId,
-		contract_order.order.action.c_str(), contract_order.order.totalQuantity,
-		contract_order.contract.symbol.c_str(), contract_order.order.lmtPrice);
-
-	m_state = ST_PLACEORDER_ACK;
-
-	contract_order.orderId = m_orderId;
-	if(checkValidId(contract_order.orderId)){
-		m_pClient->placeOrder( contract_order.orderId, contract_order.contract, contract_order.order);
+	if(checkValidId(req.orderId)){
+		m_pClient->placeOrder( req.orderId, req.contract, req.order);
 	}else{
 		assert(0 && "checkValidId failed !");
 	}
 	std::lock_guard<std::mutex> lk(mutex);
-	auto it = FindorCreate<OrderId, OrderResponse>(contract_order.orderId, order_statuses);
-	auto & sec = it->second;
-	sec->state = 0; // order submitted
-	placed_contract_orders.update(contract_order.orderId, contract_order);
+	placed_contract_orders.insert(req.orderId, req);
 }
 
 bool EWrapperImpl::cancelOrder(OrderId orderId)
 {
 	printf( "Cancelling Order %ld\n", orderId);
 
-	m_state = ST_CANCELORDER_ACK;
-
-	if(order_statuses.count(orderId) == 1){
+	auto & m = placed_contract_orders.orderId_index_map;
+	if(m.count(orderId) == 1){
 		m_pClient->cancelOrder(orderId);
-		auto & ptr =  order_statuses[orderId];
-		ptr->state = -1; // canceled
+
+		std::lock_guard<std::mutex> lk(mutex);
+		auto & rds = placed_contract_orders.records;
+		auto & resp = rds[m.at(orderId)]->response;
+		assert(resp.orderId == orderId && "assert in EWrapperImpl::cancelOrder: resp.orderId == orderId failed.");
+		resp.state = -1; // canceled
 		return true;
 	}else{
 		std::cout<<"This orderId: "<<orderId<<" doesn't exist."<<std::endl;
 		return false;
 	}
 }
-///////////////////////////////////////////////////////////////////
-// events
+
+// events called by m_pClient->onReceive();
 void EWrapperImpl::orderStatus( OrderId orderId, const IBString &status, int filled,
 	   int remaining, double avgFillPrice, int permId, int parentId,
 	   double lastFillPrice, int clientId, const IBString& whyHeld)
 
 {
-	{   // written by Aiqun Huang
-		if(order_statuses.count(orderId) == 0){
-			std::cout<<"This orderId:"<<orderId<<" hasn't been placed, why I am getting this message?"<<std::endl;
-			return;
-		}
-		std::lock_guard<std::mutex> lk(mutex);
-		auto & ptr = order_statuses.at(orderId);
-		ptr->orderId = orderId;
-		ptr->state += 1;
-		ptr->status = status;
-		ptr->filled = filled;
-		ptr->remaining = remaining;
-		ptr->avgFillPrice = avgFillPrice;
-		ptr->permId = permId;
-		ptr->parentId = parentId;
-		ptr->lastFillPrice = lastFillPrice;
-		ptr->clientId = clientId;
-		ptr->whyHeld = whyHeld;
-    }
-
-	if( orderId == m_orderId) {
-
-		if( m_state == ST_PLACEORDER_ACK && (status == "PreSubmitted" || status == "Submitted"))
-			m_state = ST_CANCELORDER;
-
-		if( m_state == ST_CANCELORDER_ACK && status == "Cancelled")
-			m_state = ST_PING;
-
-		printf( "Order: id=%ld, status=%s\n", orderId, status.c_str());
+    auto & m = placed_contract_orders.orderId_index_map;
+	if(m.count(orderId) == 0){
+		std::cout<<"This orderId:"<<orderId<<" hasn't been placed, why I am getting this message?"<<std::endl;
+		return;
 	}
+
+	std::lock_guard<std::mutex> lk(mutex);
+	auto & rds = placed_contract_orders.records;
+	auto & resp = rds[m.at(orderId)]->response;
+	assert(resp.orderId == orderId && "assert in EWrapperImpl::orderStatus: resp.orderId == orderId failed.");
+	resp.state += 1;
+	resp.clientId = clientId;
+	resp.permId = permId;
+	resp.parentId = parentId;
+	resp.filled = filled;
+	resp.remaining = remaining;
+	resp.avgFillPrice = avgFillPrice;
+	resp.lastFillPrice = lastFillPrice;
+	resp.status = status;
+	resp.whyHeld = whyHeld;
+
+	printf( "Order: id=%ld, status=%s\n", orderId, status.c_str());
+
 }
-
-
 
 void EWrapperImpl::nextValidId( OrderId orderId)
 {
 	m_orderId = orderId;
 	order_ids.push_back(orderId);
-
-	m_state = ST_PLACEORDER;
 }
 
 void EWrapperImpl::currentTime( long time)
 {
-	if ( m_state == ST_PING_ACK) {
-		time_t t = ( time_t)time;
-		struct tm * timeinfo = localtime ( &t);
-		printf( "The current date/time is: %s", asctime( timeinfo));
 
-		time_t now = ::time(NULL);
-		m_sleepDeadline = now + SLEEP_BETWEEN_PINGS;
+	time_t t = ( time_t)time;
+	struct tm * timeinfo = localtime ( &t);
+	printf( "The current date/time is: %s", asctime( timeinfo));
 
-		m_state = ST_IDLE;
-	}
+	time_t now = ::time(NULL);
+	m_sleepDeadline = now + SLEEP_BETWEEN_PINGS;
 }
 
 void EWrapperImpl::error(const int id, const int errorCode, const IBString errorString)
@@ -351,10 +283,6 @@ void EWrapperImpl::verifyCompleted( bool isSuccessful, const IBString& errorText
 void EWrapperImpl::displayGroupList( int reqId, const IBString& groups) {}
 void EWrapperImpl::displayGroupUpdated( int reqId, const IBString& contractInfo) {}
 
-
-
-//  the following code is defined by Aiqun Huang
-
 bool EWrapperImpl::checkValidId( OrderId orderId){
 	int count = std::count(order_ids.begin(), order_ids.end(), orderId);
 	if( count == 1 )return true;
@@ -363,4 +291,4 @@ bool EWrapperImpl::checkValidId( OrderId orderId){
 
 
 
-
+} // end of namespace sharp

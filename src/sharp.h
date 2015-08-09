@@ -1,23 +1,37 @@
 /* Copyright (C) 2013 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
-#ifndef posixtestclient_h__INCLUDED
-#define posixtestclient_h__INCLUDED
+#ifndef QUNZI_SHARP_HEADER
+#define QUNZI_SHARP_HEADER
 
 #include "Contract.h"
 #include "Order.h"
+#include "EPosixClientSocket.h"
+#include "EPosixClientSocketPlatform.h"
 #include "EWrapper.h"
-#include <stdio.h>
-#include <memory>
 #include <iostream>
-#include <map>
-#include <vector>
 #include <algorithm>
+#include <stdio.h>
+#include <chrono>
+#include <memory>
+#include <vector>
 #include <utility>
 #include <cassert>
 #include <mutex>
+#include <map>
 
 class EPosixClientSocket;
+
+namespace sharp{
+
+static constexpr int PING_DEADLINE = 2; // seconds
+static constexpr int SLEEP_BETWEEN_PINGS = 30; // seconds
+static constexpr unsigned int MAX_ATTEMPTS = 50;
+const auto ATTEMPT_WAITING_TIME = std::chrono::seconds(10);
+const auto MONITOR_WAITING_TIME = std::chrono::milliseconds(50); // 0.05 second
+
+template<typename T>
+class TypeDisplayer; // usage: TypeDisplayer<decltype(x)>xType;
 
 enum State {
 	ST_CONNECT,
@@ -29,14 +43,31 @@ enum State {
 	ST_PING_ACK,
 	ST_IDLE
 };
+
+struct OrderResponse
+{
+	OrderId orderId = -1L;
+	int state = -1;
+	int clientId = -1;
+	int permId = -1;
+	int parentId = -1;
+	int filled = -1;
+	int remaining = -1;
+	double avgFillPrice = 0.0;
+	double lastFillPrice = 0.0;
+	IBString status;
+	IBString whyHeld;
+};
+
 struct ContractOrder
 {
 	OrderId orderId;
 	Contract contract;
 	Order order;
+	OrderResponse response;
 
-	ContractOrder():orderId(-1), contract(),order(){};
-	ContractOrder(const ContractOrder & contract_order){
+	ContractOrder():orderId(-1), contract(),order(), response(){};
+	ContractOrder(const ContractOrder & contract_order):response(){
 		orderId = contract_order.orderId;
 
 		contract.symbol = contract_order.contract.symbol;
@@ -51,39 +82,6 @@ struct ContractOrder
 	}
 };
 
-struct PlacedOrderContracts
-{
-	std::map<OrderId, int> orderId_index_map;
-	std::vector<std::unique_ptr<ContractOrder> > records;
-
-	void update(OrderId orderId, ContractOrder & contract_order){
-		if(orderId_index_map.count(orderId) > 0){
-			std::cout<<"This orderId:"<<orderId<<" has been already registered, records insertion failed."<<std::endl;
-			return;
-		}else{
-			records.push_back(std::unique_ptr<ContractOrder>(new ContractOrder(contract_order)));
-			orderId_index_map[orderId] = records.size()-1;
-			return;
-		}
-	}
-};
-
-struct OrderResponse
-{
-	OrderId orderId;
-	int16_t state;
-	IBString status;
-	int filled;
-	int remaining;
-	double avgFillPrice;
-	int permId;
-	int parentId;
-	double lastFillPrice;
-	int clientId;
-	IBString whyHeld;
-};
-
-/* the following is by Aiqun Huang */
 template<typename K, typename V>
 typename std::map<K, std::unique_ptr<V> >::iterator
 FindorCreate(K key, std::map<K, std::unique_ptr<V> > & signal_map){
@@ -103,6 +101,27 @@ FindorCreate(K key, std::map<K, std::unique_ptr<V> > & signal_map){
 	}
 }
 
+struct PlacedOrderContracts
+{
+	std::map<OrderId, std::size_t> orderId_index_map;
+	std::vector<std::unique_ptr<ContractOrder> > records;
+
+	bool insert(OrderId orderId, ContractOrder & contract_order){
+		if(orderId_index_map.count(orderId) > 0){
+			std::cout<<"This orderId:"<<orderId<<" has been already registered, records insertion failed."<<std::endl;
+			return false;
+		}else{
+			records.push_back(std::unique_ptr<ContractOrder>(new ContractOrder(contract_order)));
+			orderId_index_map[orderId] = records.size() - 1;
+			auto & resp = records.back()->response;
+			resp.orderId = orderId;
+			resp.state = 0; // order placed
+			return true;
+		}
+	}
+};
+
+
 class EWrapperImpl : public EWrapper
 {
 public:
@@ -117,8 +136,8 @@ public:
 	bool connect(const char * host, unsigned int port, int clientId = 0);
 	void disconnect() const;
 	bool isConnected() const;
-public: // defined by Aiqun Huang
-    void placeOrder(ContractOrder &);
+public:
+    void placeOrder();
     bool checkValidId( OrderId orderId);
 	bool cancelOrder(OrderId orderId);
 
@@ -198,21 +217,19 @@ private:
 public:
 	OrderId m_orderId;
 
-	// the following is defined by Aiqun Huang
 public:
 	const char *host;
 	unsigned int port;
 	int clientId;
 	std::mutex mutex;
-	// order_statuses is written by three member functions: placeOrder, cancelOrder and orderStatus,
-	// so these functions should be synchronized.
-	std::map<OrderId, std::unique_ptr<OrderResponse> > order_statuses;
 	ContractOrder contract_order_request;
-	PlacedOrderContracts placed_contract_orders; // written only by EWrapperImpl::placeOrder(ContractOrder & contract_order)
+	// placed_contract_orders is written by three member functions: placeOrder, cancelOrder and orderStatus,
+	// so these functions should be synchronized.
+	PlacedOrderContracts placed_contract_orders;
 	std::vector<OrderId> order_ids; // written only by EWrapperImpl::nextValidId( OrderId orderId)
 };
 
-namespace sharp{
+
 	void run_server (EWrapperImpl & ibtrader);
 
 	class SharpClientService{
@@ -226,7 +243,8 @@ namespace sharp{
 	};
 
 	SharpClientService *make_client ();
-}
 
+
+} // end of namespace sharp
 #endif
 

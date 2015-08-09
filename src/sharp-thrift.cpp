@@ -1,9 +1,7 @@
 #include <future>
-#include <chrono>
 #include <thread>
 //#include <boost/log/utility/setup/console.hpp>
 #include <thrift/protocol/TBinaryProtocol.h>
-//#include <thrift/protocol/TCompactProtocol.h>
 #include <thrift/server/TSimpleServer.h>
 #include <thrift/transport/TBufferTransports.h>
 #include <thrift/concurrency/ThreadManager.h>
@@ -63,6 +61,8 @@ public:
 
             auto & m_req = trader.contract_order_request;
 
+            m_req.orderId = trader.m_orderId;
+
             m_req.contract.symbol = c_req.symbol;
             m_req.contract.secType = c_req.secType;
             m_req.contract.exchange = c_req.exchange;
@@ -73,24 +73,28 @@ public:
             m_req.order.orderType = o_req.orderType;
             m_req.order.lmtPrice = o_req.lmtPrice;
 
-            trader.placeOrder(m_req);
+            trader.placeOrder();
 
+            auto & m = trader.placed_contract_orders.orderId_index_map;
+            auto & rds = trader.placed_contract_orders.records;
+            auto & resp = rds[m.at(m_req.orderId)]->response;
+
+            assert(m_req.orderId == resp.orderId && "assert in SharpHandler::placeOrder: m_req.orderId == resp.orderId failed." );
             o_response.orderId = m_req.orderId;
-            auto & m_resp = *(trader.order_statuses)[o_response.orderId];
-            if(m_resp.state == 0){
-                o_response.state = 0;
+            o_response.state = resp.state;
+
+            if(o_response.state == 0){
                 return;
             }else{
-                o_response.state = m_resp.state;
-                o_response.status = m_resp.status;
-                o_response.filled = m_resp.filled;
-                o_response.remaining = m_resp.remaining;
-                o_response.avgFillPrice = m_resp.avgFillPrice;
-                o_response.permId = m_resp.permId;
-                o_response.parentId = m_resp.parentId;
-                o_response.lastFillPrice = m_resp.lastFillPrice;
-                o_response.clientId = m_resp.clientId;
-                o_response.whyHeld = m_resp.whyHeld;
+                o_response.clientId = resp.clientId;
+                o_response.permId = resp.permId;
+                o_response.parentId = resp.parentId;
+                o_response.filled = resp.filled;
+                o_response.remaining = resp.remaining;
+                o_response.avgFillPrice = resp.avgFillPrice;
+                o_response.lastFillPrice = resp.lastFillPrice;
+                o_response.status = resp.status;
+                o_response.whyHeld = resp.whyHeld;
             }
 
         } );
@@ -107,17 +111,20 @@ public:
             auto ret = trader.cancelOrder(o_id);
             o_response.orderId = o_id;
             if(ret){ // order canceled successfully
-                auto & m_resp = *(trader.order_statuses)[o_response.orderId];
+                auto & m = trader.placed_contract_orders.orderId_index_map;
+                auto & rds = trader.placed_contract_orders.records;
+                auto & resp = rds[m.at(o_id)]->response;
+                assert(o_id == resp.orderId && "assert in SharpHandler::cancelOrder: o_id == resp.orderId failed.");
                 o_response.state = -1;
-                o_response.status = m_resp.status;
-                o_response.filled = m_resp.filled;
-                o_response.remaining = m_resp.remaining;
-                o_response.avgFillPrice = m_resp.avgFillPrice;
-                o_response.permId = m_resp.permId;
-                o_response.parentId = m_resp.parentId;
-                o_response.lastFillPrice = m_resp.lastFillPrice;
-                o_response.clientId = m_resp.clientId;
-                o_response.whyHeld = m_resp.whyHeld;
+                o_response.clientId = resp.clientId;
+                o_response.permId = resp.permId;
+                o_response.parentId = resp.parentId;
+                o_response.filled = resp.filled;
+                o_response.remaining = resp.remaining;
+                o_response.avgFillPrice = resp.avgFillPrice;
+                o_response.lastFillPrice = resp.lastFillPrice;
+                o_response.status = resp.status;
+                o_response.whyHeld = resp.whyHeld;
             }else{
                 o_response.state = -2; // orderId doesn't exist
             }
@@ -128,28 +135,29 @@ public:
     void orderStatus(api::OrderResponse& o_response, const int64_t o_id){
         protect( [this, &o_response, o_id](){
 
-            if(trader.order_statuses.count(o_id) == 0){
+            auto & m = trader.placed_contract_orders.orderId_index_map;
+            if(m.count(o_id) == 0){
                 o_response.state = -2; // orderId doesn't exist
                 return;
             }else{
+                auto & rds = trader.placed_contract_orders.records;
+                auto & resp = rds[m.at(o_id)]->response;
+                assert(o_id == resp.orderId && "assert in SharpHandler::orderStatus: o_id == resp.orderId failed.");
                 o_response.orderId = o_id;
-                auto & m_resp = *(trader.order_statuses)[o_response.orderId];
-                o_response.state = m_resp.state;
-                o_response.status = m_resp.status;
-                o_response.filled = m_resp.filled;
-                o_response.remaining = m_resp.remaining;
-                o_response.avgFillPrice = m_resp.avgFillPrice;
-                o_response.permId = m_resp.permId;
-                o_response.parentId = m_resp.parentId;
-                o_response.lastFillPrice = m_resp.lastFillPrice;
-                o_response.clientId = m_resp.clientId;
-                o_response.whyHeld = m_resp.whyHeld;
+                o_response.state = resp.state;
+                o_response.clientId = resp.clientId;
+                o_response.permId = resp.permId;
+                o_response.parentId = resp.parentId;
+                o_response.filled = resp.filled;
+                o_response.remaining = resp.remaining;
+                o_response.avgFillPrice = resp.avgFillPrice;
+                o_response.lastFillPrice = resp.lastFillPrice;
+                o_response.status = resp.status;
+                o_response.whyHeld = resp.whyHeld;
             }
         } );
     }
 };
-
-
 
 void run_server (EWrapperImpl & ibtrader) {
     std::cout << "Starting the server..."<<std::endl;
@@ -169,22 +177,31 @@ void run_server (EWrapperImpl & ibtrader) {
 
     //TSimpleServer server(processor, serverTransport, transportFactory, apiFactory);
 
-
     std::future<void> ret = std::async(std::launch::async, [&server](){server.serve();});
 
-    ibtrader.connect( ibtrader.host, ibtrader.port, ibtrader.clientId);
-    while( ibtrader.isConnected() ) {
+    unsigned attempt = 0;
+    for (;;)
+    {
+        ++attempt;
+        ibtrader.connect( ibtrader.host, ibtrader.port, ibtrader.clientId);
+        while( ibtrader.isConnected() ) {
             ibtrader.monitor();
-            std::this_thread::sleep_for (std::chrono::seconds(1));
+            std::this_thread::sleep_for(MONITOR_WAITING_TIME);
         }
-    //WaitSignal ws;
-    //int sig = 0;
-    //ws.wait(&sig);
+        if( attempt >= MAX_ATTEMPTS) {
+            break;
+        }
+        std::this_thread::sleep_for(ATTEMPT_WAITING_TIME);
+        //WaitSignal ws;
+        //int sig = 0;
+        //ws.wait(&sig);
+    }
     server.stop();
     ret.get();
+
 }
 
-void translate_contract_order(const Contract & c_request, const Order & o_request,
+void translate_request(const Contract & c_request, const Order & o_request,
     api::ContractRequest & c_req, api::OrderRequest & o_req){
 
     c_req.symbol = c_request.symbol;
@@ -202,14 +219,14 @@ void translate_response(OrderResponse & response, const api::OrderResponse & res
 
     response.orderId = resp.orderId;
     response.state = resp.state;
-    response.status = resp.status;
+    response.clientId = resp.clientId;
+    response.permId = resp.permId;
+    response.parentId = resp.parentId;
     response.filled = resp.filled;
     response.remaining = resp.remaining;
     response.avgFillPrice = resp.avgFillPrice;
-    response.permId = resp.permId;
-    response.parentId = resp.parentId;
     response.lastFillPrice = resp.lastFillPrice;
-    response.clientId = resp.clientId;
+    response.status = resp.status;
     response.whyHeld = resp.whyHeld;
 }
 
@@ -271,7 +288,7 @@ public:
             api::ContractRequest c_req;
             api::OrderRequest o_req;
 
-            translate_contract_order(c_request, o_request, c_req, o_req);
+            translate_request(c_request, o_request, c_req, o_req);
             client.placeOrder(resp, c_req, o_req);
             translate_response(response, resp);
         } );
@@ -286,7 +303,6 @@ public:
             api::OrderResponse resp;
             client.cancelOrder(resp, o_id);
             translate_response(response, resp);
-
         } );
     }
 
@@ -304,20 +320,6 @@ public:
 SharpClientService *make_client () {
     return new SharpClientImpl();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
