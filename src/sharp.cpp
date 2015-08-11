@@ -228,14 +228,14 @@ void EWrapperImpl::currentTime( long time)
 
 void EWrapperImpl::error(const int id, const int errorCode, const IBString errorString)
 {
-//	printf( "Error id=%d, errorCode=%d, msg=%s\n", id, errorCode, errorString.c_str());
+// printf( "Error id=%d, errorCode=%d, msg=%s\n", id, errorCode, errorString.c_str());
 
 	if( id == -1 && errorCode == 1100) // if "Connectivity between IB and TWS has been lost"
 		disconnect();
 }
 
 void EWrapperImpl::reqMarketSnapshot()
-	//TickerId tickerId, const Contract& contract,
+	// TickerId tickerId, const Contract& contract,
 	//						   const IBString& genericTicks, bool snapshot,
 	//						   const TagValueListSPtr& mktDataOptions)
 {
@@ -262,8 +262,8 @@ void EWrapperImpl::reqMarketSnapshot()
 									   barSizeSetting, whatToShow,
 									   useRTH, formatDate, chartOptions);
 	*/
-    //m_pClient->reqMarketDataType(2);
-    //m_pClient->reqMktData(0, contract, genericTicks, true, mktDataOptions);
+    // m_pClient->reqMarketDataType(2);
+    // m_pClient->reqMktData(0, contract, genericTicks, true, mktDataOptions);
 /*
     m_pClient->reqRealTimeBars(0, contract, 5, whatToShow, false, realTimeBarsOptions);
     contract.symbol = "AAPL";
@@ -288,14 +288,14 @@ void EWrapperImpl::reqMarketSnapshot()
     m_pClient->reqRealTimeBars(10, contract, 5, whatToShow, false, realTimeBarsOptions);
 */
 
-    //m_pClient->reqScannerParameters();
+    // m_pClient->reqScannerParameters();
 
     ScannerSubscription scanner;
     scanner.instrument = "STK";
     scanner.locationCode = "STK.US.MAJOR";
     scanner.abovePrice = 10.00;
     scanner.scanCode = "TOP_PERC_GAIN";
-    //m_pClient->reqScannerSubscription(0, scanner, scannerSubscriptionOptions);
+    // m_pClient->reqScannerSubscription(0, scanner, scannerSubscriptionOptions);
 
 
     contract.symbol = "AMZN";
@@ -306,8 +306,8 @@ void EWrapperImpl::reqMarketSnapshot()
     contract.expiry = "201509";
     contract.conId = 202874396;
     contract.currency = "USD";
-    //m_pClient->reqContractDetails(0, contract);
-    //m_pClient->reqMktData(0, contract, genericTicks, true, mktDataOptions);
+    // m_pClient->reqContractDetails(0, contract);
+    // m_pClient->reqMktData(0, contract, genericTicks, true, mktDataOptions);
     m_pClient->reqRealTimeBars(10, contract, 5, whatToShow, false, realTimeBarsOptions);
 
 

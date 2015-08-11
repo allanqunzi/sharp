@@ -94,9 +94,9 @@ struct ContractOrder
 template<typename K, typename V>
 typename std::map<K, std::unique_ptr<V> >::iterator
 FindorCreate(K key, std::map<K, std::unique_ptr<V> > & signal_map){
-	//using value_type = V;
+	// using value_type = V;
 	typedef V value_type;
-	//using key_type = K;
+	// using key_type = K;
 	auto it = signal_map.find(key);
 	if(it != signal_map.end()){
 		return it;
@@ -122,8 +122,8 @@ struct PlacedOrderContracts
 		}else{
 			records.push_back(std::unique_ptr<ContractOrder>(new ContractOrder(contract_order)));
 			orderId_index_map[orderId] = records.size() - 1;
-			//auto & resp = records.back()->response;
-			//resp.orderId = orderId;
+			// auto & resp = records.back()->response;
+			// resp.orderId = orderId;
 			return true;
 		}
 	}
@@ -173,13 +173,15 @@ public:
 	bool cancelOrder(OrderId orderId);
 	void reqMarketSnapshot();
 	bool checkValidId( OrderId orderId);
-	void addToWatchList( const std::vector<std::string> &, const IBString & whatToShow = "TRADES"); // calling this function will call
+	// calling this function will call
 	// m_pClient->reqRealTimeBars, otherwise it doesn't make sense to call this function.
+	void addToWatchList( const std::vector<std::string> &, const IBString & whatToShow = "TRADES");
 
 	void removeFromWatchList(const std::vector<std::string> &);
 	bool requestRealTimeBars(const IBString & whatToShow = "TRADES");
-	const RealTimeBar & getNextBar(const IBString & symbol);// must work on one stock basis,
-															// pop operation is done at thrift level
+	// must work on one stock basis,
+	// pop operation is done at thrift level
+	const RealTimeBar & getNextBar(const IBString & symbol);
 	std::string getField(TickType tickType);
 
 
