@@ -327,8 +327,8 @@ void OrderRequest::__set_lmtPrice(const double val) {
   this->lmtPrice = val;
 }
 
-const char* OrderRequest::ascii_fingerprint = "BDADCF4D7224A335D3343EB69F43C773";
-const uint8_t OrderRequest::binary_fingerprint[16] = {0xBD,0xAD,0xCF,0x4D,0x72,0x24,0xA3,0x35,0xD3,0x34,0x3E,0xB6,0x9F,0x43,0xC7,0x73};
+const char* OrderRequest::ascii_fingerprint = "BF0356C5E100788D29BCE753DB8BD2D7";
+const uint8_t OrderRequest::binary_fingerprint[16] = {0xBF,0x03,0x56,0xC5,0xE1,0x00,0x78,0x8D,0x29,0xBC,0xE7,0x53,0xDB,0x8B,0xD2,0xD7};
 
 uint32_t OrderRequest::read(::apache::thrift::protocol::TProtocol* iprot) {
 
@@ -354,7 +354,7 @@ uint32_t OrderRequest::read(::apache::thrift::protocol::TProtocol* iprot) {
     }
     switch (fid)
     {
-      case 2:
+      case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readString(this->action);
           isset_action = true;
@@ -362,7 +362,7 @@ uint32_t OrderRequest::read(::apache::thrift::protocol::TProtocol* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 3:
+      case 2:
         if (ftype == ::apache::thrift::protocol::T_I64) {
           xfer += iprot->readI64(this->totalQuantity);
           isset_totalQuantity = true;
@@ -370,7 +370,7 @@ uint32_t OrderRequest::read(::apache::thrift::protocol::TProtocol* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 4:
+      case 3:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readString(this->orderType);
           isset_orderType = true;
@@ -378,7 +378,7 @@ uint32_t OrderRequest::read(::apache::thrift::protocol::TProtocol* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 5:
+      case 4:
         if (ftype == ::apache::thrift::protocol::T_DOUBLE) {
           xfer += iprot->readDouble(this->lmtPrice);
           isset_lmtPrice = true;
@@ -411,19 +411,19 @@ uint32_t OrderRequest::write(::apache::thrift::protocol::TProtocol* oprot) const
   oprot->incrementRecursionDepth();
   xfer += oprot->writeStructBegin("OrderRequest");
 
-  xfer += oprot->writeFieldBegin("action", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeFieldBegin("action", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString(this->action);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("totalQuantity", ::apache::thrift::protocol::T_I64, 3);
+  xfer += oprot->writeFieldBegin("totalQuantity", ::apache::thrift::protocol::T_I64, 2);
   xfer += oprot->writeI64(this->totalQuantity);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("orderType", ::apache::thrift::protocol::T_STRING, 4);
+  xfer += oprot->writeFieldBegin("orderType", ::apache::thrift::protocol::T_STRING, 3);
   xfer += oprot->writeString(this->orderType);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("lmtPrice", ::apache::thrift::protocol::T_DOUBLE, 5);
+  xfer += oprot->writeFieldBegin("lmtPrice", ::apache::thrift::protocol::T_DOUBLE, 4);
   xfer += oprot->writeDouble(this->lmtPrice);
   xfer += oprot->writeFieldEnd();
 
@@ -780,6 +780,280 @@ std::ostream& operator<<(std::ostream& out, const OrderResponse& obj) {
 }
 
 
+RealTimeBar::~RealTimeBar() throw() {
+}
+
+
+void RealTimeBar::__set_reqId(const int64_t val) {
+  this->reqId = val;
+}
+
+void RealTimeBar::__set_time(const int64_t val) {
+  this->time = val;
+}
+
+void RealTimeBar::__set_open(const double val) {
+  this->open = val;
+}
+
+void RealTimeBar::__set_low(const double val) {
+  this->low = val;
+}
+
+void RealTimeBar::__set_high(const double val) {
+  this->high = val;
+}
+
+void RealTimeBar::__set_close(const double val) {
+  this->close = val;
+}
+
+void RealTimeBar::__set_volume(const int64_t val) {
+  this->volume = val;
+}
+
+void RealTimeBar::__set_wap(const double val) {
+  this->wap = val;
+}
+
+void RealTimeBar::__set_count(const int32_t val) {
+  this->count = val;
+}
+
+const char* RealTimeBar::ascii_fingerprint = "F497BCC02B737D782888C43604D4FC50";
+const uint8_t RealTimeBar::binary_fingerprint[16] = {0xF4,0x97,0xBC,0xC0,0x2B,0x73,0x7D,0x78,0x28,0x88,0xC4,0x36,0x04,0xD4,0xFC,0x50};
+
+uint32_t RealTimeBar::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+  bool isset_reqId = false;
+  bool isset_time = false;
+  bool isset_open = false;
+  bool isset_low = false;
+  bool isset_high = false;
+  bool isset_close = false;
+  bool isset_volume = false;
+  bool isset_wap = false;
+  bool isset_count = false;
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->reqId);
+          isset_reqId = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->time);
+          isset_time = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_DOUBLE) {
+          xfer += iprot->readDouble(this->open);
+          isset_open = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_DOUBLE) {
+          xfer += iprot->readDouble(this->low);
+          isset_low = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 5:
+        if (ftype == ::apache::thrift::protocol::T_DOUBLE) {
+          xfer += iprot->readDouble(this->high);
+          isset_high = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 6:
+        if (ftype == ::apache::thrift::protocol::T_DOUBLE) {
+          xfer += iprot->readDouble(this->close);
+          isset_close = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 7:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->volume);
+          isset_volume = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 8:
+        if (ftype == ::apache::thrift::protocol::T_DOUBLE) {
+          xfer += iprot->readDouble(this->wap);
+          isset_wap = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 9:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->count);
+          isset_count = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  if (!isset_reqId)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_time)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_open)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_low)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_high)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_close)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_volume)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_wap)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_count)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  return xfer;
+}
+
+uint32_t RealTimeBar::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  oprot->incrementRecursionDepth();
+  xfer += oprot->writeStructBegin("RealTimeBar");
+
+  xfer += oprot->writeFieldBegin("reqId", ::apache::thrift::protocol::T_I64, 1);
+  xfer += oprot->writeI64(this->reqId);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("time", ::apache::thrift::protocol::T_I64, 2);
+  xfer += oprot->writeI64(this->time);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("open", ::apache::thrift::protocol::T_DOUBLE, 3);
+  xfer += oprot->writeDouble(this->open);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("low", ::apache::thrift::protocol::T_DOUBLE, 4);
+  xfer += oprot->writeDouble(this->low);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("high", ::apache::thrift::protocol::T_DOUBLE, 5);
+  xfer += oprot->writeDouble(this->high);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("close", ::apache::thrift::protocol::T_DOUBLE, 6);
+  xfer += oprot->writeDouble(this->close);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("volume", ::apache::thrift::protocol::T_I64, 7);
+  xfer += oprot->writeI64(this->volume);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("wap", ::apache::thrift::protocol::T_DOUBLE, 8);
+  xfer += oprot->writeDouble(this->wap);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("count", ::apache::thrift::protocol::T_I32, 9);
+  xfer += oprot->writeI32(this->count);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  oprot->decrementRecursionDepth();
+  return xfer;
+}
+
+void swap(RealTimeBar &a, RealTimeBar &b) {
+  using ::std::swap;
+  swap(a.reqId, b.reqId);
+  swap(a.time, b.time);
+  swap(a.open, b.open);
+  swap(a.low, b.low);
+  swap(a.high, b.high);
+  swap(a.close, b.close);
+  swap(a.volume, b.volume);
+  swap(a.wap, b.wap);
+  swap(a.count, b.count);
+}
+
+RealTimeBar::RealTimeBar(const RealTimeBar& other10) {
+  reqId = other10.reqId;
+  time = other10.time;
+  open = other10.open;
+  low = other10.low;
+  high = other10.high;
+  close = other10.close;
+  volume = other10.volume;
+  wap = other10.wap;
+  count = other10.count;
+}
+RealTimeBar& RealTimeBar::operator=(const RealTimeBar& other11) {
+  reqId = other11.reqId;
+  time = other11.time;
+  open = other11.open;
+  low = other11.low;
+  high = other11.high;
+  close = other11.close;
+  volume = other11.volume;
+  wap = other11.wap;
+  count = other11.count;
+  return *this;
+}
+std::ostream& operator<<(std::ostream& out, const RealTimeBar& obj) {
+  using apache::thrift::to_string;
+  out << "RealTimeBar(";
+  out << "reqId=" << to_string(obj.reqId);
+  out << ", " << "time=" << to_string(obj.time);
+  out << ", " << "open=" << to_string(obj.open);
+  out << ", " << "low=" << to_string(obj.low);
+  out << ", " << "high=" << to_string(obj.high);
+  out << ", " << "close=" << to_string(obj.close);
+  out << ", " << "volume=" << to_string(obj.volume);
+  out << ", " << "wap=" << to_string(obj.wap);
+  out << ", " << "count=" << to_string(obj.count);
+  out << ")";
+  return out;
+}
+
+
 Exception::~Exception() throw() {
 }
 
@@ -869,15 +1143,15 @@ void swap(Exception &a, Exception &b) {
   swap(a.__isset, b.__isset);
 }
 
-Exception::Exception(const Exception& other10) : TException() {
-  what = other10.what;
-  why = other10.why;
-  __isset = other10.__isset;
+Exception::Exception(const Exception& other12) : TException() {
+  what = other12.what;
+  why = other12.why;
+  __isset = other12.__isset;
 }
-Exception& Exception::operator=(const Exception& other11) {
-  what = other11.what;
-  why = other11.why;
-  __isset = other11.__isset;
+Exception& Exception::operator=(const Exception& other13) {
+  what = other13.what;
+  why = other13.why;
+  __isset = other13.__isset;
   return *this;
 }
 std::ostream& operator<<(std::ostream& out, const Exception& obj) {

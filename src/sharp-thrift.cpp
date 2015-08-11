@@ -22,9 +22,13 @@ using namespace apache::thrift::transport;
 using namespace apache::thrift::concurrency;
 using namespace apache::thrift::server;
 
+inline void translate_realtimebar(const RealTimeBar & tb, api::RealTimeBar & time_bar);
+
 class SharpHandler : virtual public api::SharpIf {
 
     EWrapperImpl & trader;
+    const RealTimeBar invalid_bar = RealTimeBar(-2L, 1L, 1.0, 1.0, 1.0, 1.0, 1L, 1.0, 1);
+    bool bar_requested;
 
     void protect (std::function<void()> const &callback) {
         try {
@@ -49,7 +53,7 @@ class SharpHandler : virtual public api::SharpIf {
         }
     }
 public:
-    SharpHandler(EWrapperImpl & trader_): trader(trader_){}
+    SharpHandler(EWrapperImpl & trader_): trader(trader_), bar_requested(false){}
 
     void ping(api::PingResponse& response, const api::PingRequest& request) {
     }
@@ -157,6 +161,56 @@ public:
             }
         } );
     }
+
+    bool requestRealTimeBars(){
+        if(!bar_requested){
+            protect( [this]() {
+            trader.requestRealTimeBars();
+            } );
+            bar_requested = true;
+            return true;
+        }
+        return false;
+    }
+
+    bool addToWatchList(const std::vector<std::string> & wl){
+        protect( [this, &wl](){
+            trader.addToWatchList(wl);
+        } );
+        return true;
+    }
+
+    bool removeFromWatchList(const std::vector<std::string> & rm){
+        protect( [this, &rm](){
+            trader.removeFromWatchList(rm); // will cancel the request for real time bars
+        } );
+        return true;
+    }
+
+    void getNextBar(api::RealTimeBar& next_bar, const std::string& symbol){
+        protect([this, &next_bar, &symbol](){
+            auto id = trader.watch_list[symbol];
+            auto & bars = trader.watch_list_bars[id];
+            auto start = std::chrono::steady_clock::now();
+            auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+                std::chrono::steady_clock::now() - start);
+
+            while(bars.empty() && elapsed < BAR_WAITING_TIME){
+                elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+                    std::chrono::steady_clock::now() - start);
+            }
+
+            if(!bars.empty()){
+                translate_realtimebar(bars.front(), next_bar);
+                bars.pop_front();
+            }else{
+                translate_realtimebar(invalid_bar, next_bar);
+            }
+        } );
+    }
+
+
+
 };
 
 void run_server (EWrapperImpl & ibtrader) {
@@ -204,7 +258,19 @@ void run_server (EWrapperImpl & ibtrader) {
 
 }
 
-void translate_request(const Contract & c_request, const Order & o_request,
+inline void translate_realtimebar(const RealTimeBar & tb, api::RealTimeBar & time_bar){
+    time_bar.reqId = tb.reqId;
+    time_bar.time = tb.time;
+    time_bar.open = tb.open;
+    time_bar.low = tb.low;
+    time_bar.high = tb.high;
+    time_bar.close = tb.close;
+    time_bar.volume = tb.volume;
+    time_bar.wap = tb.wap;
+    time_bar.count = tb.count;
+}
+
+inline void translate_request(const Contract & c_request, const Order & o_request,
     api::ContractRequest & c_req, api::OrderRequest & o_req){
 
     c_req.symbol = c_request.symbol;
@@ -218,7 +284,7 @@ void translate_request(const Contract & c_request, const Order & o_request,
     o_req.lmtPrice = o_request.lmtPrice;
 }
 
-void translate_response(OrderResponse & response, const api::OrderResponse & resp ){
+inline void translate_response(OrderResponse & response, const api::OrderResponse & resp ){
 
     response.orderId = resp.orderId;
     response.state = resp.state;

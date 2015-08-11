@@ -448,13 +448,14 @@ bool EWrapperImpl::checkValidId( OrderId orderId){
 	else return false;
 }
 
-void EWrapperImpl::addToWatchList( const std::vector<std::string> & wl, const IBString & whatToShow){
+bool EWrapperImpl::addToWatchList( const std::vector<std::string> & wl){
 	Contract contract;
 	contract.secType = "STK";
 	contract.exchange = "SMART";
 	contract.primaryExchange = "NYSE";
 	contract.currency = "USD";
 	TagValueListSPtr realTimeBarsOptions;
+	IBString whatToShow = "TRADES";
 
 	for(auto & e : wl){
 		if(watch_list.count(e) == 0){
@@ -463,9 +464,10 @@ void EWrapperImpl::addToWatchList( const std::vector<std::string> & wl, const IB
 			m_pClient->reqRealTimeBars(watch_list[e], contract, 5, whatToShow, true, realTimeBarsOptions);
 		}
 	}
+	return true;
 }
 
-void EWrapperImpl::removeFromWatchList( const std::vector<std::string> & rm){
+bool EWrapperImpl::removeFromWatchList( const std::vector<std::string> & rm){
 	for(auto & e : rm){
 		auto it = watch_list.find(e);
 		if(it != watch_list.end()){
@@ -474,15 +476,17 @@ void EWrapperImpl::removeFromWatchList( const std::vector<std::string> & rm){
 			watch_list.erase(it);
 		}
 	}
+	return true;
 }
 
-bool EWrapperImpl::requestRealTimeBars(const IBString & whatToShow){
+bool EWrapperImpl::requestRealTimeBars(){
 	Contract contract;
 	contract.secType = "STK";
 	contract.exchange = "SMART";
 	contract.primaryExchange = "NYSE";
 	contract.currency = "USD";
 	TagValueListSPtr realTimeBarsOptions;
+	IBString whatToShow = "TRADES";
 
 	for(auto & m : watch_list){
 		contract.symbol = m.first;
@@ -490,21 +494,6 @@ bool EWrapperImpl::requestRealTimeBars(const IBString & whatToShow){
 	}
 
 	return true;
-}
-
-const RealTimeBar & EWrapperImpl::getNextBar(const IBString & symbol){
-	auto id = watch_list[symbol];
-	auto & bars = watch_list_bars[id];
-
-	auto start = std::chrono::steady_clock::now();
-	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start);
-	while(bars.empty() && elapsed < BAR_WAITING_TIME){
-		elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start);
-	}
-	if(!bars.empty()){
-		return bars.front();
-	}
-	return invalid_bar;
 }
 
 std::string EWrapperImpl::getField(TickType tickType){

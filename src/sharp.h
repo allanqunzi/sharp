@@ -175,13 +175,13 @@ public:
 	bool checkValidId( OrderId orderId);
 	// calling this function will call
 	// m_pClient->reqRealTimeBars, otherwise it doesn't make sense to call this function.
-	void addToWatchList( const std::vector<std::string> &, const IBString & whatToShow = "TRADES");
+	bool addToWatchList( const std::vector<std::string> &);
 
-	void removeFromWatchList(const std::vector<std::string> &);
-	bool requestRealTimeBars(const IBString & whatToShow = "TRADES");
-	// must work on one stock basis,
-	// pop operation is done at thrift level
-	const RealTimeBar & getNextBar(const IBString & symbol);
+	bool removeFromWatchList(const std::vector<std::string> &);
+	bool requestRealTimeBars();
+
+	// getNextBar is done at thrift level
+
 	std::string getField(TickType tickType);
 
 
@@ -273,7 +273,6 @@ public:
 	IdType ticker_id;
 	std::map<std::string, TickerId> watch_list;
 	std::map<TickerId, std::deque<RealTimeBar> >watch_list_bars;
-	const RealTimeBar invalid_bar = RealTimeBar(-2L, 1L, 1.0, 1.0, 1.0, 1.0, 1L, 1.0, 1);
 };
 
 

@@ -20,6 +20,10 @@ class SharpIf {
   virtual void placeOrder(OrderResponse& _return, const ContractRequest& c_req, const OrderRequest& o_req) = 0;
   virtual void cancelOrder(OrderResponse& _return, const int64_t o_id) = 0;
   virtual void orderStatus(OrderResponse& _return, const int64_t o_id) = 0;
+  virtual bool requestRealTimeBars() = 0;
+  virtual bool addToWatchList(const std::vector<std::string> & wl) = 0;
+  virtual bool removeFromWatchList(const std::vector<std::string> & rm) = 0;
+  virtual void getNextBar(RealTimeBar& _return, const std::string& symbol) = 0;
 };
 
 class SharpIfFactory {
@@ -63,6 +67,21 @@ class SharpNull : virtual public SharpIf {
     return;
   }
   void orderStatus(OrderResponse& /* _return */, const int64_t /* o_id */) {
+    return;
+  }
+  bool requestRealTimeBars() {
+    bool _return = false;
+    return _return;
+  }
+  bool addToWatchList(const std::vector<std::string> & /* wl */) {
+    bool _return = false;
+    return _return;
+  }
+  bool removeFromWatchList(const std::vector<std::string> & /* rm */) {
+    bool _return = false;
+    return _return;
+  }
+  void getNextBar(RealTimeBar& /* _return */, const std::string& /* symbol */) {
     return;
   }
 };
@@ -293,8 +312,8 @@ class Sharp_getOrderID_presult {
 class Sharp_placeOrder_args {
  public:
 
-  static const char* ascii_fingerprint; // = "107A0333194C3287B8F93A371EF11C3F";
-  static const uint8_t binary_fingerprint[16]; // = {0x10,0x7A,0x03,0x33,0x19,0x4C,0x32,0x87,0xB8,0xF9,0x3A,0x37,0x1E,0xF1,0x1C,0x3F};
+  static const char* ascii_fingerprint; // = "4A579754108673A99215D2D066314143";
+  static const uint8_t binary_fingerprint[16]; // = {0x4A,0x57,0x97,0x54,0x10,0x86,0x73,0xA9,0x92,0x15,0xD2,0xD0,0x66,0x31,0x41,0x43};
 
   Sharp_placeOrder_args(const Sharp_placeOrder_args&);
   Sharp_placeOrder_args& operator=(const Sharp_placeOrder_args&);
@@ -333,8 +352,8 @@ class Sharp_placeOrder_args {
 class Sharp_placeOrder_pargs {
  public:
 
-  static const char* ascii_fingerprint; // = "107A0333194C3287B8F93A371EF11C3F";
-  static const uint8_t binary_fingerprint[16]; // = {0x10,0x7A,0x03,0x33,0x19,0x4C,0x32,0x87,0xB8,0xF9,0x3A,0x37,0x1E,0xF1,0x1C,0x3F};
+  static const char* ascii_fingerprint; // = "4A579754108673A99215D2D066314143";
+  static const uint8_t binary_fingerprint[16]; // = {0x4A,0x57,0x97,0x54,0x10,0x86,0x73,0xA9,0x92,0x15,0xD2,0xD0,0x66,0x31,0x41,0x43};
 
 
   virtual ~Sharp_placeOrder_pargs() throw();
@@ -661,6 +680,488 @@ class Sharp_orderStatus_presult {
   friend std::ostream& operator<<(std::ostream& out, const Sharp_orderStatus_presult& obj);
 };
 
+
+class Sharp_requestRealTimeBars_args {
+ public:
+
+  static const char* ascii_fingerprint; // = "99914B932BD37A50B983C5E7C90AE93B";
+  static const uint8_t binary_fingerprint[16]; // = {0x99,0x91,0x4B,0x93,0x2B,0xD3,0x7A,0x50,0xB9,0x83,0xC5,0xE7,0xC9,0x0A,0xE9,0x3B};
+
+  Sharp_requestRealTimeBars_args(const Sharp_requestRealTimeBars_args&);
+  Sharp_requestRealTimeBars_args& operator=(const Sharp_requestRealTimeBars_args&);
+  Sharp_requestRealTimeBars_args() {
+  }
+
+  virtual ~Sharp_requestRealTimeBars_args() throw();
+
+  bool operator == (const Sharp_requestRealTimeBars_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const Sharp_requestRealTimeBars_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Sharp_requestRealTimeBars_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_requestRealTimeBars_args& obj);
+};
+
+
+class Sharp_requestRealTimeBars_pargs {
+ public:
+
+  static const char* ascii_fingerprint; // = "99914B932BD37A50B983C5E7C90AE93B";
+  static const uint8_t binary_fingerprint[16]; // = {0x99,0x91,0x4B,0x93,0x2B,0xD3,0x7A,0x50,0xB9,0x83,0xC5,0xE7,0xC9,0x0A,0xE9,0x3B};
+
+
+  virtual ~Sharp_requestRealTimeBars_pargs() throw();
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_requestRealTimeBars_pargs& obj);
+};
+
+typedef struct _Sharp_requestRealTimeBars_result__isset {
+  _Sharp_requestRealTimeBars_result__isset() : success(false), e(false) {}
+  bool success :1;
+  bool e :1;
+} _Sharp_requestRealTimeBars_result__isset;
+
+class Sharp_requestRealTimeBars_result {
+ public:
+
+  static const char* ascii_fingerprint; // = "EF470197A1C5BF49AAC5538556BB87D9";
+  static const uint8_t binary_fingerprint[16]; // = {0xEF,0x47,0x01,0x97,0xA1,0xC5,0xBF,0x49,0xAA,0xC5,0x53,0x85,0x56,0xBB,0x87,0xD9};
+
+  Sharp_requestRealTimeBars_result(const Sharp_requestRealTimeBars_result&);
+  Sharp_requestRealTimeBars_result& operator=(const Sharp_requestRealTimeBars_result&);
+  Sharp_requestRealTimeBars_result() : success(0) {
+  }
+
+  virtual ~Sharp_requestRealTimeBars_result() throw();
+  bool success;
+  Exception e;
+
+  _Sharp_requestRealTimeBars_result__isset __isset;
+
+  void __set_success(const bool val);
+
+  void __set_e(const Exception& val);
+
+  bool operator == (const Sharp_requestRealTimeBars_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(e == rhs.e))
+      return false;
+    return true;
+  }
+  bool operator != (const Sharp_requestRealTimeBars_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Sharp_requestRealTimeBars_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_requestRealTimeBars_result& obj);
+};
+
+typedef struct _Sharp_requestRealTimeBars_presult__isset {
+  _Sharp_requestRealTimeBars_presult__isset() : success(false), e(false) {}
+  bool success :1;
+  bool e :1;
+} _Sharp_requestRealTimeBars_presult__isset;
+
+class Sharp_requestRealTimeBars_presult {
+ public:
+
+  static const char* ascii_fingerprint; // = "EF470197A1C5BF49AAC5538556BB87D9";
+  static const uint8_t binary_fingerprint[16]; // = {0xEF,0x47,0x01,0x97,0xA1,0xC5,0xBF,0x49,0xAA,0xC5,0x53,0x85,0x56,0xBB,0x87,0xD9};
+
+
+  virtual ~Sharp_requestRealTimeBars_presult() throw();
+  bool* success;
+  Exception e;
+
+  _Sharp_requestRealTimeBars_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_requestRealTimeBars_presult& obj);
+};
+
+
+class Sharp_addToWatchList_args {
+ public:
+
+  static const char* ascii_fingerprint; // = "ACE4F644F0FDD289DDC4EE5B83BC13C0";
+  static const uint8_t binary_fingerprint[16]; // = {0xAC,0xE4,0xF6,0x44,0xF0,0xFD,0xD2,0x89,0xDD,0xC4,0xEE,0x5B,0x83,0xBC,0x13,0xC0};
+
+  Sharp_addToWatchList_args(const Sharp_addToWatchList_args&);
+  Sharp_addToWatchList_args& operator=(const Sharp_addToWatchList_args&);
+  Sharp_addToWatchList_args() {
+  }
+
+  virtual ~Sharp_addToWatchList_args() throw();
+  std::vector<std::string>  wl;
+
+  void __set_wl(const std::vector<std::string> & val);
+
+  bool operator == (const Sharp_addToWatchList_args & rhs) const
+  {
+    if (!(wl == rhs.wl))
+      return false;
+    return true;
+  }
+  bool operator != (const Sharp_addToWatchList_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Sharp_addToWatchList_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_addToWatchList_args& obj);
+};
+
+
+class Sharp_addToWatchList_pargs {
+ public:
+
+  static const char* ascii_fingerprint; // = "ACE4F644F0FDD289DDC4EE5B83BC13C0";
+  static const uint8_t binary_fingerprint[16]; // = {0xAC,0xE4,0xF6,0x44,0xF0,0xFD,0xD2,0x89,0xDD,0xC4,0xEE,0x5B,0x83,0xBC,0x13,0xC0};
+
+
+  virtual ~Sharp_addToWatchList_pargs() throw();
+  const std::vector<std::string> * wl;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_addToWatchList_pargs& obj);
+};
+
+typedef struct _Sharp_addToWatchList_result__isset {
+  _Sharp_addToWatchList_result__isset() : success(false), e(false) {}
+  bool success :1;
+  bool e :1;
+} _Sharp_addToWatchList_result__isset;
+
+class Sharp_addToWatchList_result {
+ public:
+
+  static const char* ascii_fingerprint; // = "EF470197A1C5BF49AAC5538556BB87D9";
+  static const uint8_t binary_fingerprint[16]; // = {0xEF,0x47,0x01,0x97,0xA1,0xC5,0xBF,0x49,0xAA,0xC5,0x53,0x85,0x56,0xBB,0x87,0xD9};
+
+  Sharp_addToWatchList_result(const Sharp_addToWatchList_result&);
+  Sharp_addToWatchList_result& operator=(const Sharp_addToWatchList_result&);
+  Sharp_addToWatchList_result() : success(0) {
+  }
+
+  virtual ~Sharp_addToWatchList_result() throw();
+  bool success;
+  Exception e;
+
+  _Sharp_addToWatchList_result__isset __isset;
+
+  void __set_success(const bool val);
+
+  void __set_e(const Exception& val);
+
+  bool operator == (const Sharp_addToWatchList_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(e == rhs.e))
+      return false;
+    return true;
+  }
+  bool operator != (const Sharp_addToWatchList_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Sharp_addToWatchList_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_addToWatchList_result& obj);
+};
+
+typedef struct _Sharp_addToWatchList_presult__isset {
+  _Sharp_addToWatchList_presult__isset() : success(false), e(false) {}
+  bool success :1;
+  bool e :1;
+} _Sharp_addToWatchList_presult__isset;
+
+class Sharp_addToWatchList_presult {
+ public:
+
+  static const char* ascii_fingerprint; // = "EF470197A1C5BF49AAC5538556BB87D9";
+  static const uint8_t binary_fingerprint[16]; // = {0xEF,0x47,0x01,0x97,0xA1,0xC5,0xBF,0x49,0xAA,0xC5,0x53,0x85,0x56,0xBB,0x87,0xD9};
+
+
+  virtual ~Sharp_addToWatchList_presult() throw();
+  bool* success;
+  Exception e;
+
+  _Sharp_addToWatchList_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_addToWatchList_presult& obj);
+};
+
+
+class Sharp_removeFromWatchList_args {
+ public:
+
+  static const char* ascii_fingerprint; // = "ACE4F644F0FDD289DDC4EE5B83BC13C0";
+  static const uint8_t binary_fingerprint[16]; // = {0xAC,0xE4,0xF6,0x44,0xF0,0xFD,0xD2,0x89,0xDD,0xC4,0xEE,0x5B,0x83,0xBC,0x13,0xC0};
+
+  Sharp_removeFromWatchList_args(const Sharp_removeFromWatchList_args&);
+  Sharp_removeFromWatchList_args& operator=(const Sharp_removeFromWatchList_args&);
+  Sharp_removeFromWatchList_args() {
+  }
+
+  virtual ~Sharp_removeFromWatchList_args() throw();
+  std::vector<std::string>  rm;
+
+  void __set_rm(const std::vector<std::string> & val);
+
+  bool operator == (const Sharp_removeFromWatchList_args & rhs) const
+  {
+    if (!(rm == rhs.rm))
+      return false;
+    return true;
+  }
+  bool operator != (const Sharp_removeFromWatchList_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Sharp_removeFromWatchList_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_removeFromWatchList_args& obj);
+};
+
+
+class Sharp_removeFromWatchList_pargs {
+ public:
+
+  static const char* ascii_fingerprint; // = "ACE4F644F0FDD289DDC4EE5B83BC13C0";
+  static const uint8_t binary_fingerprint[16]; // = {0xAC,0xE4,0xF6,0x44,0xF0,0xFD,0xD2,0x89,0xDD,0xC4,0xEE,0x5B,0x83,0xBC,0x13,0xC0};
+
+
+  virtual ~Sharp_removeFromWatchList_pargs() throw();
+  const std::vector<std::string> * rm;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_removeFromWatchList_pargs& obj);
+};
+
+typedef struct _Sharp_removeFromWatchList_result__isset {
+  _Sharp_removeFromWatchList_result__isset() : success(false), e(false) {}
+  bool success :1;
+  bool e :1;
+} _Sharp_removeFromWatchList_result__isset;
+
+class Sharp_removeFromWatchList_result {
+ public:
+
+  static const char* ascii_fingerprint; // = "EF470197A1C5BF49AAC5538556BB87D9";
+  static const uint8_t binary_fingerprint[16]; // = {0xEF,0x47,0x01,0x97,0xA1,0xC5,0xBF,0x49,0xAA,0xC5,0x53,0x85,0x56,0xBB,0x87,0xD9};
+
+  Sharp_removeFromWatchList_result(const Sharp_removeFromWatchList_result&);
+  Sharp_removeFromWatchList_result& operator=(const Sharp_removeFromWatchList_result&);
+  Sharp_removeFromWatchList_result() : success(0) {
+  }
+
+  virtual ~Sharp_removeFromWatchList_result() throw();
+  bool success;
+  Exception e;
+
+  _Sharp_removeFromWatchList_result__isset __isset;
+
+  void __set_success(const bool val);
+
+  void __set_e(const Exception& val);
+
+  bool operator == (const Sharp_removeFromWatchList_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(e == rhs.e))
+      return false;
+    return true;
+  }
+  bool operator != (const Sharp_removeFromWatchList_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Sharp_removeFromWatchList_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_removeFromWatchList_result& obj);
+};
+
+typedef struct _Sharp_removeFromWatchList_presult__isset {
+  _Sharp_removeFromWatchList_presult__isset() : success(false), e(false) {}
+  bool success :1;
+  bool e :1;
+} _Sharp_removeFromWatchList_presult__isset;
+
+class Sharp_removeFromWatchList_presult {
+ public:
+
+  static const char* ascii_fingerprint; // = "EF470197A1C5BF49AAC5538556BB87D9";
+  static const uint8_t binary_fingerprint[16]; // = {0xEF,0x47,0x01,0x97,0xA1,0xC5,0xBF,0x49,0xAA,0xC5,0x53,0x85,0x56,0xBB,0x87,0xD9};
+
+
+  virtual ~Sharp_removeFromWatchList_presult() throw();
+  bool* success;
+  Exception e;
+
+  _Sharp_removeFromWatchList_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_removeFromWatchList_presult& obj);
+};
+
+
+class Sharp_getNextBar_args {
+ public:
+
+  static const char* ascii_fingerprint; // = "EFB929595D312AC8F305D5A794CFEDA1";
+  static const uint8_t binary_fingerprint[16]; // = {0xEF,0xB9,0x29,0x59,0x5D,0x31,0x2A,0xC8,0xF3,0x05,0xD5,0xA7,0x94,0xCF,0xED,0xA1};
+
+  Sharp_getNextBar_args(const Sharp_getNextBar_args&);
+  Sharp_getNextBar_args& operator=(const Sharp_getNextBar_args&);
+  Sharp_getNextBar_args() : symbol() {
+  }
+
+  virtual ~Sharp_getNextBar_args() throw();
+  std::string symbol;
+
+  void __set_symbol(const std::string& val);
+
+  bool operator == (const Sharp_getNextBar_args & rhs) const
+  {
+    if (!(symbol == rhs.symbol))
+      return false;
+    return true;
+  }
+  bool operator != (const Sharp_getNextBar_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Sharp_getNextBar_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_getNextBar_args& obj);
+};
+
+
+class Sharp_getNextBar_pargs {
+ public:
+
+  static const char* ascii_fingerprint; // = "EFB929595D312AC8F305D5A794CFEDA1";
+  static const uint8_t binary_fingerprint[16]; // = {0xEF,0xB9,0x29,0x59,0x5D,0x31,0x2A,0xC8,0xF3,0x05,0xD5,0xA7,0x94,0xCF,0xED,0xA1};
+
+
+  virtual ~Sharp_getNextBar_pargs() throw();
+  const std::string* symbol;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_getNextBar_pargs& obj);
+};
+
+typedef struct _Sharp_getNextBar_result__isset {
+  _Sharp_getNextBar_result__isset() : success(false), e(false) {}
+  bool success :1;
+  bool e :1;
+} _Sharp_getNextBar_result__isset;
+
+class Sharp_getNextBar_result {
+ public:
+
+  static const char* ascii_fingerprint; // = "CE88BFE53AF361B3128E14CAB5B92018";
+  static const uint8_t binary_fingerprint[16]; // = {0xCE,0x88,0xBF,0xE5,0x3A,0xF3,0x61,0xB3,0x12,0x8E,0x14,0xCA,0xB5,0xB9,0x20,0x18};
+
+  Sharp_getNextBar_result(const Sharp_getNextBar_result&);
+  Sharp_getNextBar_result& operator=(const Sharp_getNextBar_result&);
+  Sharp_getNextBar_result() {
+  }
+
+  virtual ~Sharp_getNextBar_result() throw();
+  RealTimeBar success;
+  Exception e;
+
+  _Sharp_getNextBar_result__isset __isset;
+
+  void __set_success(const RealTimeBar& val);
+
+  void __set_e(const Exception& val);
+
+  bool operator == (const Sharp_getNextBar_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(e == rhs.e))
+      return false;
+    return true;
+  }
+  bool operator != (const Sharp_getNextBar_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Sharp_getNextBar_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_getNextBar_result& obj);
+};
+
+typedef struct _Sharp_getNextBar_presult__isset {
+  _Sharp_getNextBar_presult__isset() : success(false), e(false) {}
+  bool success :1;
+  bool e :1;
+} _Sharp_getNextBar_presult__isset;
+
+class Sharp_getNextBar_presult {
+ public:
+
+  static const char* ascii_fingerprint; // = "CE88BFE53AF361B3128E14CAB5B92018";
+  static const uint8_t binary_fingerprint[16]; // = {0xCE,0x88,0xBF,0xE5,0x3A,0xF3,0x61,0xB3,0x12,0x8E,0x14,0xCA,0xB5,0xB9,0x20,0x18};
+
+
+  virtual ~Sharp_getNextBar_presult() throw();
+  RealTimeBar* success;
+  Exception e;
+
+  _Sharp_getNextBar_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_getNextBar_presult& obj);
+};
+
 class SharpClient : virtual public SharpIf {
  public:
   SharpClient(boost::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
@@ -701,6 +1202,18 @@ class SharpClient : virtual public SharpIf {
   void orderStatus(OrderResponse& _return, const int64_t o_id);
   void send_orderStatus(const int64_t o_id);
   void recv_orderStatus(OrderResponse& _return);
+  bool requestRealTimeBars();
+  void send_requestRealTimeBars();
+  bool recv_requestRealTimeBars();
+  bool addToWatchList(const std::vector<std::string> & wl);
+  void send_addToWatchList(const std::vector<std::string> & wl);
+  bool recv_addToWatchList();
+  bool removeFromWatchList(const std::vector<std::string> & rm);
+  void send_removeFromWatchList(const std::vector<std::string> & rm);
+  bool recv_removeFromWatchList();
+  void getNextBar(RealTimeBar& _return, const std::string& symbol);
+  void send_getNextBar(const std::string& symbol);
+  void recv_getNextBar(RealTimeBar& _return);
  protected:
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -721,6 +1234,10 @@ class SharpProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_placeOrder(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_cancelOrder(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_orderStatus(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_requestRealTimeBars(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_addToWatchList(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_removeFromWatchList(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_getNextBar(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   SharpProcessor(boost::shared_ptr<SharpIf> iface) :
     iface_(iface) {
@@ -729,6 +1246,10 @@ class SharpProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["placeOrder"] = &SharpProcessor::process_placeOrder;
     processMap_["cancelOrder"] = &SharpProcessor::process_cancelOrder;
     processMap_["orderStatus"] = &SharpProcessor::process_orderStatus;
+    processMap_["requestRealTimeBars"] = &SharpProcessor::process_requestRealTimeBars;
+    processMap_["addToWatchList"] = &SharpProcessor::process_addToWatchList;
+    processMap_["removeFromWatchList"] = &SharpProcessor::process_removeFromWatchList;
+    processMap_["getNextBar"] = &SharpProcessor::process_getNextBar;
   }
 
   virtual ~SharpProcessor() {}
@@ -803,6 +1324,43 @@ class SharpMultiface : virtual public SharpIf {
       ifaces_[i]->orderStatus(_return, o_id);
     }
     ifaces_[i]->orderStatus(_return, o_id);
+    return;
+  }
+
+  bool requestRealTimeBars() {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->requestRealTimeBars();
+    }
+    return ifaces_[i]->requestRealTimeBars();
+  }
+
+  bool addToWatchList(const std::vector<std::string> & wl) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->addToWatchList(wl);
+    }
+    return ifaces_[i]->addToWatchList(wl);
+  }
+
+  bool removeFromWatchList(const std::vector<std::string> & rm) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->removeFromWatchList(rm);
+    }
+    return ifaces_[i]->removeFromWatchList(rm);
+  }
+
+  void getNextBar(RealTimeBar& _return, const std::string& symbol) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->getNextBar(_return, symbol);
+    }
+    ifaces_[i]->getNextBar(_return, symbol);
     return;
   }
 

@@ -29,6 +29,8 @@ class OrderRequest;
 
 class OrderResponse;
 
+class RealTimeBar;
+
 class Exception;
 
 
@@ -151,8 +153,8 @@ void swap(ContractRequest &a, ContractRequest &b);
 class OrderRequest {
  public:
 
-  static const char* ascii_fingerprint; // = "BDADCF4D7224A335D3343EB69F43C773";
-  static const uint8_t binary_fingerprint[16]; // = {0xBD,0xAD,0xCF,0x4D,0x72,0x24,0xA3,0x35,0xD3,0x34,0x3E,0xB6,0x9F,0x43,0xC7,0x73};
+  static const char* ascii_fingerprint; // = "BF0356C5E100788D29BCE753DB8BD2D7";
+  static const uint8_t binary_fingerprint[16]; // = {0xBF,0x03,0x56,0xC5,0xE1,0x00,0x78,0x8D,0x29,0xBC,0xE7,0x53,0xDB,0x8B,0xD2,0xD7};
 
   OrderRequest(const OrderRequest&);
   OrderRequest& operator=(const OrderRequest&);
@@ -317,6 +319,83 @@ class OrderResponse {
 };
 
 void swap(OrderResponse &a, OrderResponse &b);
+
+
+class RealTimeBar {
+ public:
+
+  static const char* ascii_fingerprint; // = "F497BCC02B737D782888C43604D4FC50";
+  static const uint8_t binary_fingerprint[16]; // = {0xF4,0x97,0xBC,0xC0,0x2B,0x73,0x7D,0x78,0x28,0x88,0xC4,0x36,0x04,0xD4,0xFC,0x50};
+
+  RealTimeBar(const RealTimeBar&);
+  RealTimeBar& operator=(const RealTimeBar&);
+  RealTimeBar() : reqId(-2LL), time(1LL), open(1), low(1), high(1), close(1), volume(1LL), wap(1), count(1) {
+  }
+
+  virtual ~RealTimeBar() throw();
+  int64_t reqId;
+  int64_t time;
+  double open;
+  double low;
+  double high;
+  double close;
+  int64_t volume;
+  double wap;
+  int32_t count;
+
+  void __set_reqId(const int64_t val);
+
+  void __set_time(const int64_t val);
+
+  void __set_open(const double val);
+
+  void __set_low(const double val);
+
+  void __set_high(const double val);
+
+  void __set_close(const double val);
+
+  void __set_volume(const int64_t val);
+
+  void __set_wap(const double val);
+
+  void __set_count(const int32_t val);
+
+  bool operator == (const RealTimeBar & rhs) const
+  {
+    if (!(reqId == rhs.reqId))
+      return false;
+    if (!(time == rhs.time))
+      return false;
+    if (!(open == rhs.open))
+      return false;
+    if (!(low == rhs.low))
+      return false;
+    if (!(high == rhs.high))
+      return false;
+    if (!(close == rhs.close))
+      return false;
+    if (!(volume == rhs.volume))
+      return false;
+    if (!(wap == rhs.wap))
+      return false;
+    if (!(count == rhs.count))
+      return false;
+    return true;
+  }
+  bool operator != (const RealTimeBar &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const RealTimeBar & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const RealTimeBar& obj);
+};
+
+void swap(RealTimeBar &a, RealTimeBar &b);
 
 typedef struct _Exception__isset {
   _Exception__isset() : what(false), why(false) {}
