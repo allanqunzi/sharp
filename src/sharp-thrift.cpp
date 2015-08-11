@@ -202,6 +202,7 @@ public:
 
             if(!bars.empty()){
                 translate_realtimebar(bars.front(), next_bar);
+                std::lock_guard<std::mutex> lk(trader.bar_mutexes[id]);
                 bars.pop_front();
             }else{
                 translate_realtimebar(invalid_bar, next_bar);

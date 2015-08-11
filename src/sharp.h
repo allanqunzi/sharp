@@ -264,7 +264,7 @@ public:
 	std::string host;
 	unsigned int port;
 	int clientId;
-	std::mutex mutex;
+	std::mutex mutex; // mutex for order statuses
 	ContractOrder contract_order_request;
 	// placed_contract_orders is written by three member functions: placeOrder, cancelOrder and orderStatus,
 	// so these functions should be synchronized.
@@ -272,7 +272,11 @@ public:
 	std::vector<OrderId> order_ids; // written only by EWrapperImpl::nextValidId( OrderId orderId)
 	IdType ticker_id;
 	std::map<std::string, TickerId> watch_list;
+
+	// std::deque is not guranteed to be thread-safe, so the following needs to be synchronized.
 	std::map<TickerId, std::deque<RealTimeBar> >watch_list_bars;
+	// bar_mutexes should be initialized on construction and modification of watch_list
+	std::map<TickerId, std::mutex> bar_mutexes;
 };
 
 

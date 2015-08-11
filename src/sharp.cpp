@@ -17,6 +17,7 @@ EWrapperImpl::EWrapperImpl( const std::vector<std::string> wl )
 {
 	for(auto e : wl){
 		watch_list[e] = ticker_id.getNewId();
+		bar_mutexes[watch_list[e]];
 	}
 }
 
@@ -361,6 +362,7 @@ void EWrapperImpl::realtimeBar(TickerId reqId, long time, double open, double hi
 {
 	LOG(info)<<"EWrapperImpl::realtimeBar";
 	std::cout<<" open ="<<open<<std::endl;
+	std::lock_guard<std::mutex> lk(bar_mutexes[reqId]);
 	watch_list_bars[reqId].push_back(RealTimeBar(reqId, time, open,	low, high, close, volume, wap, count));
 }
 
@@ -460,6 +462,7 @@ bool EWrapperImpl::addToWatchList( const std::vector<std::string> & wl){
 	for(auto & e : wl){
 		if(watch_list.count(e) == 0){
 			watch_list[e] = ticker_id.getNewId();
+			bar_mutexes[watch_list[e]];
 			contract.symbol = e;
 			m_pClient->reqRealTimeBars(watch_list[e], contract, 5, whatToShow, true, realTimeBarsOptions);
 		}
@@ -473,6 +476,7 @@ bool EWrapperImpl::removeFromWatchList( const std::vector<std::string> & rm){
 		if(it != watch_list.end()){
 			m_pClient->cancelRealTimeBars(it->second);
 			watch_list_bars.erase(it->second);
+			bar_mutexes.erase(it->second);
 			watch_list.erase(it);
 		}
 	}
