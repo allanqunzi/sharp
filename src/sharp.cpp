@@ -148,7 +148,7 @@ void EWrapperImpl::placeOrder()
 	if(checkValidId(req.orderId)){
 		m_pClient->placeOrder( req.orderId, req.contract, req.order);
 	}else{
-		assert(0 && "checkValidId failed !");
+		assert(0 && "error: checkValidId failed !");
 	}
 	std::lock_guard<std::mutex> lk(mutex);
 	req.response.orderId = req.orderId;
@@ -167,7 +167,7 @@ bool EWrapperImpl::cancelOrder(OrderId orderId)
 		std::lock_guard<std::mutex> lk(mutex);
 		auto & rds = placed_contract_orders.records;
 		auto & resp = rds[m.at(orderId)]->response;
-		assert(resp.orderId == orderId && "assert in EWrapperImpl::cancelOrder: resp.orderId == orderId failed.");
+		assert(resp.orderId == orderId && "error: assert in EWrapperImpl::cancelOrder: resp.orderId == orderId failed.");
 		resp.state = -1; // canceled
 		return true;
 	}else{
@@ -193,7 +193,7 @@ void EWrapperImpl::orderStatus( OrderId orderId, const IBString &status, int fil
 		placed_contract_orders.insert(orderId, co);
 	}
 	auto & resp = rds[m.at(orderId)]->response;
-	assert(resp.orderId == orderId && "assert in EWrapperImpl::orderStatus: resp.orderId == orderId failed.");
+	assert(resp.orderId == orderId && "error: assert in EWrapperImpl::orderStatus: resp.orderId == orderId failed.");
 	if(resp.state != -1){ resp.state += 1; } // -1 means this order is previously placed
 	resp.clientId = clientId;
 	resp.permId = permId;
