@@ -515,7 +515,8 @@ IBString EClientSocketBase::TwsConnectionTime()
 }
 
 void EClientSocketBase::reqMktData(TickerId tickerId, const Contract& contract,
-							   const IBString& genericTicks, bool snapshot, const TagValueListSPtr& mktDataOptions)
+							   const IBString& genericTicks, bool snapshot,
+							   const TagValueListSPtr& mktDataOptions)
 {
 	// not connected?
 	if( !m_connected) {

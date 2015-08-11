@@ -4,8 +4,10 @@
 #ifndef QUNZI_SHARP_HEADER
 #define QUNZI_SHARP_HEADER
 
+#include "CommonDefs.h"
 #include "Contract.h"
 #include "Order.h"
+#include "ScannerSubscription.h"
 #include "EPosixClientSocket.h"
 #include "EPosixClientSocketPlatform.h"
 #include "EWrapper.h"
@@ -15,12 +17,14 @@
 #include <chrono>
 #include <memory>
 #include <vector>
+#include <deque>
 #include <string>
 #include <utility>
 #include <cassert>
 #include <mutex>
 #include <map>
-
+#include <boost/log/trivial.hpp>
+#include <boost/log/attributes/named_scope.hpp>
 class EPosixClientSocket;
 
 namespace sharp{
@@ -30,9 +34,13 @@ static constexpr int SLEEP_BETWEEN_PINGS = 30; // seconds
 static constexpr unsigned int MAX_ATTEMPTS = 50;
 const auto ATTEMPT_WAITING_TIME = std::chrono::seconds(10);
 const auto MONITOR_WAITING_TIME = std::chrono::milliseconds(50); // 0.05 second
+const auto BAR_WAITING_TIME = std::chrono::milliseconds(5000);
 
 template<typename T>
 class TypeDisplayer; // usage: TypeDisplayer<decltype(x)>xType;
+
+#define BOOST_LOG_DYN_LINK 1
+#define LOG(x) BOOST_LOG_TRIVIAL(x)
 
 enum State {
 	ST_CONNECT,
@@ -48,7 +56,7 @@ enum State {
 struct OrderResponse
 {
 	OrderId orderId = -1L;
-	int state = -1;
+	int state = -1; // -1: initial value; 0: just placed; -2: canceled
 	int clientId = -1;
 	int permId = -1;
 	int parentId = -1;
@@ -68,7 +76,7 @@ struct ContractOrder
 	OrderResponse response;
 
 	ContractOrder():orderId(-1), contract(),order(), response(){};
-	ContractOrder(const ContractOrder & contract_order):response(){
+	ContractOrder(const ContractOrder & contract_order):response(contract_order.response){
 		orderId = contract_order.orderId;
 
 		contract.symbol = contract_order.contract.symbol;
@@ -114,19 +122,44 @@ struct PlacedOrderContracts
 		}else{
 			records.push_back(std::unique_ptr<ContractOrder>(new ContractOrder(contract_order)));
 			orderId_index_map[orderId] = records.size() - 1;
-			auto & resp = records.back()->response;
-			resp.orderId = orderId;
-			resp.state = 0; // order placed
+			//auto & resp = records.back()->response;
+			//resp.orderId = orderId;
 			return true;
 		}
 	}
 };
 
+class IdType{
+private:
+	TickerId id = -1L; // TickerId is long = 8 bytes
+public:
+	TickerId getNewId(){ return ++id; }
+	TickerId getCurrentId(){ return id;	}
+};
+
+struct RealTimeBar
+{
+	TickerId reqId;
+	long time;
+	double open;
+	double low;
+	double high;
+	double close;
+	long volume; // The volume during the time covered by the bar
+	double wap;  // The weighted average price during the time covered by the bar.
+	int count;   // When TRADES historical data is returned, represents the number of
+	             // trades that occurred during the time period the bar covers.
+	RealTimeBar(TickerId r, long t, double o, double l, double h,
+		double c, long v, double w, int ct): reqId(r), time(t), open(o),
+		low(l), high(h), close(c), volume(v), wap(w), count(ct){}
+};
+
+
 
 class EWrapperImpl : public EWrapper
 {
 public:
-	EWrapperImpl();
+	EWrapperImpl( const std::vector<std::string> wl = std::vector<std::string>() );
 	~EWrapperImpl();
 
 public:
@@ -137,8 +170,20 @@ public:
 public:
 	void monitor();
 	void placeOrder();
-	bool checkValidId( OrderId orderId);
 	bool cancelOrder(OrderId orderId);
+	void reqMarketSnapshot();
+	bool checkValidId( OrderId orderId);
+	void addToWatchList( const std::vector<std::string> &, const IBString & whatToShow = "TRADES"); // calling this function will call
+	// m_pClient->reqRealTimeBars, otherwise it doesn't make sense to call this function.
+
+	void removeFromWatchList(const std::vector<std::string> &);
+	bool requestRealTimeBars(const IBString & whatToShow = "TRADES");
+	const RealTimeBar & getNextBar(const IBString & symbol);// must work on one stock basis,
+															// pop operation is done at thrift level
+	std::string getField(TickType tickType);
+
+
+
 
 private:
 	void reqCurrentTime();
@@ -223,22 +268,27 @@ public:
 	// so these functions should be synchronized.
 	PlacedOrderContracts placed_contract_orders;
 	std::vector<OrderId> order_ids; // written only by EWrapperImpl::nextValidId( OrderId orderId)
+	IdType ticker_id;
+	std::map<std::string, TickerId> watch_list;
+	std::map<TickerId, std::deque<RealTimeBar> >watch_list_bars;
+	const RealTimeBar invalid_bar = RealTimeBar(-2L, 1L, 1.0, 1.0, 1.0, 1.0, 1L, 1.0, 1);
 };
 
 
-	void run_server (EWrapperImpl & ibtrader);
+void run_server (EWrapperImpl & ibtrader);
 
-	class SharpClientService{
-	public:
-		virtual ~SharpClientService() = default;
-		virtual void ping () = 0;
-		virtual void placeOrder(OrderResponse& response, const Contract& c_request, const Order& o_request) = 0;
-		virtual int64_t getOrderID() = 0;
-		virtual void cancelOrder(OrderResponse & response, const int64_t o_id) = 0;
-		virtual void orderStatus(OrderResponse & response, const int64_t o_id) = 0;
-	};
+class SharpClientService{
+public:
+	virtual ~SharpClientService() = default;
+	virtual void ping () = 0;
+	virtual void placeOrder(OrderResponse& response, const Contract& c_request, const Order& o_request) = 0;
+	virtual int64_t getOrderID() = 0;
+	virtual void cancelOrder(OrderResponse & response, const int64_t o_id) = 0;
+	virtual void orderStatus(OrderResponse & response, const int64_t o_id) = 0;
+};
 
-	SharpClientService *make_client ();
+SharpClientService *make_client ();
+
 
 
 } // end of namespace sharp

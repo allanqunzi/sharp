@@ -184,9 +184,12 @@ void run_server (EWrapperImpl & ibtrader) {
     {
         ++attempt;
         ibtrader.connect( ibtrader.host.c_str(), ibtrader.port, ibtrader.clientId);
+        std::this_thread::sleep_for(MONITOR_WAITING_TIME);
+        ibtrader.reqMarketSnapshot();
+
         while( ibtrader.isConnected() ) {
             ibtrader.monitor();
-            std::this_thread::sleep_for(MONITOR_WAITING_TIME);
+            //std::this_thread::sleep_for(MONITOR_WAITING_TIME);
         }
         if( attempt >= MAX_ATTEMPTS) {
             break;
