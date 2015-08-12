@@ -184,7 +184,7 @@ void EWrapperImpl::orderStatus( OrderId orderId, const IBString &status, int fil
 
 {
 	std::lock_guard<std::mutex> lk(mutex);
-    auto & m = placed_contract_orders.orderId_index_map;
+	auto & m = placed_contract_orders.orderId_index_map;
 	auto & rds = placed_contract_orders.records;
 	if(m.count(orderId) == 0){
 		LOG(info)<<"get status messages for previously placed order, orderId = "<<orderId;
