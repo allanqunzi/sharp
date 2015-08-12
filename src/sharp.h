@@ -47,12 +47,21 @@ class sharpdeque: public std::deque<T>
 {
 public:
     static const std::size_t limit = 20;
-    void push(T&& e){
+    void push(T&& e){ // this is not universal reference, there is no type deduction here, only binds to
+    	// rvalue
         if(this->size() >= limit){
         	this->pop_front();
         	LOG(warning)<<"deque limit is reached";
         }
-        this->push_back(std::forward<T>(e));
+        this->push_back(std::move(e));
+    }
+
+    void push(const T & e){
+    if(this->size() >= limit){
+    	this->pop_front();
+    	LOG(warning)<<"deque limit is reached";
+    }
+    this->push_back(e);
     }
 };
 
