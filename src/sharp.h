@@ -57,11 +57,11 @@ public:
     }
 
     void push(const T & e){
-    if(this->size() >= limit){
-    	this->pop_front();
-    	LOG(warning)<<"deque limit is reached";
-    }
-    this->push_back(e);
+	    if(this->size() >= limit){
+	    	this->pop_front();
+	    	LOG(warning)<<"deque limit is reached";
+	    }
+	    this->push_back(e);
     }
 };
 
