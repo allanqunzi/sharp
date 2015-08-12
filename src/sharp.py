@@ -47,15 +47,17 @@ print(o_id)
 
 def getNewBar(q, sbl):
   while True:
-    q.put(client.getNextBar(sbl))
+    q.put(client.getNextBar(sbl), False)
     print(sbl)
-    print(q.get().open)
+    print(sbl, "q.qsize() = ", q.qsize())
+    print(q.get(False).open)
 
 
 def monitor(dict, list, threads):
   dict.clear() # remove all entries in dict
   for l in list:
     dict[l] = Queue()
+  client.addToWatchList(list)
   num_threads = len(list)
   for i in range(num_threads):
     symbol = list[i]

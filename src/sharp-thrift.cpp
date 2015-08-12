@@ -205,6 +205,7 @@ public:
                 std::lock_guard<std::mutex> lk(trader.bar_mutexes[id]);
                 bars.pop_front();
             }else{
+                std::cout<<symbol<<std::endl;
                 translate_realtimebar(invalid_bar, next_bar);
             }
         } );

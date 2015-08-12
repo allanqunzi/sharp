@@ -42,6 +42,21 @@ class TypeDisplayer; // usage: TypeDisplayer<decltype(x)>xType;
 #define BOOST_LOG_DYN_LINK 1
 #define LOG(x) BOOST_LOG_TRIVIAL(x)
 
+template<typename T>
+class sharpdeque: public std::deque<T>
+{
+public:
+    static const std::size_t limit = 20;
+    void push(T&& e){
+        if(this->size() >= limit){
+        	this->pop_front();
+        	this->push_back(std::forward<T>(e));
+            LOG(warning)<<"deque limit is reached";
+        }
+
+    }
+};
+
 enum State {
 	ST_CONNECT,
 	ST_PLACEORDER,
@@ -274,7 +289,7 @@ public:
 	std::map<std::string, TickerId> watch_list;
 
 	// std::deque is not guranteed to be thread-safe, so the following needs to be synchronized.
-	std::map<TickerId, std::deque<RealTimeBar> >watch_list_bars;
+	std::map<TickerId, sharpdeque<RealTimeBar> >watch_list_bars;
 	// bar_mutexes should be initialized on construction and modification of watch_list
 	std::map<TickerId, std::mutex> bar_mutexes;
 };

@@ -363,7 +363,7 @@ void EWrapperImpl::realtimeBar(TickerId reqId, long time, double open, double hi
 	LOG(info)<<"EWrapperImpl::realtimeBar";
 	std::cout<<" open ="<<open<<std::endl;
 	std::lock_guard<std::mutex> lk(bar_mutexes[reqId]);
-	watch_list_bars[reqId].push_back(RealTimeBar(reqId, time, open,	low, high, close, volume, wap, count));
+	watch_list_bars[reqId].push(RealTimeBar(reqId, time, open,	low, high, close, volume, wap, count));
 }
 
 void EWrapperImpl::scannerParameters(const IBString &xml) {
