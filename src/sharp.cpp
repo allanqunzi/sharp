@@ -298,18 +298,19 @@ void EWrapperImpl::reqMarketSnapshot()
     scanner.scanCode = "TOP_PERC_GAIN";
     // m_pClient->reqScannerSubscription(0, scanner, scannerSubscriptionOptions);
 
-
+/*
     contract.symbol = "AMZN";
     contract.secType = "OPT";
-    contract.exchange = "SMART";
-    //contract.strike = 400.00;
-    //contract.right = "CALL";
+    contract.strike = 540.00;
+    contract.right = "CALL";
     contract.expiry = "201509";
-    contract.conId = 202874396;
     contract.currency = "USD";
+*/
+    contract.conId = 202465243;
+    contract.exchange = "SMART";
     // m_pClient->reqContractDetails(0, contract);
     // m_pClient->reqMktData(0, contract, genericTicks, true, mktDataOptions);
-    m_pClient->reqRealTimeBars(10, contract, 5, whatToShow, false, realTimeBarsOptions);
+    //m_pClient->reqRealTimeBars(10, contract, 5, whatToShow, false, realTimeBarsOptions);
 
 
 
@@ -477,6 +478,7 @@ bool EWrapperImpl::removeFromWatchList( const std::vector<std::string> & rm){
 	for(auto & e : rm){
 		auto it = watch_list.find(e);
 		if(it != watch_list.end()){
+			LOG(info)<<"calling EWrapperImpl::removeFromWatchList";
 			m_pClient->cancelRealTimeBars(it->second);
 			watch_list_bars.erase(it->second);
 			bar_mutexes.erase(it->second);

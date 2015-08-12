@@ -45,12 +45,16 @@ o_id = client.getOrderID()
 print(o_id)
 
 
-def getNewBar(q, sbl):
-  while True:
+def getNewBar(q, sbl, stop_event):
+  while not stop_event.isSet():
     q.put(client.getNextBar(sbl), False)
     print(sbl)
     print(sbl, "q.qsize() = ", q.qsize())
     print(q.get(False).open)
+
+stop_events = []
+stop_events.append(threading.Event())
+stop_events.append(threading.Event())
 
 
 def monitor(dict, list, threads):
@@ -61,7 +65,7 @@ def monitor(dict, list, threads):
   num_threads = len(list)
   for i in range(num_threads):
     symbol = list[i]
-    worker = threading.Thread(target=getNewBar, args=(dict[symbol], symbol, ))
+    worker = threading.Thread(target=getNewBar, args=(dict[symbol], symbol, stop_events[i]))
     threads.append(worker)
     worker.setDaemon(True)
     worker.start()
@@ -71,8 +75,20 @@ wlist = ["AMZN", "AAPL"]
 ts = []
 monitor(qdict, wlist, ts)
 
-while threading.active_count() > 0: # this while responds to ctrl + c
-  time.sleep(0.1)
+
+time.sleep(20)
+for i in range(len(stop_events)):
+  stop_events[i].set()
+  ts[i].join()
+
+client.removeFromWatchList(wlist)
+
+time.sleep(10)
+
+print("done")
+
+#while threading.active_count() > 0: # this while responds to ctrl + c
+#  time.sleep(0.1)
 
 '''
 q = Queue()

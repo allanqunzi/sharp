@@ -242,7 +242,7 @@ class Client(Iface):
 
   def requestRealTimeBars(self):
     self.send_requestRealTimeBars()
-    return self.recv_requestRealTimeBars()
+    self.recv_requestRealTimeBars()
 
   def send_requestRealTimeBars(self):
     self._oprot.writeMessageBegin('requestRealTimeBars', TMessageType.CALL, self._seqid)
@@ -262,11 +262,9 @@ class Client(Iface):
     result = requestRealTimeBars_result()
     result.read(iprot)
     iprot.readMessageEnd()
-    if result.success is not None:
-      return result.success
     if result.e is not None:
       raise result.e
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "requestRealTimeBars failed: unknown result");
+    return
 
   def addToWatchList(self, wl):
     """
@@ -274,7 +272,7 @@ class Client(Iface):
      - wl
     """
     self.send_addToWatchList(wl)
-    return self.recv_addToWatchList()
+    self.recv_addToWatchList()
 
   def send_addToWatchList(self, wl):
     self._oprot.writeMessageBegin('addToWatchList', TMessageType.CALL, self._seqid)
@@ -295,11 +293,9 @@ class Client(Iface):
     result = addToWatchList_result()
     result.read(iprot)
     iprot.readMessageEnd()
-    if result.success is not None:
-      return result.success
     if result.e is not None:
       raise result.e
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "addToWatchList failed: unknown result");
+    return
 
   def removeFromWatchList(self, rm):
     """
@@ -307,7 +303,7 @@ class Client(Iface):
      - rm
     """
     self.send_removeFromWatchList(rm)
-    return self.recv_removeFromWatchList()
+    self.recv_removeFromWatchList()
 
   def send_removeFromWatchList(self, rm):
     self._oprot.writeMessageBegin('removeFromWatchList', TMessageType.CALL, self._seqid)
@@ -328,11 +324,9 @@ class Client(Iface):
     result = removeFromWatchList_result()
     result.read(iprot)
     iprot.readMessageEnd()
-    if result.success is not None:
-      return result.success
     if result.e is not None:
       raise result.e
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "removeFromWatchList failed: unknown result");
+    return
 
   def getNextBar(self, symbol):
     """
@@ -467,7 +461,7 @@ class Processor(Iface, TProcessor):
     iprot.readMessageEnd()
     result = requestRealTimeBars_result()
     try:
-      result.success = self._handler.requestRealTimeBars()
+      self._handler.requestRealTimeBars()
     except Exception, e:
       result.e = e
     oprot.writeMessageBegin("requestRealTimeBars", TMessageType.REPLY, seqid)
@@ -481,7 +475,7 @@ class Processor(Iface, TProcessor):
     iprot.readMessageEnd()
     result = addToWatchList_result()
     try:
-      result.success = self._handler.addToWatchList(args.wl)
+      self._handler.addToWatchList(args.wl)
     except Exception, e:
       result.e = e
     oprot.writeMessageBegin("addToWatchList", TMessageType.REPLY, seqid)
@@ -495,7 +489,7 @@ class Processor(Iface, TProcessor):
     iprot.readMessageEnd()
     result = removeFromWatchList_result()
     try:
-      result.success = self._handler.removeFromWatchList(args.rm)
+      self._handler.removeFromWatchList(args.rm)
     except Exception, e:
       result.e = e
     oprot.writeMessageBegin("removeFromWatchList", TMessageType.REPLY, seqid)
@@ -1267,17 +1261,15 @@ class requestRealTimeBars_args:
 class requestRealTimeBars_result:
   """
   Attributes:
-   - success
    - e
   """
 
   thrift_spec = (
-    (0, TType.BOOL, 'success', None, None, ), # 0
+    None, # 0
     (1, TType.STRUCT, 'e', (Exception, Exception.thrift_spec), None, ), # 1
   )
 
-  def __init__(self, success=None, e=None,):
-    self.success = success
+  def __init__(self, e=None,):
     self.e = e
 
   def read(self, iprot):
@@ -1289,12 +1281,7 @@ class requestRealTimeBars_result:
       (fname, ftype, fid) = iprot.readFieldBegin()
       if ftype == TType.STOP:
         break
-      if fid == 0:
-        if ftype == TType.BOOL:
-          self.success = iprot.readBool();
-        else:
-          iprot.skip(ftype)
-      elif fid == 1:
+      if fid == 1:
         if ftype == TType.STRUCT:
           self.e = Exception()
           self.e.read(iprot)
@@ -1310,10 +1297,6 @@ class requestRealTimeBars_result:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
     oprot.writeStructBegin('requestRealTimeBars_result')
-    if self.success is not None:
-      oprot.writeFieldBegin('success', TType.BOOL, 0)
-      oprot.writeBool(self.success)
-      oprot.writeFieldEnd()
     if self.e is not None:
       oprot.writeFieldBegin('e', TType.STRUCT, 1)
       self.e.write(oprot)
@@ -1327,7 +1310,6 @@ class requestRealTimeBars_result:
 
   def __hash__(self):
     value = 17
-    value = (value * 31) ^ hash(self.success)
     value = (value * 31) ^ hash(self.e)
     return value
 
@@ -1420,17 +1402,15 @@ class addToWatchList_args:
 class addToWatchList_result:
   """
   Attributes:
-   - success
    - e
   """
 
   thrift_spec = (
-    (0, TType.BOOL, 'success', None, None, ), # 0
+    None, # 0
     (1, TType.STRUCT, 'e', (Exception, Exception.thrift_spec), None, ), # 1
   )
 
-  def __init__(self, success=None, e=None,):
-    self.success = success
+  def __init__(self, e=None,):
     self.e = e
 
   def read(self, iprot):
@@ -1442,12 +1422,7 @@ class addToWatchList_result:
       (fname, ftype, fid) = iprot.readFieldBegin()
       if ftype == TType.STOP:
         break
-      if fid == 0:
-        if ftype == TType.BOOL:
-          self.success = iprot.readBool();
-        else:
-          iprot.skip(ftype)
-      elif fid == 1:
+      if fid == 1:
         if ftype == TType.STRUCT:
           self.e = Exception()
           self.e.read(iprot)
@@ -1463,10 +1438,6 @@ class addToWatchList_result:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
     oprot.writeStructBegin('addToWatchList_result')
-    if self.success is not None:
-      oprot.writeFieldBegin('success', TType.BOOL, 0)
-      oprot.writeBool(self.success)
-      oprot.writeFieldEnd()
     if self.e is not None:
       oprot.writeFieldBegin('e', TType.STRUCT, 1)
       self.e.write(oprot)
@@ -1480,7 +1451,6 @@ class addToWatchList_result:
 
   def __hash__(self):
     value = 17
-    value = (value * 31) ^ hash(self.success)
     value = (value * 31) ^ hash(self.e)
     return value
 
@@ -1573,17 +1543,15 @@ class removeFromWatchList_args:
 class removeFromWatchList_result:
   """
   Attributes:
-   - success
    - e
   """
 
   thrift_spec = (
-    (0, TType.BOOL, 'success', None, None, ), # 0
+    None, # 0
     (1, TType.STRUCT, 'e', (Exception, Exception.thrift_spec), None, ), # 1
   )
 
-  def __init__(self, success=None, e=None,):
-    self.success = success
+  def __init__(self, e=None,):
     self.e = e
 
   def read(self, iprot):
@@ -1595,12 +1563,7 @@ class removeFromWatchList_result:
       (fname, ftype, fid) = iprot.readFieldBegin()
       if ftype == TType.STOP:
         break
-      if fid == 0:
-        if ftype == TType.BOOL:
-          self.success = iprot.readBool();
-        else:
-          iprot.skip(ftype)
-      elif fid == 1:
+      if fid == 1:
         if ftype == TType.STRUCT:
           self.e = Exception()
           self.e.read(iprot)
@@ -1616,10 +1579,6 @@ class removeFromWatchList_result:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
     oprot.writeStructBegin('removeFromWatchList_result')
-    if self.success is not None:
-      oprot.writeFieldBegin('success', TType.BOOL, 0)
-      oprot.writeBool(self.success)
-      oprot.writeFieldEnd()
     if self.e is not None:
       oprot.writeFieldBegin('e', TType.STRUCT, 1)
       self.e.write(oprot)
@@ -1633,7 +1592,6 @@ class removeFromWatchList_result:
 
   def __hash__(self):
     value = 17
-    value = (value * 31) ^ hash(self.success)
     value = (value * 31) ^ hash(self.e)
     return value
 

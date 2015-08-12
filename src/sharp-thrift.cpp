@@ -162,29 +162,25 @@ public:
         } );
     }
 
-    bool requestRealTimeBars(){
+    void requestRealTimeBars(){
         if(!bar_requested){
             protect( [this]() {
-            trader.requestRealTimeBars();
+            auto b = trader.requestRealTimeBars();
             } );
             bar_requested = true;
-            return true;
         }
-        return false;
     }
 
-    bool addToWatchList(const std::vector<std::string> & wl){
+    void addToWatchList(const std::vector<std::string> & wl){
         protect( [this, &wl](){
-            trader.addToWatchList(wl);
+            auto b = trader.addToWatchList(wl);
         } );
-        return true;
     }
 
-    bool removeFromWatchList(const std::vector<std::string> & rm){
+    void removeFromWatchList(const std::vector<std::string> & rm){
         protect( [this, &rm](){
-            trader.removeFromWatchList(rm); // will cancel the request for real time bars
+            auto b = trader.removeFromWatchList(rm); // will cancel the request for real time bars
         } );
-        return true;
     }
 
     void getNextBar(api::RealTimeBar& next_bar, const std::string& symbol){
@@ -240,8 +236,8 @@ void run_server (EWrapperImpl & ibtrader) {
     {
         ++attempt;
         ibtrader.connect( ibtrader.host.c_str(), ibtrader.port, ibtrader.clientId);
-        std::this_thread::sleep_for(MONITOR_WAITING_TIME);
-        ibtrader.reqMarketSnapshot();
+        // std::this_thread::sleep_for(MONITOR_WAITING_TIME);
+        // ibtrader.reqMarketSnapshot();
 
         while( ibtrader.isConnected() ) {
             ibtrader.monitor();

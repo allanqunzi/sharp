@@ -1092,14 +1092,6 @@ uint32_t Sharp_requestRealTimeBars_result::read(::apache::thrift::protocol::TPro
     }
     switch (fid)
     {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_BOOL) {
-          xfer += iprot->readBool(this->success);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
           xfer += this->e.read(iprot);
@@ -1126,11 +1118,7 @@ uint32_t Sharp_requestRealTimeBars_result::write(::apache::thrift::protocol::TPr
 
   xfer += oprot->writeStructBegin("Sharp_requestRealTimeBars_result");
 
-  if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_BOOL, 0);
-    xfer += oprot->writeBool(this->success);
-    xfer += oprot->writeFieldEnd();
-  } else if (this->__isset.e) {
+  if (this->__isset.e) {
     xfer += oprot->writeFieldBegin("e", ::apache::thrift::protocol::T_STRUCT, 1);
     xfer += this->e.write(oprot);
     xfer += oprot->writeFieldEnd();
@@ -1165,14 +1153,6 @@ uint32_t Sharp_requestRealTimeBars_presult::read(::apache::thrift::protocol::TPr
     }
     switch (fid)
     {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_BOOL) {
-          xfer += iprot->readBool((*(this->success)));
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
           xfer += this->e.read(iprot);
@@ -1329,14 +1309,6 @@ uint32_t Sharp_addToWatchList_result::read(::apache::thrift::protocol::TProtocol
     }
     switch (fid)
     {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_BOOL) {
-          xfer += iprot->readBool(this->success);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
           xfer += this->e.read(iprot);
@@ -1363,11 +1335,7 @@ uint32_t Sharp_addToWatchList_result::write(::apache::thrift::protocol::TProtoco
 
   xfer += oprot->writeStructBegin("Sharp_addToWatchList_result");
 
-  if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_BOOL, 0);
-    xfer += oprot->writeBool(this->success);
-    xfer += oprot->writeFieldEnd();
-  } else if (this->__isset.e) {
+  if (this->__isset.e) {
     xfer += oprot->writeFieldBegin("e", ::apache::thrift::protocol::T_STRUCT, 1);
     xfer += this->e.write(oprot);
     xfer += oprot->writeFieldEnd();
@@ -1402,14 +1370,6 @@ uint32_t Sharp_addToWatchList_presult::read(::apache::thrift::protocol::TProtoco
     }
     switch (fid)
     {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_BOOL) {
-          xfer += iprot->readBool((*(this->success)));
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
           xfer += this->e.read(iprot);
@@ -1566,14 +1526,6 @@ uint32_t Sharp_removeFromWatchList_result::read(::apache::thrift::protocol::TPro
     }
     switch (fid)
     {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_BOOL) {
-          xfer += iprot->readBool(this->success);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
           xfer += this->e.read(iprot);
@@ -1600,11 +1552,7 @@ uint32_t Sharp_removeFromWatchList_result::write(::apache::thrift::protocol::TPr
 
   xfer += oprot->writeStructBegin("Sharp_removeFromWatchList_result");
 
-  if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_BOOL, 0);
-    xfer += oprot->writeBool(this->success);
-    xfer += oprot->writeFieldEnd();
-  } else if (this->__isset.e) {
+  if (this->__isset.e) {
     xfer += oprot->writeFieldBegin("e", ::apache::thrift::protocol::T_STRUCT, 1);
     xfer += this->e.write(oprot);
     xfer += oprot->writeFieldEnd();
@@ -1639,14 +1587,6 @@ uint32_t Sharp_removeFromWatchList_presult::read(::apache::thrift::protocol::TPr
     }
     switch (fid)
     {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_BOOL) {
-          xfer += iprot->readBool((*(this->success)));
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
           xfer += this->e.read(iprot);
@@ -2175,10 +2115,10 @@ void SharpClient::recv_orderStatus(OrderResponse& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "orderStatus failed: unknown result");
 }
 
-bool SharpClient::requestRealTimeBars()
+void SharpClient::requestRealTimeBars()
 {
   send_requestRealTimeBars();
-  return recv_requestRealTimeBars();
+  recv_requestRealTimeBars();
 }
 
 void SharpClient::send_requestRealTimeBars()
@@ -2194,7 +2134,7 @@ void SharpClient::send_requestRealTimeBars()
   oprot_->getTransport()->flush();
 }
 
-bool SharpClient::recv_requestRealTimeBars()
+void SharpClient::recv_requestRealTimeBars()
 {
 
   int32_t rseqid = 0;
@@ -2219,26 +2159,21 @@ bool SharpClient::recv_requestRealTimeBars()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  bool _return;
   Sharp_requestRealTimeBars_presult result;
-  result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
 
-  if (result.__isset.success) {
-    return _return;
-  }
   if (result.__isset.e) {
     throw result.e;
   }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "requestRealTimeBars failed: unknown result");
+  return;
 }
 
-bool SharpClient::addToWatchList(const std::vector<std::string> & wl)
+void SharpClient::addToWatchList(const std::vector<std::string> & wl)
 {
   send_addToWatchList(wl);
-  return recv_addToWatchList();
+  recv_addToWatchList();
 }
 
 void SharpClient::send_addToWatchList(const std::vector<std::string> & wl)
@@ -2255,7 +2190,7 @@ void SharpClient::send_addToWatchList(const std::vector<std::string> & wl)
   oprot_->getTransport()->flush();
 }
 
-bool SharpClient::recv_addToWatchList()
+void SharpClient::recv_addToWatchList()
 {
 
   int32_t rseqid = 0;
@@ -2280,26 +2215,21 @@ bool SharpClient::recv_addToWatchList()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  bool _return;
   Sharp_addToWatchList_presult result;
-  result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
 
-  if (result.__isset.success) {
-    return _return;
-  }
   if (result.__isset.e) {
     throw result.e;
   }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "addToWatchList failed: unknown result");
+  return;
 }
 
-bool SharpClient::removeFromWatchList(const std::vector<std::string> & rm)
+void SharpClient::removeFromWatchList(const std::vector<std::string> & rm)
 {
   send_removeFromWatchList(rm);
-  return recv_removeFromWatchList();
+  recv_removeFromWatchList();
 }
 
 void SharpClient::send_removeFromWatchList(const std::vector<std::string> & rm)
@@ -2316,7 +2246,7 @@ void SharpClient::send_removeFromWatchList(const std::vector<std::string> & rm)
   oprot_->getTransport()->flush();
 }
 
-bool SharpClient::recv_removeFromWatchList()
+void SharpClient::recv_removeFromWatchList()
 {
 
   int32_t rseqid = 0;
@@ -2341,20 +2271,15 @@ bool SharpClient::recv_removeFromWatchList()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  bool _return;
   Sharp_removeFromWatchList_presult result;
-  result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
 
-  if (result.__isset.success) {
-    return _return;
-  }
   if (result.__isset.e) {
     throw result.e;
   }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "removeFromWatchList failed: unknown result");
+  return;
 }
 
 void SharpClient::getNextBar(RealTimeBar& _return, const std::string& symbol)
@@ -2739,8 +2664,7 @@ void SharpProcessor::process_requestRealTimeBars(int32_t seqid, ::apache::thrift
 
   Sharp_requestRealTimeBars_result result;
   try {
-    result.success = iface_->requestRealTimeBars();
-    result.__isset.success = true;
+    iface_->requestRealTimeBars();
   } catch (Exception &e) {
     result.e = e;
     result.__isset.e = true;
@@ -2796,8 +2720,7 @@ void SharpProcessor::process_addToWatchList(int32_t seqid, ::apache::thrift::pro
 
   Sharp_addToWatchList_result result;
   try {
-    result.success = iface_->addToWatchList(args.wl);
-    result.__isset.success = true;
+    iface_->addToWatchList(args.wl);
   } catch (Exception &e) {
     result.e = e;
     result.__isset.e = true;
@@ -2853,8 +2776,7 @@ void SharpProcessor::process_removeFromWatchList(int32_t seqid, ::apache::thrift
 
   Sharp_removeFromWatchList_result result;
   try {
-    result.success = iface_->removeFromWatchList(args.rm);
-    result.__isset.success = true;
+    iface_->removeFromWatchList(args.rm);
   } catch (Exception &e) {
     result.e = e;
     result.__isset.e = true;

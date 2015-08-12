@@ -58,9 +58,9 @@ service Sharp {
     OrderResponse cancelOrder (1:required i64 o_id) throws (1:Exception e);
     OrderResponse orderStatus (1:required i64 o_id) throws (1:Exception e);
 
-    bool requestRealTimeBars() throws (1:Exception e);
-    bool addToWatchList(1:required list<string> wl) throws (1:Exception e);
-    bool removeFromWatchList(1:required list<string> rm) throws (1:Exception e);
+    void requestRealTimeBars() throws (1:Exception e);
+    void addToWatchList(1:required list<string> wl) throws (1:Exception e);
+    void removeFromWatchList(1:required list<string> rm) throws (1:Exception e);
     RealTimeBar getNextBar(1:required string symbol) throws (1:Exception e);
 }
 

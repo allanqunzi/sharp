@@ -50,9 +50,9 @@ public:
     void push(T&& e){
         if(this->size() >= limit){
         	this->pop_front();
-        	this->push_back(std::forward<T>(e));
         	LOG(warning)<<"deque limit is reached";
         }
+        this->push_back(std::forward<T>(e));
     }
 };
 
@@ -119,7 +119,7 @@ FindorCreate(K key, std::map<K, std::unique_ptr<V> > & signal_map){
 		if(res.second){
 			return res.first;
 		}else{
-			assert(0 && "signal_map insertion failed !!");
+			assert(0 && "error: signal_map insertion failed !!");
 		}
 	}
 }

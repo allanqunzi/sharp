@@ -47,17 +47,17 @@ class SharpHandler : virtual public SharpIf {
     printf("orderStatus\n");
   }
 
-  bool requestRealTimeBars() {
+  void requestRealTimeBars() {
     // Your implementation goes here
     printf("requestRealTimeBars\n");
   }
 
-  bool addToWatchList(const std::vector<std::string> & wl) {
+  void addToWatchList(const std::vector<std::string> & wl) {
     // Your implementation goes here
     printf("addToWatchList\n");
   }
 
-  bool removeFromWatchList(const std::vector<std::string> & rm) {
+  void removeFromWatchList(const std::vector<std::string> & rm) {
     // Your implementation goes here
     printf("removeFromWatchList\n");
   }
