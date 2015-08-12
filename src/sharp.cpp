@@ -507,19 +507,19 @@ std::string EWrapperImpl::getField(TickType tickType){
 	switch (tickType)
 	{
 		case BID_SIZE:	                    return "bidSize";
-		case BID:		                    return "bidPrice";
-		case ASK:		                    return "askPrice";
+		case BID:                           return "bidPrice";
+		case ASK:                           return "askPrice";
 		case ASK_SIZE:	                    return "askSize";
-		case LAST:		                    return "lastPrice";
+		case LAST:                          return "lastPrice";
 		case LAST_SIZE:	                    return "lastSize";
-		case HIGH:		                    return "high";
-		case LOW:		                    return "low";
+		case HIGH:                          return "high";
+		case LOW:                           return "low";
 		case VOLUME:	                    return "volume";
-		case CLOSE:		                    return "close";
+		case CLOSE:                         return "close";
 		case BID_OPTION_COMPUTATION:		return "bidOptComp";
 		case ASK_OPTION_COMPUTATION:		return "askOptComp";
 		case LAST_OPTION_COMPUTATION:		return "lastOptComp";
-		case MODEL_OPTION:					return "optionModel";
+		case MODEL_OPTION:                  return "optionModel";
 		case OPEN:                          return "open";
 		case LOW_13_WEEK:                   return "13WeekLow";
 		case HIGH_13_WEEK:                  return "13WeekHigh";
