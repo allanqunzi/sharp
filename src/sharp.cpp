@@ -516,9 +516,9 @@ std::string EWrapperImpl::getField(TickType tickType){
 		case LOW:                           return "low";
 		case VOLUME:	                    return "volume";
 		case CLOSE:                         return "close";
-		case BID_OPTION_COMPUTATION:		return "bidOptComp";
-		case ASK_OPTION_COMPUTATION:		return "askOptComp";
-		case LAST_OPTION_COMPUTATION:		return "lastOptComp";
+		case BID_OPTION_COMPUTATION:        return "bidOptComp";
+		case ASK_OPTION_COMPUTATION:        return "askOptComp";
+		case LAST_OPTION_COMPUTATION:       return "lastOptComp";
 		case MODEL_OPTION:                  return "optionModel";
 		case OPEN:                          return "open";
 		case LOW_13_WEEK:                   return "13WeekLow";
