@@ -51,9 +51,8 @@ public:
         if(this->size() >= limit){
         	this->pop_front();
         	this->push_back(std::forward<T>(e));
-            LOG(warning)<<"deque limit is reached";
+        	LOG(warning)<<"deque limit is reached";
         }
-
     }
 };
 
