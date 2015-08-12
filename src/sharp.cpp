@@ -460,11 +460,14 @@ bool EWrapperImpl::addToWatchList( const std::vector<std::string> & wl){
 	IBString whatToShow = "TRADES";
 
 	for(auto & e : wl){
+
 		if(watch_list.count(e) == 0){
 			watch_list[e] = ticker_id.getNewId();
+			LOG(info)<<"adding "<<e<<" to watch_list, reqId = "<<watch_list[e];
 			bar_mutexes[watch_list[e]];
 			contract.symbol = e;
-			m_pClient->reqRealTimeBars(watch_list[e], contract, 5, whatToShow, true, realTimeBarsOptions);
+			// true: only trading hours data
+			m_pClient->reqRealTimeBars(watch_list[e], contract, 5, whatToShow, false, realTimeBarsOptions);
 		}
 	}
 	return true;

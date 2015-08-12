@@ -1,7 +1,9 @@
-
+from Queue import Queue
+import threading
+#from threading import Thread # this way Thread can be directly used without "threading."
 import sys, glob
 import time
-sys.path.append('/home/qunzi/Projects/IBJts_test/sample_TestPosix/py2.7_thrift/')
+sys.path.append('/home/qunzi/sharp/src/py2.7_thrift/')
 sys.path.insert(0, glob.glob('/home/qunzi/Downloads/thrift-0.9.2/lib/py/build/lib.linux-x86_64-2.7')[0])
 
 #sys.path.append('/home/qunzi/Projects/IBJts_test/sample_TestPosix/py3.4_thrift/')
@@ -17,31 +19,82 @@ from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol
 #from thrift.protocol import TCompactProtocol
 
-try:
-  # Make socket
-  socket = TSocket.TSocket('localhost', 9090)
+#try:
+# Make socket
+socket = TSocket.TSocket('localhost', 9090)
 
-  # Buffering is critical. Raw sockets are very slow
-  transport = TTransport.TBufferedTransport(socket)
+# Buffering is critical. Raw sockets are very slow
+transport = TTransport.TBufferedTransport(socket)
 
-  # Wrap in a protocol
-  protocol = TBinaryProtocol.TBinaryProtocol(transport)
-  #protocol = TCompactProtocol.TCompactProtocol(transport)
+# Wrap in a protocol
+protocol = TBinaryProtocol.TBinaryProtocol(transport)
+#protocol = TCompactProtocol.TCompactProtocol(transport)
 
-  # Create a client to use the protocol encoder
-  client = Sharp.Client(protocol)
+# Create a client to use the protocol encoder
+client = Sharp.Client(protocol)
 
-  # Connect!
-  transport.open()
+# Connect!
+transport.open()
 
 
-  ping_req = PingRequest()
-  ping_resp = client.ping(ping_req)
-  print('ping....')
+ping_req = PingRequest()
+ping_resp = client.ping(ping_req)
+print('ping....')
 
-  o_id = client.getOrderID()
-  print(o_id)
+o_id = client.getOrderID()
+print(o_id)
 
+
+def getNewBar(q, sbl):
+  while True:
+    q.put(client.getNextBar(sbl))
+    print(sbl)
+    print(q.get().open)
+
+
+def monitor(dict, list, threads):
+  dict.clear() # remove all entries in dict
+  for l in list:
+    dict[l] = Queue()
+  num_threads = len(list)
+  for i in range(num_threads):
+    symbol = list[i]
+    worker = threading.Thread(target=getNewBar, args=(dict[symbol], symbol, ))
+    threads.append(worker)
+    worker.setDaemon(True)
+    worker.start()
+
+qdict = {}
+wlist = ["AMZN", "AAPL"]
+ts = []
+monitor(qdict, wlist, ts)
+
+while threading.active_count() > 0: # this while responds to ctrl + c
+  time.sleep(0.1)
+
+'''
+q = Queue()
+b1 = client.addToWatchList(["AMZN"])
+if b1:
+  print('watch list added.')
+
+while True:
+  q.put(client.getNextBar("AMZN"))
+  print(q.get().open)
+'''
+
+
+transport.close()
+
+#except Exception, e:
+#except Exception as e:
+# print(e.what, e.why)
+
+
+
+
+
+'''
   c_req = ContractRequest('AMZN', 'STK', 'SMART', 'USD')
   o_req = OrderRequest('BUY', 1000, 'LMT', 0.12)
 
@@ -55,9 +108,4 @@ try:
   cancel_resp = client.cancelOrder(o_id)
 
   print('cancel_resp.state =', cancel_resp.state)
-
-  transport.close()
-
-except Exception, e:
-#except Exception as e:
-  print(e.what, e.why)
+'''

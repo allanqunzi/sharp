@@ -29,6 +29,10 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
   print('  OrderResponse placeOrder(ContractRequest c_req, OrderRequest o_req)')
   print('  OrderResponse cancelOrder(i64 o_id)')
   print('  OrderResponse orderStatus(i64 o_id)')
+  print('  bool requestRealTimeBars()')
+  print('  bool addToWatchList( wl)')
+  print('  bool removeFromWatchList( rm)')
+  print('  RealTimeBar getNextBar(string symbol)')
   print('')
   sys.exit(0)
 
@@ -114,6 +118,30 @@ elif cmd == 'orderStatus':
     print('orderStatus requires 1 args')
     sys.exit(1)
   pp.pprint(client.orderStatus(eval(args[0]),))
+
+elif cmd == 'requestRealTimeBars':
+  if len(args) != 0:
+    print('requestRealTimeBars requires 0 args')
+    sys.exit(1)
+  pp.pprint(client.requestRealTimeBars())
+
+elif cmd == 'addToWatchList':
+  if len(args) != 1:
+    print('addToWatchList requires 1 args')
+    sys.exit(1)
+  pp.pprint(client.addToWatchList(eval(args[0]),))
+
+elif cmd == 'removeFromWatchList':
+  if len(args) != 1:
+    print('removeFromWatchList requires 1 args')
+    sys.exit(1)
+  pp.pprint(client.removeFromWatchList(eval(args[0]),))
+
+elif cmd == 'getNextBar':
+  if len(args) != 1:
+    print('getNextBar requires 1 args')
+    sys.exit(1)
+  pp.pprint(client.getNextBar(args[0],))
 
 else:
   print('Unrecognized method %s' % cmd)

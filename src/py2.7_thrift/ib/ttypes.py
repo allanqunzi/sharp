@@ -232,11 +232,10 @@ class OrderRequest:
 
   thrift_spec = (
     None, # 0
-    None, # 1
-    (2, TType.STRING, 'action', None, None, ), # 2
-    (3, TType.I64, 'totalQuantity', None, None, ), # 3
-    (4, TType.STRING, 'orderType', None, None, ), # 4
-    (5, TType.DOUBLE, 'lmtPrice', None, None, ), # 5
+    (1, TType.STRING, 'action', None, None, ), # 1
+    (2, TType.I64, 'totalQuantity', None, None, ), # 2
+    (3, TType.STRING, 'orderType', None, None, ), # 3
+    (4, TType.DOUBLE, 'lmtPrice', None, None, ), # 4
   )
 
   def __init__(self, action=None, totalQuantity=None, orderType=None, lmtPrice=None,):
@@ -254,22 +253,22 @@ class OrderRequest:
       (fname, ftype, fid) = iprot.readFieldBegin()
       if ftype == TType.STOP:
         break
-      if fid == 2:
+      if fid == 1:
         if ftype == TType.STRING:
           self.action = iprot.readString();
         else:
           iprot.skip(ftype)
-      elif fid == 3:
+      elif fid == 2:
         if ftype == TType.I64:
           self.totalQuantity = iprot.readI64();
         else:
           iprot.skip(ftype)
-      elif fid == 4:
+      elif fid == 3:
         if ftype == TType.STRING:
           self.orderType = iprot.readString();
         else:
           iprot.skip(ftype)
-      elif fid == 5:
+      elif fid == 4:
         if ftype == TType.DOUBLE:
           self.lmtPrice = iprot.readDouble();
         else:
@@ -285,19 +284,19 @@ class OrderRequest:
       return
     oprot.writeStructBegin('OrderRequest')
     if self.action is not None:
-      oprot.writeFieldBegin('action', TType.STRING, 2)
+      oprot.writeFieldBegin('action', TType.STRING, 1)
       oprot.writeString(self.action)
       oprot.writeFieldEnd()
     if self.totalQuantity is not None:
-      oprot.writeFieldBegin('totalQuantity', TType.I64, 3)
+      oprot.writeFieldBegin('totalQuantity', TType.I64, 2)
       oprot.writeI64(self.totalQuantity)
       oprot.writeFieldEnd()
     if self.orderType is not None:
-      oprot.writeFieldBegin('orderType', TType.STRING, 4)
+      oprot.writeFieldBegin('orderType', TType.STRING, 3)
       oprot.writeString(self.orderType)
       oprot.writeFieldEnd()
     if self.lmtPrice is not None:
-      oprot.writeFieldBegin('lmtPrice', TType.DOUBLE, 5)
+      oprot.writeFieldBegin('lmtPrice', TType.DOUBLE, 4)
       oprot.writeDouble(self.lmtPrice)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -520,6 +519,193 @@ class OrderResponse:
     value = (value * 31) ^ hash(self.lastFillPrice)
     value = (value * 31) ^ hash(self.clientId)
     value = (value * 31) ^ hash(self.whyHeld)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class RealTimeBar:
+  """
+  Attributes:
+   - reqId
+   - time
+   - open
+   - low
+   - high
+   - close
+   - volume
+   - wap
+   - count
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.I64, 'reqId', None, -2, ), # 1
+    (2, TType.I64, 'time', None, 1, ), # 2
+    (3, TType.DOUBLE, 'open', None, 1, ), # 3
+    (4, TType.DOUBLE, 'low', None, 1, ), # 4
+    (5, TType.DOUBLE, 'high', None, 1, ), # 5
+    (6, TType.DOUBLE, 'close', None, 1, ), # 6
+    (7, TType.I64, 'volume', None, 1, ), # 7
+    (8, TType.DOUBLE, 'wap', None, 1, ), # 8
+    (9, TType.I32, 'count', None, 1, ), # 9
+  )
+
+  def __init__(self, reqId=thrift_spec[1][4], time=thrift_spec[2][4], open=thrift_spec[3][4], low=thrift_spec[4][4], high=thrift_spec[5][4], close=thrift_spec[6][4], volume=thrift_spec[7][4], wap=thrift_spec[8][4], count=thrift_spec[9][4],):
+    self.reqId = reqId
+    self.time = time
+    self.open = open
+    self.low = low
+    self.high = high
+    self.close = close
+    self.volume = volume
+    self.wap = wap
+    self.count = count
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I64:
+          self.reqId = iprot.readI64();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.I64:
+          self.time = iprot.readI64();
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.DOUBLE:
+          self.open = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.DOUBLE:
+          self.low = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.DOUBLE:
+          self.high = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      elif fid == 6:
+        if ftype == TType.DOUBLE:
+          self.close = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      elif fid == 7:
+        if ftype == TType.I64:
+          self.volume = iprot.readI64();
+        else:
+          iprot.skip(ftype)
+      elif fid == 8:
+        if ftype == TType.DOUBLE:
+          self.wap = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      elif fid == 9:
+        if ftype == TType.I32:
+          self.count = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('RealTimeBar')
+    if self.reqId is not None:
+      oprot.writeFieldBegin('reqId', TType.I64, 1)
+      oprot.writeI64(self.reqId)
+      oprot.writeFieldEnd()
+    if self.time is not None:
+      oprot.writeFieldBegin('time', TType.I64, 2)
+      oprot.writeI64(self.time)
+      oprot.writeFieldEnd()
+    if self.open is not None:
+      oprot.writeFieldBegin('open', TType.DOUBLE, 3)
+      oprot.writeDouble(self.open)
+      oprot.writeFieldEnd()
+    if self.low is not None:
+      oprot.writeFieldBegin('low', TType.DOUBLE, 4)
+      oprot.writeDouble(self.low)
+      oprot.writeFieldEnd()
+    if self.high is not None:
+      oprot.writeFieldBegin('high', TType.DOUBLE, 5)
+      oprot.writeDouble(self.high)
+      oprot.writeFieldEnd()
+    if self.close is not None:
+      oprot.writeFieldBegin('close', TType.DOUBLE, 6)
+      oprot.writeDouble(self.close)
+      oprot.writeFieldEnd()
+    if self.volume is not None:
+      oprot.writeFieldBegin('volume', TType.I64, 7)
+      oprot.writeI64(self.volume)
+      oprot.writeFieldEnd()
+    if self.wap is not None:
+      oprot.writeFieldBegin('wap', TType.DOUBLE, 8)
+      oprot.writeDouble(self.wap)
+      oprot.writeFieldEnd()
+    if self.count is not None:
+      oprot.writeFieldBegin('count', TType.I32, 9)
+      oprot.writeI32(self.count)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    if self.reqId is None:
+      raise TProtocol.TProtocolException(message='Required field reqId is unset!')
+    if self.time is None:
+      raise TProtocol.TProtocolException(message='Required field time is unset!')
+    if self.open is None:
+      raise TProtocol.TProtocolException(message='Required field open is unset!')
+    if self.low is None:
+      raise TProtocol.TProtocolException(message='Required field low is unset!')
+    if self.high is None:
+      raise TProtocol.TProtocolException(message='Required field high is unset!')
+    if self.close is None:
+      raise TProtocol.TProtocolException(message='Required field close is unset!')
+    if self.volume is None:
+      raise TProtocol.TProtocolException(message='Required field volume is unset!')
+    if self.wap is None:
+      raise TProtocol.TProtocolException(message='Required field wap is unset!')
+    if self.count is None:
+      raise TProtocol.TProtocolException(message='Required field count is unset!')
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.reqId)
+    value = (value * 31) ^ hash(self.time)
+    value = (value * 31) ^ hash(self.open)
+    value = (value * 31) ^ hash(self.low)
+    value = (value * 31) ^ hash(self.high)
+    value = (value * 31) ^ hash(self.close)
+    value = (value * 31) ^ hash(self.volume)
+    value = (value * 31) ^ hash(self.wap)
+    value = (value * 31) ^ hash(self.count)
     return value
 
   def __repr__(self):
