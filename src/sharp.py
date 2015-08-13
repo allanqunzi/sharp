@@ -71,7 +71,7 @@ def monitor(dict, list, threads):
     worker.start()
 
 qdict = {}
-wlist = ["AMZN", "AAPL"]
+wlist = ["AMZN", "BIDU"]
 ts = []
 monitor(qdict, wlist, ts)
 

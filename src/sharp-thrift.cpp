@@ -171,6 +171,11 @@ public:
         }
     }
 
+    /* on the python client side, addToWatchList and removeFromWatchList
+    * must not be called by different processes. watch_list and watch_list_bars
+    * can be synchronized if needed, but most likely it is not necessary and
+    * expensive to do so.
+    */
     void addToWatchList(const std::vector<std::string> & wl){
         protect( [this, &wl](){
             auto b = trader.addToWatchList(wl);
@@ -185,7 +190,14 @@ public:
 
     void getNextBar(api::RealTimeBar& next_bar, const std::string& symbol){
         protect([this, &next_bar, &symbol](){
-            auto id = trader.watch_list[symbol];
+            auto it = trader.watch_list.find(symbol);
+            if (it == trader.watch_list.end())
+            {
+                translate_realtimebar(invalid_bar, next_bar);
+                return;
+            }
+
+            auto id = it->second;
             auto & bars = trader.watch_list_bars[id];
             auto start = std::chrono::steady_clock::now();
             auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -197,11 +209,11 @@ public:
             }
 
             if(!bars.empty()){
-                translate_realtimebar(bars.front(), next_bar);
                 std::lock_guard<std::mutex> lk(trader.bar_mutexes[id]);
+                translate_realtimebar(bars.front(), next_bar);
                 bars.pop_front();
             }else{
-                std::cout<<symbol<<std::endl;
+                LOG(info)<<"timeout for "<<symbol;
                 translate_realtimebar(invalid_bar, next_bar);
             }
         } );

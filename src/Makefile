@@ -11,11 +11,11 @@ TARGET=server
 
 
 
-$(TARGET): server.cpp client.cpp sharp.cpp sharp.h
+$(TARGET): server.cpp client.cpp sharp.cpp sharp.h sharp-thrift.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o EClientSocketBase.o -c $(BASE_SRC_DIR)/EClientSocketBase.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o EPosixClientSocket.o -c $(BASE_SRC_DIR)/EPosixClientSocket.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -DBOOST_LOG_DYN_LINK -o sharp.o -c sharp.cpp
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -o sharp-thrift.o -c sharp-thrift.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -DBOOST_LOG_DYN_LINK -o sharp-thrift.o -c sharp-thrift.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o server.o -c server.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o client.o -c client.cpp
 	$(CXX) $(LDFLAGS) server.o sharp.o EClientSocketBase.o EPosixClientSocket.o $(PROTOCOL_OBJS) -o $@ $(LDLIBS)
