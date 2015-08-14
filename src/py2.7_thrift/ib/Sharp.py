@@ -67,6 +67,13 @@ class Iface:
     """
     pass
 
+  def removeZombieWatchList(self, rm):
+    """
+    Parameters:
+     - rm
+    """
+    pass
+
   def getNextBar(self, symbol):
     """
     Parameters:
@@ -328,6 +335,37 @@ class Client(Iface):
       raise result.e
     return
 
+  def removeZombieWatchList(self, rm):
+    """
+    Parameters:
+     - rm
+    """
+    self.send_removeZombieWatchList(rm)
+    self.recv_removeZombieWatchList()
+
+  def send_removeZombieWatchList(self, rm):
+    self._oprot.writeMessageBegin('removeZombieWatchList', TMessageType.CALL, self._seqid)
+    args = removeZombieWatchList_args()
+    args.rm = rm
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_removeZombieWatchList(self):
+    iprot = self._iprot
+    (fname, mtype, rseqid) = iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(iprot)
+      iprot.readMessageEnd()
+      raise x
+    result = removeZombieWatchList_result()
+    result.read(iprot)
+    iprot.readMessageEnd()
+    if result.e is not None:
+      raise result.e
+    return
+
   def getNextBar(self, symbol):
     """
     Parameters:
@@ -374,6 +412,7 @@ class Processor(Iface, TProcessor):
     self._processMap["requestRealTimeBars"] = Processor.process_requestRealTimeBars
     self._processMap["addToWatchList"] = Processor.process_addToWatchList
     self._processMap["removeFromWatchList"] = Processor.process_removeFromWatchList
+    self._processMap["removeZombieWatchList"] = Processor.process_removeZombieWatchList
     self._processMap["getNextBar"] = Processor.process_getNextBar
 
   def process(self, iprot, oprot):
@@ -493,6 +532,20 @@ class Processor(Iface, TProcessor):
     except Exception, e:
       result.e = e
     oprot.writeMessageBegin("removeFromWatchList", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_removeZombieWatchList(self, seqid, iprot, oprot):
+    args = removeZombieWatchList_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = removeZombieWatchList_result()
+    try:
+      self._handler.removeZombieWatchList(args.rm)
+    except Exception, e:
+      result.e = e
+    oprot.writeMessageBegin("removeZombieWatchList", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
     oprot.trans.flush()
@@ -1579,6 +1632,147 @@ class removeFromWatchList_result:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
     oprot.writeStructBegin('removeFromWatchList_result')
+    if self.e is not None:
+      oprot.writeFieldBegin('e', TType.STRUCT, 1)
+      self.e.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.e)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class removeZombieWatchList_args:
+  """
+  Attributes:
+   - rm
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.LIST, 'rm', (TType.STRING,None), None, ), # 1
+  )
+
+  def __init__(self, rm=None,):
+    self.rm = rm
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.LIST:
+          self.rm = []
+          (_etype17, _size14) = iprot.readListBegin()
+          for _i18 in xrange(_size14):
+            _elem19 = iprot.readString();
+            self.rm.append(_elem19)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('removeZombieWatchList_args')
+    if self.rm is not None:
+      oprot.writeFieldBegin('rm', TType.LIST, 1)
+      oprot.writeListBegin(TType.STRING, len(self.rm))
+      for iter20 in self.rm:
+        oprot.writeString(iter20)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    if self.rm is None:
+      raise TProtocol.TProtocolException(message='Required field rm is unset!')
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.rm)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class removeZombieWatchList_result:
+  """
+  Attributes:
+   - e
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRUCT, 'e', (Exception, Exception.thrift_spec), None, ), # 1
+  )
+
+  def __init__(self, e=None,):
+    self.e = e
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.e = Exception()
+          self.e.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('removeZombieWatchList_result')
     if self.e is not None:
       oprot.writeFieldBegin('e', TType.STRUCT, 1)
       self.e.write(oprot)

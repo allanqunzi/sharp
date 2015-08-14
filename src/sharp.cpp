@@ -477,7 +477,7 @@ bool EWrapperImpl::removeFromWatchList( const std::vector<std::string> & rm){
 	for(auto & e : rm){
 		auto it = watch_list.find(e);
 		if(it != watch_list.end()){
-			LOG(info)<<"calling EWrapperImpl::removeFromWatchList";
+			LOG(info)<<"removing "<<e<<" from watch_list";
 			m_pClient->cancelRealTimeBars(it->second);
 			watch_list_bars.erase(it->second);
 			bar_mutexes.erase(it->second);
@@ -485,6 +485,16 @@ bool EWrapperImpl::removeFromWatchList( const std::vector<std::string> & rm){
 		}
 	}
 	return true;
+}
+
+bool EWrapperImpl::removeZombieWatchList(const std::vector<std::string> & wl){
+	std::vector<std::string> rm;
+	for( auto & e : watch_list){
+		if ( std::find(wl.begin(), wl.end(), e.first) == wl.end() ){
+			rm.push_back(e.first);
+		}
+	}
+	return removeFromWatchList(rm);
 }
 
 bool EWrapperImpl::requestRealTimeBars(){

@@ -185,6 +185,12 @@ public:
         } );
     }
 
+    void removeZombieWatchList(const std::vector<std::string> & rm){
+        protect( [this, &rm](){
+            auto b = trader.removeZombieWatchList(rm); // will cancel the request for real time bars
+        } );
+    }
+
     // if C++ thrift server shuts down (the watch_list and watch_list_bars are gone),
     // while the python client is still running, C++ thrift server restarts again,
     // the python client will get invalid_bar for all the getNextBar requests, the python

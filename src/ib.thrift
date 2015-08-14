@@ -61,6 +61,7 @@ service Sharp {
     void requestRealTimeBars() throws (1:Exception e);
     void addToWatchList(1:required list<string> wl) throws (1:Exception e);
     void removeFromWatchList(1:required list<string> rm) throws (1:Exception e);
+    void removeZombieWatchList(1:required list<string> rm) throws (1:Exception e);
     RealTimeBar getNextBar(1:required string symbol) throws (1:Exception e);
 }
 

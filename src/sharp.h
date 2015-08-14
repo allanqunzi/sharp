@@ -199,6 +199,7 @@ public:
 	//
 	bool addToWatchList( const std::vector<std::string> &);
 	bool removeFromWatchList(const std::vector<std::string> &);
+	bool removeZombieWatchList(const std::vector<std::string> &);
 
 
 	bool requestRealTimeBars();
@@ -296,7 +297,7 @@ public:
 	IdType ticker_id;
 
 	// all possible symbols (A - ZZZZ) have been tested to be hashed
-    // to different values.
+	// to different values.
 	std::unordered_map<std::string, TickerId> watch_list;
 
 	// non-const operation on std::deque is not thread-safe,

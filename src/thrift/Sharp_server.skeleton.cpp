@@ -62,6 +62,11 @@ class SharpHandler : virtual public SharpIf {
     printf("removeFromWatchList\n");
   }
 
+  void removeZombieWatchList(const std::vector<std::string> & rm) {
+    // Your implementation goes here
+    printf("removeZombieWatchList\n");
+  }
+
   void getNextBar(RealTimeBar& _return, const std::string& symbol) {
     // Your implementation goes here
     printf("getNextBar\n");
