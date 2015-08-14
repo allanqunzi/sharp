@@ -461,7 +461,6 @@ bool EWrapperImpl::addToWatchList( const std::vector<std::string> & wl){
 	IBString whatToShow = "TRADES";
 
 	for(auto & e : wl){
-
 		if(watch_list.count(e) == 0){
 			watch_list[e] = ticker_id.getNewId();
 			LOG(info)<<"adding "<<e<<" to watch_list, reqId = "<<watch_list[e];

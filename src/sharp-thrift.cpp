@@ -171,22 +171,46 @@ public:
         }
     }
 
-    /* on the python client side, addToWatchList and removeFromWatchList
-    * must not be called by different processes. watch_list and watch_list_bars
-    * can be synchronized if needed, but most likely it is not necessary and
-    * expensive to do so.
-    */
     void addToWatchList(const std::vector<std::string> & wl){
         protect( [this, &wl](){
             auto b = trader.addToWatchList(wl);
         } );
     }
 
+    // on the python client side, this function is called after all the getNextBar
+    // requests (for the to-be-removed watch list) are done (i.e, after join is called.)
     void removeFromWatchList(const std::vector<std::string> & rm){
         protect( [this, &rm](){
             auto b = trader.removeFromWatchList(rm); // will cancel the request for real time bars
         } );
     }
+
+    // if C++ thrift server shuts down (the watch_list and watch_list_bars are gone),
+    // while the python client is still running, C++ thrift server restarts again,
+    // the python client will get invalid_bar for all the getNextBar requests, the python
+    // client has to restart again.
+
+    // if python client shuts down while C++ thrift server is still running, and python client
+    // restarts again (with possibly modified watch list), addToWatchList will work fine, since it
+    // only selects the symbols which are not in the watch_list, and only send reqRealTimeBars for
+    // those symbols. But the symbols which are not in the new watch list (by the python client side)
+    // will not get deleted, since there is no request to removeFromWatchList and right now I don't
+    // have a solution to check if there is python client connected.
+
+    // during the time both C++ thrift server and python client are running, if addToWatchList is
+    // called, watch_list will get modified, at the same time, however, it is not safe to access
+    // other exsisting symbols in watch_list if watch_list is std::map. std::unordered_map will
+    // probably work fine, since all possible symbols (A - ZZZZ) have been tested to be hashed
+    // to different values. Thus adding buckets will not affect the existing buckets. This may
+    // be subject to change due to compiler updates, etc. Another alternative without explicitly
+    // using lock is concurrent_unordered_map or lock-free maps.
+    // after addToWatchList returns on the python client side, the new sybmol is already in
+    // watch_list.
+
+    // if getNextBar is called, that means the python client is running, which means that
+    // addToWatchList has already been called, which means symbol should be in watch_list,
+    // if symbol is not, that means C++ thrift server has shut down previously during the
+    // python client is running, so the watch_list must be empty().
 
     void getNextBar(api::RealTimeBar& next_bar, const std::string& symbol){
         protect([this, &next_bar, &symbol](){

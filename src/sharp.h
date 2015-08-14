@@ -22,7 +22,7 @@
 #include <utility>
 #include <cassert>
 #include <mutex>
-#include <map>
+#include <unordered_map>
 #include <boost/log/trivial.hpp>
 #include <boost/log/attributes/named_scope.hpp>
 class EPosixClientSocket;
@@ -115,8 +115,8 @@ struct ContractOrder
 };
 
 template<typename K, typename V>
-typename std::map<K, std::unique_ptr<V> >::iterator
-FindorCreate(K key, std::map<K, std::unique_ptr<V> > & signal_map){
+typename std::unordered_map<K, std::unique_ptr<V> >::iterator
+FindorCreate(K key, std::unordered_map<K, std::unique_ptr<V> > & signal_map){
 	// using value_type = V;
 	typedef V value_type;
 	// using key_type = K;
@@ -135,18 +135,16 @@ FindorCreate(K key, std::map<K, std::unique_ptr<V> > & signal_map){
 
 struct PlacedOrderContracts
 {
-	std::map<OrderId, std::size_t> orderId_index_map;
+	std::unordered_map<OrderId, std::size_t> orderId_index_map;
 	std::vector<std::unique_ptr<ContractOrder> > records;
 
 	bool insert(OrderId orderId, ContractOrder & contract_order){
 		if(orderId_index_map.count(orderId) > 0){
-			std::cout<<"This orderId:"<<orderId<<" has been already registered, records insertion failed."<<std::endl;
+			LOG(warning)<<"This orderId:"<<orderId<<" has been already registered, records insertion failed.";
 			return false;
 		}else{
 			records.push_back(std::unique_ptr<ContractOrder>(new ContractOrder(contract_order)));
 			orderId_index_map[orderId] = records.size() - 1;
-			// auto & resp = records.back()->response;
-			// resp.orderId = orderId;
 			return true;
 		}
 	}
@@ -198,9 +196,11 @@ public:
 	bool checkValidId( OrderId orderId);
 	// calling this function will call
 	// m_pClient->reqRealTimeBars, otherwise it doesn't make sense to call this function.
+	//
 	bool addToWatchList( const std::vector<std::string> &);
-
 	bool removeFromWatchList(const std::vector<std::string> &);
+
+
 	bool requestRealTimeBars();
 
 	// getNextBar is done at thrift level
@@ -294,12 +294,16 @@ public:
 	PlacedOrderContracts placed_contract_orders;
 	std::vector<OrderId> order_ids; // written only by EWrapperImpl::nextValidId( OrderId orderId)
 	IdType ticker_id;
-	std::map<std::string, TickerId> watch_list;
 
-	// std::deque is not guranteed to be thread-safe, so the following needs to be synchronized.
-	std::map<TickerId, sharpdeque<RealTimeBar> >watch_list_bars;
+	// all possible symbols (A - ZZZZ) have been tested to be hashed
+    // to different values.
+	std::unordered_map<std::string, TickerId> watch_list;
+
+	// non-const operation on std::deque is not thread-safe,
+	// so the following needs to be synchronized.
+	std::unordered_map<TickerId, sharpdeque<RealTimeBar> >watch_list_bars;
 	// bar_mutexes should be initialized on construction and modification of watch_list
-	std::map<TickerId, std::mutex> bar_mutexes;
+	std::unordered_map<TickerId, std::mutex> bar_mutexes;
 };
 
 
