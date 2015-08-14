@@ -14,6 +14,9 @@ EWrapperImpl::EWrapperImpl( const std::vector<std::string> wl )
 	, host("")
 	, port(7496)
 	, clientId(0)
+	, watch_list(DEFAULT_BUCKETS_NUM)
+	, watch_list_bars(DEFAULT_BUCKETS_NUM)
+	, bar_mutexes(DEFAULT_BUCKETS_NUM)
 {
 	for(auto e : wl){
 		watch_list[e] = ticker_id.getNewId();

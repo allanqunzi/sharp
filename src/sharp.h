@@ -29,6 +29,7 @@ class EPosixClientSocket;
 
 namespace sharp{
 
+static constexpr std::size_t DEFAULT_BUCKETS_NUM = 500; // initial number of buckets for std::unordered_map
 static constexpr int PING_DEADLINE = 2; // seconds
 static constexpr int SLEEP_BETWEEN_PINGS = 30; // seconds
 static constexpr unsigned int MAX_ATTEMPTS = 50;
@@ -298,13 +299,13 @@ public:
 
 	// all possible symbols (A - ZZZZ) have been tested to be hashed
 	// to different values.
-	std::unordered_map<std::string, TickerId> watch_list;
+	std::unordered_map<std::string, TickerId>watch_list;
 
 	// non-const operation on std::deque is not thread-safe,
 	// so the following needs to be synchronized.
 	std::unordered_map<TickerId, sharpdeque<RealTimeBar> >watch_list_bars;
 	// bar_mutexes should be initialized on construction and modification of watch_list
-	std::unordered_map<TickerId, std::mutex> bar_mutexes;
+	std::unordered_map<TickerId, std::mutex>bar_mutexes;
 };
 
 

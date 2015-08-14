@@ -220,14 +220,16 @@ public:
 
     void getNextBar(api::RealTimeBar& next_bar, const std::string& symbol){
         protect([this, &next_bar, &symbol](){
-            auto it = trader.watch_list.find(symbol);
-            if (it == trader.watch_list.end())
-            {
+
+            // modern compilers make exceptions usually faster
+            // on the non-exceptional path compared to error code handling.
+            long id; // TickerId is long
+            try{
+                id = trader.watch_list.at(symbol);
+            }catch(...){
                 translate_realtimebar(invalid_bar, next_bar);
                 return;
             }
-
-            auto id = it->second;
             auto & bars = trader.watch_list_bars[id];
             auto start = std::chrono::steady_clock::now();
             auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
