@@ -1608,11 +1608,11 @@ uint32_t Sharp_removeFromWatchList_presult::read(::apache::thrift::protocol::TPr
 }
 
 
-Sharp_removeZombieWatchList_args::~Sharp_removeZombieWatchList_args() throw() {
+Sharp_removeZombieSymbols_args::~Sharp_removeZombieSymbols_args() throw() {
 }
 
 
-uint32_t Sharp_removeZombieWatchList_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Sharp_removeZombieSymbols_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   uint32_t xfer = 0;
   std::string fname;
@@ -1667,10 +1667,10 @@ uint32_t Sharp_removeZombieWatchList_args::read(::apache::thrift::protocol::TPro
   return xfer;
 }
 
-uint32_t Sharp_removeZombieWatchList_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Sharp_removeZombieSymbols_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   oprot->incrementRecursionDepth();
-  xfer += oprot->writeStructBegin("Sharp_removeZombieWatchList_args");
+  xfer += oprot->writeStructBegin("Sharp_removeZombieSymbols_args");
 
   xfer += oprot->writeFieldBegin("rm", ::apache::thrift::protocol::T_LIST, 1);
   {
@@ -1691,14 +1691,14 @@ uint32_t Sharp_removeZombieWatchList_args::write(::apache::thrift::protocol::TPr
 }
 
 
-Sharp_removeZombieWatchList_pargs::~Sharp_removeZombieWatchList_pargs() throw() {
+Sharp_removeZombieSymbols_pargs::~Sharp_removeZombieSymbols_pargs() throw() {
 }
 
 
-uint32_t Sharp_removeZombieWatchList_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Sharp_removeZombieSymbols_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   oprot->incrementRecursionDepth();
-  xfer += oprot->writeStructBegin("Sharp_removeZombieWatchList_pargs");
+  xfer += oprot->writeStructBegin("Sharp_removeZombieSymbols_pargs");
 
   xfer += oprot->writeFieldBegin("rm", ::apache::thrift::protocol::T_LIST, 1);
   {
@@ -1719,11 +1719,11 @@ uint32_t Sharp_removeZombieWatchList_pargs::write(::apache::thrift::protocol::TP
 }
 
 
-Sharp_removeZombieWatchList_result::~Sharp_removeZombieWatchList_result() throw() {
+Sharp_removeZombieSymbols_result::~Sharp_removeZombieSymbols_result() throw() {
 }
 
 
-uint32_t Sharp_removeZombieWatchList_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Sharp_removeZombieSymbols_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   uint32_t xfer = 0;
   std::string fname;
@@ -1763,11 +1763,11 @@ uint32_t Sharp_removeZombieWatchList_result::read(::apache::thrift::protocol::TP
   return xfer;
 }
 
-uint32_t Sharp_removeZombieWatchList_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Sharp_removeZombieSymbols_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("Sharp_removeZombieWatchList_result");
+  xfer += oprot->writeStructBegin("Sharp_removeZombieSymbols_result");
 
   if (this->__isset.e) {
     xfer += oprot->writeFieldBegin("e", ::apache::thrift::protocol::T_STRUCT, 1);
@@ -1780,11 +1780,11 @@ uint32_t Sharp_removeZombieWatchList_result::write(::apache::thrift::protocol::T
 }
 
 
-Sharp_removeZombieWatchList_presult::~Sharp_removeZombieWatchList_presult() throw() {
+Sharp_removeZombieSymbols_presult::~Sharp_removeZombieSymbols_presult() throw() {
 }
 
 
-uint32_t Sharp_removeZombieWatchList_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Sharp_removeZombieSymbols_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   uint32_t xfer = 0;
   std::string fname;
@@ -2499,18 +2499,18 @@ void SharpClient::recv_removeFromWatchList()
   return;
 }
 
-void SharpClient::removeZombieWatchList(const std::vector<std::string> & rm)
+void SharpClient::removeZombieSymbols(const std::vector<std::string> & rm)
 {
-  send_removeZombieWatchList(rm);
-  recv_removeZombieWatchList();
+  send_removeZombieSymbols(rm);
+  recv_removeZombieSymbols();
 }
 
-void SharpClient::send_removeZombieWatchList(const std::vector<std::string> & rm)
+void SharpClient::send_removeZombieSymbols(const std::vector<std::string> & rm)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("removeZombieWatchList", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("removeZombieSymbols", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  Sharp_removeZombieWatchList_pargs args;
+  Sharp_removeZombieSymbols_pargs args;
   args.rm = &rm;
   args.write(oprot_);
 
@@ -2519,7 +2519,7 @@ void SharpClient::send_removeZombieWatchList(const std::vector<std::string> & rm
   oprot_->getTransport()->flush();
 }
 
-void SharpClient::recv_removeZombieWatchList()
+void SharpClient::recv_removeZombieSymbols()
 {
 
   int32_t rseqid = 0;
@@ -2539,12 +2539,12 @@ void SharpClient::recv_removeZombieWatchList()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("removeZombieWatchList") != 0) {
+  if (fname.compare("removeZombieSymbols") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  Sharp_removeZombieWatchList_presult result;
+  Sharp_removeZombieSymbols_presult result;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
@@ -3082,40 +3082,40 @@ void SharpProcessor::process_removeFromWatchList(int32_t seqid, ::apache::thrift
   }
 }
 
-void SharpProcessor::process_removeZombieWatchList(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void SharpProcessor::process_removeZombieSymbols(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("Sharp.removeZombieWatchList", callContext);
+    ctx = this->eventHandler_->getContext("Sharp.removeZombieSymbols", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Sharp.removeZombieWatchList");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Sharp.removeZombieSymbols");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "Sharp.removeZombieWatchList");
+    this->eventHandler_->preRead(ctx, "Sharp.removeZombieSymbols");
   }
 
-  Sharp_removeZombieWatchList_args args;
+  Sharp_removeZombieSymbols_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "Sharp.removeZombieWatchList", bytes);
+    this->eventHandler_->postRead(ctx, "Sharp.removeZombieSymbols", bytes);
   }
 
-  Sharp_removeZombieWatchList_result result;
+  Sharp_removeZombieSymbols_result result;
   try {
-    iface_->removeZombieWatchList(args.rm);
+    iface_->removeZombieSymbols(args.rm);
   } catch (Exception &e) {
     result.e = e;
     result.__isset.e = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "Sharp.removeZombieWatchList");
+      this->eventHandler_->handlerError(ctx, "Sharp.removeZombieSymbols");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("removeZombieWatchList", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("removeZombieSymbols", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -3124,17 +3124,17 @@ void SharpProcessor::process_removeZombieWatchList(int32_t seqid, ::apache::thri
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "Sharp.removeZombieWatchList");
+    this->eventHandler_->preWrite(ctx, "Sharp.removeZombieSymbols");
   }
 
-  oprot->writeMessageBegin("removeZombieWatchList", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("removeZombieSymbols", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "Sharp.removeZombieWatchList", bytes);
+    this->eventHandler_->postWrite(ctx, "Sharp.removeZombieSymbols", bytes);
   }
 }
 

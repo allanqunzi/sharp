@@ -487,7 +487,7 @@ bool EWrapperImpl::removeFromWatchList( const std::vector<std::string> & rm){
 	return true;
 }
 
-bool EWrapperImpl::removeZombieWatchList(const std::vector<std::string> & wl){
+bool EWrapperImpl::removeZombieSymbols(const std::vector<std::string> & wl){
 	std::vector<std::string> rm;
 	for( auto & e : watch_list){
 		if ( std::find(wl.begin(), wl.end(), e.first) == wl.end() ){

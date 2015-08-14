@@ -165,7 +165,7 @@ public:
     void requestRealTimeBars(){
         if(!bar_requested){
             protect( [this]() {
-            auto b = trader.requestRealTimeBars();
+            trader.requestRealTimeBars();
             } );
             bar_requested = true;
         }
@@ -173,7 +173,7 @@ public:
 
     void addToWatchList(const std::vector<std::string> & wl){
         protect( [this, &wl](){
-            auto b = trader.addToWatchList(wl);
+            trader.addToWatchList(wl);
         } );
     }
 
@@ -181,13 +181,13 @@ public:
     // requests (for the to-be-removed watch list) are done (i.e, after join is called.)
     void removeFromWatchList(const std::vector<std::string> & rm){
         protect( [this, &rm](){
-            auto b = trader.removeFromWatchList(rm); // will cancel the request for real time bars
+            trader.removeFromWatchList(rm); // will cancel the request for real time bars
         } );
     }
 
-    void removeZombieWatchList(const std::vector<std::string> & rm){
+    void removeZombieSymbols(const std::vector<std::string> & rm){
         protect( [this, &rm](){
-            auto b = trader.removeZombieWatchList(rm); // will cancel the request for real time bars
+            trader.removeZombieSymbols(rm); // will cancel the request for real time bars
         } );
     }
 

@@ -32,7 +32,7 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
   print('  void requestRealTimeBars()')
   print('  void addToWatchList( wl)')
   print('  void removeFromWatchList( rm)')
-  print('  void removeZombieWatchList( rm)')
+  print('  void removeZombieSymbols( rm)')
   print('  RealTimeBar getNextBar(string symbol)')
   print('')
   sys.exit(0)
@@ -138,11 +138,11 @@ elif cmd == 'removeFromWatchList':
     sys.exit(1)
   pp.pprint(client.removeFromWatchList(eval(args[0]),))
 
-elif cmd == 'removeZombieWatchList':
+elif cmd == 'removeZombieSymbols':
   if len(args) != 1:
-    print('removeZombieWatchList requires 1 args')
+    print('removeZombieSymbols requires 1 args')
     sys.exit(1)
-  pp.pprint(client.removeZombieWatchList(eval(args[0]),))
+  pp.pprint(client.removeZombieSymbols(eval(args[0]),))
 
 elif cmd == 'getNextBar':
   if len(args) != 1:

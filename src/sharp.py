@@ -71,9 +71,9 @@ def monitor(dict, list, threads):
     worker.start()
 
 qdict = {}
-wlist = ["AAPL"]
+wlist = ["AAPL", "GOOG"]
 ts = []
-client.removeZombieWatchList(wlist)
+client.removeZombieSymbols(wlist)
 time.sleep(60)
 
 monitor(qdict, wlist, ts)

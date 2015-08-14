@@ -67,7 +67,7 @@ class Iface:
     """
     pass
 
-  def removeZombieWatchList(self, rm):
+  def removeZombieSymbols(self, rm):
     """
     Parameters:
      - rm
@@ -335,23 +335,23 @@ class Client(Iface):
       raise result.e
     return
 
-  def removeZombieWatchList(self, rm):
+  def removeZombieSymbols(self, rm):
     """
     Parameters:
      - rm
     """
-    self.send_removeZombieWatchList(rm)
-    self.recv_removeZombieWatchList()
+    self.send_removeZombieSymbols(rm)
+    self.recv_removeZombieSymbols()
 
-  def send_removeZombieWatchList(self, rm):
-    self._oprot.writeMessageBegin('removeZombieWatchList', TMessageType.CALL, self._seqid)
-    args = removeZombieWatchList_args()
+  def send_removeZombieSymbols(self, rm):
+    self._oprot.writeMessageBegin('removeZombieSymbols', TMessageType.CALL, self._seqid)
+    args = removeZombieSymbols_args()
     args.rm = rm
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
 
-  def recv_removeZombieWatchList(self):
+  def recv_removeZombieSymbols(self):
     iprot = self._iprot
     (fname, mtype, rseqid) = iprot.readMessageBegin()
     if mtype == TMessageType.EXCEPTION:
@@ -359,7 +359,7 @@ class Client(Iface):
       x.read(iprot)
       iprot.readMessageEnd()
       raise x
-    result = removeZombieWatchList_result()
+    result = removeZombieSymbols_result()
     result.read(iprot)
     iprot.readMessageEnd()
     if result.e is not None:
@@ -412,7 +412,7 @@ class Processor(Iface, TProcessor):
     self._processMap["requestRealTimeBars"] = Processor.process_requestRealTimeBars
     self._processMap["addToWatchList"] = Processor.process_addToWatchList
     self._processMap["removeFromWatchList"] = Processor.process_removeFromWatchList
-    self._processMap["removeZombieWatchList"] = Processor.process_removeZombieWatchList
+    self._processMap["removeZombieSymbols"] = Processor.process_removeZombieSymbols
     self._processMap["getNextBar"] = Processor.process_getNextBar
 
   def process(self, iprot, oprot):
@@ -536,16 +536,16 @@ class Processor(Iface, TProcessor):
     oprot.writeMessageEnd()
     oprot.trans.flush()
 
-  def process_removeZombieWatchList(self, seqid, iprot, oprot):
-    args = removeZombieWatchList_args()
+  def process_removeZombieSymbols(self, seqid, iprot, oprot):
+    args = removeZombieSymbols_args()
     args.read(iprot)
     iprot.readMessageEnd()
-    result = removeZombieWatchList_result()
+    result = removeZombieSymbols_result()
     try:
-      self._handler.removeZombieWatchList(args.rm)
+      self._handler.removeZombieSymbols(args.rm)
     except Exception, e:
       result.e = e
-    oprot.writeMessageBegin("removeZombieWatchList", TMessageType.REPLY, seqid)
+    oprot.writeMessageBegin("removeZombieSymbols", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
     oprot.trans.flush()
@@ -1659,7 +1659,7 @@ class removeFromWatchList_result:
   def __ne__(self, other):
     return not (self == other)
 
-class removeZombieWatchList_args:
+class removeZombieSymbols_args:
   """
   Attributes:
    - rm
@@ -1701,7 +1701,7 @@ class removeZombieWatchList_args:
     if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
-    oprot.writeStructBegin('removeZombieWatchList_args')
+    oprot.writeStructBegin('removeZombieSymbols_args')
     if self.rm is not None:
       oprot.writeFieldBegin('rm', TType.LIST, 1)
       oprot.writeListBegin(TType.STRING, len(self.rm))
@@ -1734,7 +1734,7 @@ class removeZombieWatchList_args:
   def __ne__(self, other):
     return not (self == other)
 
-class removeZombieWatchList_result:
+class removeZombieSymbols_result:
   """
   Attributes:
    - e
@@ -1772,7 +1772,7 @@ class removeZombieWatchList_result:
     if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
-    oprot.writeStructBegin('removeZombieWatchList_result')
+    oprot.writeStructBegin('removeZombieSymbols_result')
     if self.e is not None:
       oprot.writeFieldBegin('e', TType.STRUCT, 1)
       self.e.write(oprot)

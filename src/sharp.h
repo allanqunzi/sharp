@@ -199,7 +199,7 @@ public:
 	//
 	bool addToWatchList( const std::vector<std::string> &);
 	bool removeFromWatchList(const std::vector<std::string> &);
-	bool removeZombieWatchList(const std::vector<std::string> &);
+	bool removeZombieSymbols(const std::vector<std::string> &);
 
 
 	bool requestRealTimeBars();

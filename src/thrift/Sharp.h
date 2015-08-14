@@ -23,7 +23,7 @@ class SharpIf {
   virtual void requestRealTimeBars() = 0;
   virtual void addToWatchList(const std::vector<std::string> & wl) = 0;
   virtual void removeFromWatchList(const std::vector<std::string> & rm) = 0;
-  virtual void removeZombieWatchList(const std::vector<std::string> & rm) = 0;
+  virtual void removeZombieSymbols(const std::vector<std::string> & rm) = 0;
   virtual void getNextBar(RealTimeBar& _return, const std::string& symbol) = 0;
 };
 
@@ -79,7 +79,7 @@ class SharpNull : virtual public SharpIf {
   void removeFromWatchList(const std::vector<std::string> & /* rm */) {
     return;
   }
-  void removeZombieWatchList(const std::vector<std::string> & /* rm */) {
+  void removeZombieSymbols(const std::vector<std::string> & /* rm */) {
     return;
   }
   void getNextBar(RealTimeBar& /* _return */, const std::string& /* symbol */) {
@@ -1018,117 +1018,117 @@ class Sharp_removeFromWatchList_presult {
 };
 
 
-class Sharp_removeZombieWatchList_args {
+class Sharp_removeZombieSymbols_args {
  public:
 
   static const char* ascii_fingerprint; // = "ACE4F644F0FDD289DDC4EE5B83BC13C0";
   static const uint8_t binary_fingerprint[16]; // = {0xAC,0xE4,0xF6,0x44,0xF0,0xFD,0xD2,0x89,0xDD,0xC4,0xEE,0x5B,0x83,0xBC,0x13,0xC0};
 
-  Sharp_removeZombieWatchList_args(const Sharp_removeZombieWatchList_args&);
-  Sharp_removeZombieWatchList_args& operator=(const Sharp_removeZombieWatchList_args&);
-  Sharp_removeZombieWatchList_args() {
+  Sharp_removeZombieSymbols_args(const Sharp_removeZombieSymbols_args&);
+  Sharp_removeZombieSymbols_args& operator=(const Sharp_removeZombieSymbols_args&);
+  Sharp_removeZombieSymbols_args() {
   }
 
-  virtual ~Sharp_removeZombieWatchList_args() throw();
+  virtual ~Sharp_removeZombieSymbols_args() throw();
   std::vector<std::string>  rm;
 
   void __set_rm(const std::vector<std::string> & val);
 
-  bool operator == (const Sharp_removeZombieWatchList_args & rhs) const
+  bool operator == (const Sharp_removeZombieSymbols_args & rhs) const
   {
     if (!(rm == rhs.rm))
       return false;
     return true;
   }
-  bool operator != (const Sharp_removeZombieWatchList_args &rhs) const {
+  bool operator != (const Sharp_removeZombieSymbols_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const Sharp_removeZombieWatchList_args & ) const;
+  bool operator < (const Sharp_removeZombieSymbols_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
-  friend std::ostream& operator<<(std::ostream& out, const Sharp_removeZombieWatchList_args& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_removeZombieSymbols_args& obj);
 };
 
 
-class Sharp_removeZombieWatchList_pargs {
+class Sharp_removeZombieSymbols_pargs {
  public:
 
   static const char* ascii_fingerprint; // = "ACE4F644F0FDD289DDC4EE5B83BC13C0";
   static const uint8_t binary_fingerprint[16]; // = {0xAC,0xE4,0xF6,0x44,0xF0,0xFD,0xD2,0x89,0xDD,0xC4,0xEE,0x5B,0x83,0xBC,0x13,0xC0};
 
 
-  virtual ~Sharp_removeZombieWatchList_pargs() throw();
+  virtual ~Sharp_removeZombieSymbols_pargs() throw();
   const std::vector<std::string> * rm;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
-  friend std::ostream& operator<<(std::ostream& out, const Sharp_removeZombieWatchList_pargs& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_removeZombieSymbols_pargs& obj);
 };
 
-typedef struct _Sharp_removeZombieWatchList_result__isset {
-  _Sharp_removeZombieWatchList_result__isset() : e(false) {}
+typedef struct _Sharp_removeZombieSymbols_result__isset {
+  _Sharp_removeZombieSymbols_result__isset() : e(false) {}
   bool e :1;
-} _Sharp_removeZombieWatchList_result__isset;
+} _Sharp_removeZombieSymbols_result__isset;
 
-class Sharp_removeZombieWatchList_result {
+class Sharp_removeZombieSymbols_result {
  public:
 
   static const char* ascii_fingerprint; // = "0A23AF95FD017F7C6C78570E7E17112A";
   static const uint8_t binary_fingerprint[16]; // = {0x0A,0x23,0xAF,0x95,0xFD,0x01,0x7F,0x7C,0x6C,0x78,0x57,0x0E,0x7E,0x17,0x11,0x2A};
 
-  Sharp_removeZombieWatchList_result(const Sharp_removeZombieWatchList_result&);
-  Sharp_removeZombieWatchList_result& operator=(const Sharp_removeZombieWatchList_result&);
-  Sharp_removeZombieWatchList_result() {
+  Sharp_removeZombieSymbols_result(const Sharp_removeZombieSymbols_result&);
+  Sharp_removeZombieSymbols_result& operator=(const Sharp_removeZombieSymbols_result&);
+  Sharp_removeZombieSymbols_result() {
   }
 
-  virtual ~Sharp_removeZombieWatchList_result() throw();
+  virtual ~Sharp_removeZombieSymbols_result() throw();
   Exception e;
 
-  _Sharp_removeZombieWatchList_result__isset __isset;
+  _Sharp_removeZombieSymbols_result__isset __isset;
 
   void __set_e(const Exception& val);
 
-  bool operator == (const Sharp_removeZombieWatchList_result & rhs) const
+  bool operator == (const Sharp_removeZombieSymbols_result & rhs) const
   {
     if (!(e == rhs.e))
       return false;
     return true;
   }
-  bool operator != (const Sharp_removeZombieWatchList_result &rhs) const {
+  bool operator != (const Sharp_removeZombieSymbols_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const Sharp_removeZombieWatchList_result & ) const;
+  bool operator < (const Sharp_removeZombieSymbols_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
-  friend std::ostream& operator<<(std::ostream& out, const Sharp_removeZombieWatchList_result& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_removeZombieSymbols_result& obj);
 };
 
-typedef struct _Sharp_removeZombieWatchList_presult__isset {
-  _Sharp_removeZombieWatchList_presult__isset() : e(false) {}
+typedef struct _Sharp_removeZombieSymbols_presult__isset {
+  _Sharp_removeZombieSymbols_presult__isset() : e(false) {}
   bool e :1;
-} _Sharp_removeZombieWatchList_presult__isset;
+} _Sharp_removeZombieSymbols_presult__isset;
 
-class Sharp_removeZombieWatchList_presult {
+class Sharp_removeZombieSymbols_presult {
  public:
 
   static const char* ascii_fingerprint; // = "0A23AF95FD017F7C6C78570E7E17112A";
   static const uint8_t binary_fingerprint[16]; // = {0x0A,0x23,0xAF,0x95,0xFD,0x01,0x7F,0x7C,0x6C,0x78,0x57,0x0E,0x7E,0x17,0x11,0x2A};
 
 
-  virtual ~Sharp_removeZombieWatchList_presult() throw();
+  virtual ~Sharp_removeZombieSymbols_presult() throw();
   Exception e;
 
-  _Sharp_removeZombieWatchList_presult__isset __isset;
+  _Sharp_removeZombieSymbols_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
-  friend std::ostream& operator<<(std::ostream& out, const Sharp_removeZombieWatchList_presult& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_removeZombieSymbols_presult& obj);
 };
 
 
@@ -1302,9 +1302,9 @@ class SharpClient : virtual public SharpIf {
   void removeFromWatchList(const std::vector<std::string> & rm);
   void send_removeFromWatchList(const std::vector<std::string> & rm);
   void recv_removeFromWatchList();
-  void removeZombieWatchList(const std::vector<std::string> & rm);
-  void send_removeZombieWatchList(const std::vector<std::string> & rm);
-  void recv_removeZombieWatchList();
+  void removeZombieSymbols(const std::vector<std::string> & rm);
+  void send_removeZombieSymbols(const std::vector<std::string> & rm);
+  void recv_removeZombieSymbols();
   void getNextBar(RealTimeBar& _return, const std::string& symbol);
   void send_getNextBar(const std::string& symbol);
   void recv_getNextBar(RealTimeBar& _return);
@@ -1331,7 +1331,7 @@ class SharpProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_requestRealTimeBars(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_addToWatchList(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_removeFromWatchList(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_removeZombieWatchList(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_removeZombieSymbols(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getNextBar(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   SharpProcessor(boost::shared_ptr<SharpIf> iface) :
@@ -1344,7 +1344,7 @@ class SharpProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["requestRealTimeBars"] = &SharpProcessor::process_requestRealTimeBars;
     processMap_["addToWatchList"] = &SharpProcessor::process_addToWatchList;
     processMap_["removeFromWatchList"] = &SharpProcessor::process_removeFromWatchList;
-    processMap_["removeZombieWatchList"] = &SharpProcessor::process_removeZombieWatchList;
+    processMap_["removeZombieSymbols"] = &SharpProcessor::process_removeZombieSymbols;
     processMap_["getNextBar"] = &SharpProcessor::process_getNextBar;
   }
 
@@ -1450,13 +1450,13 @@ class SharpMultiface : virtual public SharpIf {
     ifaces_[i]->removeFromWatchList(rm);
   }
 
-  void removeZombieWatchList(const std::vector<std::string> & rm) {
+  void removeZombieSymbols(const std::vector<std::string> & rm) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->removeZombieWatchList(rm);
+      ifaces_[i]->removeZombieSymbols(rm);
     }
-    ifaces_[i]->removeZombieWatchList(rm);
+    ifaces_[i]->removeZombieSymbols(rm);
   }
 
   void getNextBar(RealTimeBar& _return, const std::string& symbol) {
