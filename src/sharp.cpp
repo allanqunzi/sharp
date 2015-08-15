@@ -106,13 +106,11 @@ void EWrapperImpl::monitor()
 			return;
 
 		if( FD_ISSET( m_pClient->fd(), &writeSet)) {
-			/**
-			* socket is ready for writing
-			* onSend() checks error by calling handleSocketError(), then calls
-			* sendBufferedData(), sendBufferedData() calls EPosixClientSocket::send
-			* (which calls ::send),  then sendBufferedData() clears m_outBuffer and returns
-			* an int nResult.
-			*/
+			// socket is ready for writing
+			// onSend() checks error by calling handleSocketError(), then calls
+			// sendBufferedData(), sendBufferedData() calls EPosixClientSocket::send
+			// (which calls ::send),  then sendBufferedData() clears m_outBuffer and returns
+			// an int nResult.
 			m_pClient->onSend();
 		}
 
@@ -120,14 +118,12 @@ void EWrapperImpl::monitor()
 			return;
 
 		if( FD_ISSET( m_pClient->fd(), &readSet)) {
-			/**
-			* socket is ready for reading
-			* onReceive() checks error by calling handleSocketError(), then calls
-			* checkMessages(), checkMessages() first calls bufferedRead(), bufferedRead()
-			* calls receive(which calls ::recv) and fills the m_inBuffer, then checkMessages()
-			* calls processMsg() if m_connected is true,
-			* ortherwise calls processConnectAck
-			*/
+			// socket is ready for reading
+			// onReceive() checks error by calling handleSocketError(), then calls
+			// checkMessages(), checkMessages() first calls bufferedRead(), bufferedRead()
+			// calls receive(which calls ::recv) and fills the m_inBuffer, then checkMessages()
+			// calls processMsg() if m_connected is true,
+			// ortherwise calls processConnectAck
 			m_pClient->onReceive();
 		}
 	}
@@ -271,8 +267,7 @@ void EWrapperImpl::currentTime( long time)
 
 void EWrapperImpl::error(const int id, const int errorCode, const IBString errorString)
 {
-// printf( "Error id=%d, errorCode=%d, msg=%s\n", id, errorCode, errorString.c_str());
-
+	LOG(error)<<"Error id = "<<id<<", errorCode = "<<errorCode<<", msg = "<<errorString;
 	if( id == -1 && errorCode == 1100) // if "Connectivity between IB and TWS has been lost"
 		disconnect();
 }

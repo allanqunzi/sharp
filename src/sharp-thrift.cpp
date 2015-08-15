@@ -61,11 +61,8 @@ public:
 
     void placeOrder(api::OrderResponse& o_response, const api::ContractRequest& c_req,
         const api::OrderRequest& o_req){
-
         protect( [this, &o_response, c_req, o_req](){
-
             auto & m_req = trader.contract_order_request;
-
             m_req.orderId = trader.m_orderId;
 
             m_req.contract.symbol = c_req.symbol;
@@ -84,7 +81,7 @@ public:
             auto & rds = trader.placed_contract_orders.records;
             auto & resp = rds[m.at(m_req.orderId)]->response;
 
-            assert(m_req.orderId == resp.orderId && "assert in SharpHandler::placeOrder: m_req.orderId == resp.orderId failed." );
+            assert(m_req.orderId == resp.orderId && "error: assert in SharpHandler::placeOrder: m_req.orderId == resp.orderId failed." );
             o_response.orderId = m_req.orderId;
             o_response.state = resp.state;
 
@@ -154,6 +151,8 @@ public:
         } );
     }
 
+    // modern compilers make exceptions usually faster
+    // on the non-exceptional path compared to error code handling.
     void reqOpens(std::vector<api::OrderStatus> & opens){
         while(!trader.open_order_flag.load(std::memory_order_relaxed)){
             std::this_thread::sleep_for(OPENORDER_WAITING_TIME);
@@ -256,9 +255,6 @@ public:
 
     void getNextBar(api::RealTimeBar& next_bar, const std::string& symbol){
         protect([this, &next_bar, &symbol](){
-
-            // modern compilers make exceptions usually faster
-            // on the non-exceptional path compared to error code handling.
             long id; // TickerId is long
             try{
                 id = trader.watch_list.at(symbol);

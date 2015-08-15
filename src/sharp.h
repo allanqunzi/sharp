@@ -113,19 +113,6 @@ struct ContractOrder
 	, contract(contract_order.contract)
 	, order(contract_order.order)
 	, response(contract_order.response) { }
-/*
-	{
-		orderId = contract_order.orderId;
-		contract.symbol = contract_order.contract.symbol;
-		contract.secType = contract_order.contract.secType;
-		contract.exchange = contract_order.contract.exchange;
-		contract.currency = contract_order.contract.currency;
-		order.action = contract_order.order.action;
-		order.totalQuantity = contract_order.order.totalQuantity;
-		order.orderType = contract_order.order.orderType;
-		order.lmtPrice = contract_order.order.lmtPrice;
-	}
-*/
 };
 
 template<typename K, typename V>
@@ -206,9 +193,9 @@ public:
 	void monitor();
 	void placeOrder();
 	bool cancelOrder(OrderId orderId);
-	void reqOpenOrders(); // orders sent by api
-	void reqAllOpenOrders(); // orders sent by both api and tws
-	bool reqGlobalCancel();
+	void reqOpenOrders();    // orders placed by api
+	void reqAllOpenOrders(); // orders placed by both api and tws
+	bool reqGlobalCancel();  // cancel orders placed by both api and tws
 
 	void reqMarketSnapshot(); // TODO
 
@@ -308,14 +295,12 @@ public:
 	std::set<OrderId> open_order_set;
 
 	ContractOrder contract_order_request;
-	// placed_contract_orders is written by three member functions: placeOrder, cancelOrder and orderStatus,
-	// so these functions should be synchronized.
+	// placed_contract_orders is written and read by several EWrapperImpl member functions
+	// and thrift handler functions, these functions should be synchronized.
 	PlacedOrderContracts placed_contract_orders;
 	std::vector<OrderId> order_ids; // written only by EWrapperImpl::nextValidId( OrderId orderId)
 	IdType ticker_id;
 
-	// all possible symbols (A - ZZZZ) have been tested to be hashed
-	// to different values.
 	std::unordered_map<std::string, TickerId>watch_list;
 	// non-const operation on std::deque is not thread-safe,
 	// so the following needs to be synchronized.
