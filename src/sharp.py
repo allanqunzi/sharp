@@ -70,6 +70,44 @@ def monitor(dict, list, threads):
     worker.setDaemon(True)
     worker.start()
 
+c_req = ContractRequest('V', 'STK', 'SMART', 'USD')
+o_req = OrderRequest('BUY', 1000, 'LMT', 0.12)
+place_resp = client.placeOrder(c_req, o_req)
+o_id1 = place_resp.orderId
+print('place_resp.state =', place_resp.state)
+
+
+c_req = ContractRequest('GOOG', 'STK', 'SMART', 'USD')
+o_req = OrderRequest('BUY', 500, 'LMT', 0.15)
+place_resp = client.placeOrder(c_req, o_req)
+o_id2 = place_resp.orderId
+print('place_resp.state =', place_resp.state)
+
+os = client.getOrderStatus(o_id1)
+print("os.symbol =", os.symbol, "os.status", os.status)
+
+os = client.getOrderStatus(o_id2)
+print("os.symbol =", os.symbol, "os.status", os.status)
+
+time.sleep(10)
+
+opens = client.reqOpenOrders()
+
+for o in opens:
+  print(o.orderId, "---", o.symbol, "---", o.status)
+
+client.reqGlobalCancel()
+
+time.sleep(160)
+
+o_id = place_resp.orderId
+print('o_resp.orderId = ', o_id)
+cancel_resp = client.cancelOrder(o_id)
+
+print('cancel_resp.state =', cancel_resp.state)
+
+
+'''
 qdict = {}
 wlist = ["AAPL", "GOOG"]
 ts = []
@@ -89,7 +127,7 @@ client.removeFromWatchList(wlist)
 time.sleep(10)
 
 print("done")
-
+'''
 #while threading.active_count() > 0: # this while responds to ctrl + c
 #  time.sleep(0.1)
 
@@ -115,18 +153,4 @@ transport.close()
 
 
 
-'''
-  c_req = ContractRequest('AMZN', 'STK', 'SMART', 'USD')
-  o_req = OrderRequest('BUY', 1000, 'LMT', 0.12)
 
-  place_resp = client.placeOrder(c_req, o_req)
-  print('place_resp.state =', place_resp.state)
-
-  time.sleep(20)
-
-  o_id = place_resp.orderId
-  print('o_resp.orderId = ', o_id)
-  cancel_resp = client.cancelOrder(o_id)
-
-  print('cancel_resp.state =', cancel_resp.state)
-'''

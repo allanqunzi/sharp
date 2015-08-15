@@ -140,16 +140,15 @@ void EWrapperImpl::reqCurrentTime()
 void EWrapperImpl::placeOrder()
 {
 	auto & req = contract_order_request;
-	req.orderId = m_orderId;
+	req.orderId = order_id.getNewId();
+	used_order_ids.push_back(req.orderId);
+
 	printf( "Placing Order %ld: %s %ld %s at %f\n", req.orderId,
 		req.order.action.c_str(), req.order.totalQuantity,
 		req.contract.symbol.c_str(), req.order.lmtPrice);
 
-	if(checkValidId(req.orderId)){
-		m_pClient->placeOrder( req.orderId, req.contract, req.order);
-	}else{
-		assert(0 && "error: checkValidId failed !");
-	}
+	m_pClient->placeOrder( req.orderId, req.contract, req.order);
+
 	std::lock_guard<std::mutex> lk(mutex);
 	req.response.orderId = req.orderId;
 	req.response.state = 0;
@@ -253,7 +252,8 @@ void EWrapperImpl::openOrderEnd() {
 void EWrapperImpl::nextValidId( OrderId orderId)
 {
 	m_orderId = orderId;
-	order_ids.push_back(orderId);
+	order_id.setInitial(orderId - 1);
+	LOG(info)<<"m_orderId updated, order_id.id is initialized to "<<(orderId - 1);
 }
 
 void EWrapperImpl::currentTime( long time)
@@ -269,7 +269,7 @@ void EWrapperImpl::currentTime( long time)
 
 void EWrapperImpl::error(const int id, const int errorCode, const IBString errorString)
 {
-	LOG(error)<<"Error id = "<<id<<", errorCode = "<<errorCode<<", msg = "<<errorString;
+	// LOG(error)<<"Error id = "<<id<<", errorCode = "<<errorCode<<", msg = "<<errorString;
 	if( id == -1 && errorCode == 1100) // if "Connectivity between IB and TWS has been lost"
 		disconnect();
 }
@@ -482,7 +482,7 @@ void EWrapperImpl::displayGroupList( int reqId, const IBString& groups) {}
 void EWrapperImpl::displayGroupUpdated( int reqId, const IBString& contractInfo) {}
 
 bool EWrapperImpl::checkValidId( OrderId orderId){
-	int count = std::count(order_ids.begin(), order_ids.end(), orderId);
+	int count = std::count(used_order_ids.begin(), used_order_ids.end(), orderId);
 	if( count == 1 )return true;
 	else return false;
 }

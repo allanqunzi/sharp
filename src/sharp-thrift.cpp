@@ -59,11 +59,11 @@ public:
     void ping(api::PingResponse& response, const api::PingRequest& request) {
     }
 
+    // this function must be called by at most one thread on python client side
     void placeOrder(api::OrderResponse& o_response, const api::ContractRequest& c_req,
         const api::OrderRequest& o_req){
         protect( [this, &o_response, c_req, o_req](){
             auto & m_req = trader.contract_order_request;
-            m_req.orderId = trader.m_orderId;
 
             m_req.contract.symbol = c_req.symbol;
             m_req.contract.secType = c_req.secType;
@@ -104,7 +104,7 @@ public:
     }
 
     int64_t getOrderID(){
-        return trader.m_orderId;
+        return trader.m_orderId; // get the starting orderId for current server connection to tws
     }
 
     void cancelOrder(api::OrderResponse& o_response, const int64_t o_id){

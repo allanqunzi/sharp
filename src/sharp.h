@@ -153,8 +153,10 @@ struct PlacedOrderContracts
 
 class IdType{
 private:
-	TickerId id = -1L; // TickerId is long = 8 bytes
+	std::atomic<TickerId> id; // TickerId is long = 8 bytes
 public:
+	IdType():id(-1L){ }
+	void setInitial(TickerId id_){ id = id_; }
 	TickerId getNewId(){ return ++id; }
 	TickerId getCurrentId(){ return id;	}
 };
@@ -283,7 +285,7 @@ private:
 	time_t m_sleepDeadline;
 
 public:
-	OrderId m_orderId;
+	OrderId m_orderId; // long
 
 public:
 	std::string host;
@@ -298,8 +300,9 @@ public:
 	// placed_contract_orders is written and read by several EWrapperImpl member functions
 	// and thrift handler functions, these functions should be synchronized.
 	PlacedOrderContracts placed_contract_orders;
-	std::vector<OrderId> order_ids; // written only by EWrapperImpl::nextValidId( OrderId orderId)
+	std::vector<OrderId> used_order_ids; // written only by EWrapperImpl::nextValidId( OrderId orderId)
 	IdType ticker_id;
+	IdType order_id;
 
 	std::unordered_map<std::string, TickerId>watch_list;
 	// non-const operation on std::deque is not thread-safe,
