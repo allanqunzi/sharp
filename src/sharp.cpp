@@ -175,7 +175,7 @@ bool EWrapperImpl::cancelOrder(OrderId orderId)
 	}
 }
 
-// events called by m_pClient->onReceive();
+// event called by m_pClient->onReceive();
 void EWrapperImpl::orderStatus( OrderId orderId, const IBString &status, int filled,
 	   int remaining, double avgFillPrice, int permId, int parentId,
 	   double lastFillPrice, int clientId, const IBString& whyHeld)
@@ -204,8 +204,7 @@ void EWrapperImpl::orderStatus( OrderId orderId, const IBString &status, int fil
 	resp.status = status;
 	resp.whyHeld = whyHeld;
 
-	printf( "Order: id=%ld, status=%s\n", orderId, status.c_str());
-
+	LOG(info)<<"Order: id = "<<orderId<<", status = "<<status;
 }
 
 void EWrapperImpl::reqOpenOrders(){
@@ -228,6 +227,7 @@ bool EWrapperImpl::reqGlobalCancel(){
 	}
 }
 
+// event called by m_pClient->onReceive();
 // this function and orderStatus are never called at the same time, a lock is unnecessary.
 void EWrapperImpl::openOrder( OrderId orderId, const Contract& c, const Order& o, const OrderState& ostate) {
 	open_order_set.insert(orderId);
@@ -244,10 +244,12 @@ void EWrapperImpl::openOrder( OrderId orderId, const Contract& c, const Order& o
 	}
 }
 
+// event called by m_pClient->onReceive();
 void EWrapperImpl::openOrderEnd() {
 	open_order_flag.store(true, std::memory_order_relaxed);
 }
 
+// event called by m_pClient->onReceive();
 void EWrapperImpl::nextValidId( OrderId orderId)
 {
 	m_orderId = orderId;

@@ -115,7 +115,7 @@ public:
                 auto & m = trader.placed_contract_orders.orderId_index_map;
                 auto & rds = trader.placed_contract_orders.records;
                 auto & resp = rds[m.at(o_id)]->response;
-                assert(o_id == resp.orderId && "assert in SharpHandler::cancelOrder: o_id == resp.orderId failed.");
+                assert(o_id == resp.orderId && "error: assert in SharpHandler::cancelOrder: o_id == resp.orderId failed.");
                 o_response.state = -1;
                 o_response.clientId = resp.clientId;
                 o_response.permId = resp.permId;
