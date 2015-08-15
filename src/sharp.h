@@ -300,7 +300,7 @@ public:
 	// placed_contract_orders is written and read by several EWrapperImpl member functions
 	// and thrift handler functions, these functions should be synchronized.
 	PlacedOrderContracts placed_contract_orders;
-	std::vector<OrderId> used_order_ids; // written only by EWrapperImpl::nextValidId( OrderId orderId)
+	std::vector<OrderId> used_order_ids;
 	IdType ticker_id;
 	IdType order_id;
 
