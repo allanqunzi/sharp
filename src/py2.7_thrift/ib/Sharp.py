@@ -43,11 +43,20 @@ class Iface:
     """
     pass
 
-  def orderStatus(self, o_id):
+  def getOrderStatus(self, o_id):
     """
     Parameters:
      - o_id
     """
+    pass
+
+  def reqOpenOrders(self):
+    pass
+
+  def reqAllOpenOrders(self):
+    pass
+
+  def reqGlobalCancel(self):
     pass
 
   def requestRealTimeBars(self):
@@ -214,23 +223,23 @@ class Client(Iface):
       raise result.e
     raise TApplicationException(TApplicationException.MISSING_RESULT, "cancelOrder failed: unknown result");
 
-  def orderStatus(self, o_id):
+  def getOrderStatus(self, o_id):
     """
     Parameters:
      - o_id
     """
-    self.send_orderStatus(o_id)
-    return self.recv_orderStatus()
+    self.send_getOrderStatus(o_id)
+    return self.recv_getOrderStatus()
 
-  def send_orderStatus(self, o_id):
-    self._oprot.writeMessageBegin('orderStatus', TMessageType.CALL, self._seqid)
-    args = orderStatus_args()
+  def send_getOrderStatus(self, o_id):
+    self._oprot.writeMessageBegin('getOrderStatus', TMessageType.CALL, self._seqid)
+    args = getOrderStatus_args()
     args.o_id = o_id
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
 
-  def recv_orderStatus(self):
+  def recv_getOrderStatus(self):
     iprot = self._iprot
     (fname, mtype, rseqid) = iprot.readMessageBegin()
     if mtype == TMessageType.EXCEPTION:
@@ -238,14 +247,96 @@ class Client(Iface):
       x.read(iprot)
       iprot.readMessageEnd()
       raise x
-    result = orderStatus_result()
+    result = getOrderStatus_result()
     result.read(iprot)
     iprot.readMessageEnd()
     if result.success is not None:
       return result.success
     if result.e is not None:
       raise result.e
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "orderStatus failed: unknown result");
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "getOrderStatus failed: unknown result");
+
+  def reqOpenOrders(self):
+    self.send_reqOpenOrders()
+    return self.recv_reqOpenOrders()
+
+  def send_reqOpenOrders(self):
+    self._oprot.writeMessageBegin('reqOpenOrders', TMessageType.CALL, self._seqid)
+    args = reqOpenOrders_args()
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_reqOpenOrders(self):
+    iprot = self._iprot
+    (fname, mtype, rseqid) = iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(iprot)
+      iprot.readMessageEnd()
+      raise x
+    result = reqOpenOrders_result()
+    result.read(iprot)
+    iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    if result.e is not None:
+      raise result.e
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "reqOpenOrders failed: unknown result");
+
+  def reqAllOpenOrders(self):
+    self.send_reqAllOpenOrders()
+    return self.recv_reqAllOpenOrders()
+
+  def send_reqAllOpenOrders(self):
+    self._oprot.writeMessageBegin('reqAllOpenOrders', TMessageType.CALL, self._seqid)
+    args = reqAllOpenOrders_args()
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_reqAllOpenOrders(self):
+    iprot = self._iprot
+    (fname, mtype, rseqid) = iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(iprot)
+      iprot.readMessageEnd()
+      raise x
+    result = reqAllOpenOrders_result()
+    result.read(iprot)
+    iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    if result.e is not None:
+      raise result.e
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "reqAllOpenOrders failed: unknown result");
+
+  def reqGlobalCancel(self):
+    self.send_reqGlobalCancel()
+    self.recv_reqGlobalCancel()
+
+  def send_reqGlobalCancel(self):
+    self._oprot.writeMessageBegin('reqGlobalCancel', TMessageType.CALL, self._seqid)
+    args = reqGlobalCancel_args()
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_reqGlobalCancel(self):
+    iprot = self._iprot
+    (fname, mtype, rseqid) = iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(iprot)
+      iprot.readMessageEnd()
+      raise x
+    result = reqGlobalCancel_result()
+    result.read(iprot)
+    iprot.readMessageEnd()
+    if result.e is not None:
+      raise result.e
+    return
 
   def requestRealTimeBars(self):
     self.send_requestRealTimeBars()
@@ -408,7 +499,10 @@ class Processor(Iface, TProcessor):
     self._processMap["getOrderID"] = Processor.process_getOrderID
     self._processMap["placeOrder"] = Processor.process_placeOrder
     self._processMap["cancelOrder"] = Processor.process_cancelOrder
-    self._processMap["orderStatus"] = Processor.process_orderStatus
+    self._processMap["getOrderStatus"] = Processor.process_getOrderStatus
+    self._processMap["reqOpenOrders"] = Processor.process_reqOpenOrders
+    self._processMap["reqAllOpenOrders"] = Processor.process_reqAllOpenOrders
+    self._processMap["reqGlobalCancel"] = Processor.process_reqGlobalCancel
     self._processMap["requestRealTimeBars"] = Processor.process_requestRealTimeBars
     self._processMap["addToWatchList"] = Processor.process_addToWatchList
     self._processMap["removeFromWatchList"] = Processor.process_removeFromWatchList
@@ -480,16 +574,58 @@ class Processor(Iface, TProcessor):
     oprot.writeMessageEnd()
     oprot.trans.flush()
 
-  def process_orderStatus(self, seqid, iprot, oprot):
-    args = orderStatus_args()
+  def process_getOrderStatus(self, seqid, iprot, oprot):
+    args = getOrderStatus_args()
     args.read(iprot)
     iprot.readMessageEnd()
-    result = orderStatus_result()
+    result = getOrderStatus_result()
     try:
-      result.success = self._handler.orderStatus(args.o_id)
+      result.success = self._handler.getOrderStatus(args.o_id)
     except Exception, e:
       result.e = e
-    oprot.writeMessageBegin("orderStatus", TMessageType.REPLY, seqid)
+    oprot.writeMessageBegin("getOrderStatus", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_reqOpenOrders(self, seqid, iprot, oprot):
+    args = reqOpenOrders_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = reqOpenOrders_result()
+    try:
+      result.success = self._handler.reqOpenOrders()
+    except Exception, e:
+      result.e = e
+    oprot.writeMessageBegin("reqOpenOrders", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_reqAllOpenOrders(self, seqid, iprot, oprot):
+    args = reqAllOpenOrders_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = reqAllOpenOrders_result()
+    try:
+      result.success = self._handler.reqAllOpenOrders()
+    except Exception, e:
+      result.e = e
+    oprot.writeMessageBegin("reqAllOpenOrders", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_reqGlobalCancel(self, seqid, iprot, oprot):
+    args = reqGlobalCancel_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = reqGlobalCancel_result()
+    try:
+      self._handler.reqGlobalCancel()
+    except Exception, e:
+      result.e = e
+    oprot.writeMessageBegin("reqGlobalCancel", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
     oprot.trans.flush()
@@ -1119,7 +1255,7 @@ class cancelOrder_result:
   def __ne__(self, other):
     return not (self == other)
 
-class orderStatus_args:
+class getOrderStatus_args:
   """
   Attributes:
    - o_id
@@ -1156,7 +1292,7 @@ class orderStatus_args:
     if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
-    oprot.writeStructBegin('orderStatus_args')
+    oprot.writeStructBegin('getOrderStatus_args')
     if self.o_id is not None:
       oprot.writeFieldBegin('o_id', TType.I64, 1)
       oprot.writeI64(self.o_id)
@@ -1186,7 +1322,7 @@ class orderStatus_args:
   def __ne__(self, other):
     return not (self == other)
 
-class orderStatus_result:
+class getOrderStatus_result:
   """
   Attributes:
    - success
@@ -1194,7 +1330,7 @@ class orderStatus_result:
   """
 
   thrift_spec = (
-    (0, TType.STRUCT, 'success', (OrderResponse, OrderResponse.thrift_spec), None, ), # 0
+    (0, TType.STRUCT, 'success', (OrderStatus, OrderStatus.thrift_spec), None, ), # 0
     (1, TType.STRUCT, 'e', (Exception, Exception.thrift_spec), None, ), # 1
   )
 
@@ -1213,7 +1349,7 @@ class orderStatus_result:
         break
       if fid == 0:
         if ftype == TType.STRUCT:
-          self.success = OrderResponse()
+          self.success = OrderStatus()
           self.success.read(iprot)
         else:
           iprot.skip(ftype)
@@ -1232,7 +1368,7 @@ class orderStatus_result:
     if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
-    oprot.writeStructBegin('orderStatus_result')
+    oprot.writeStructBegin('getOrderStatus_result')
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.STRUCT, 0)
       self.success.write(oprot)
@@ -1251,6 +1387,384 @@ class orderStatus_result:
   def __hash__(self):
     value = 17
     value = (value * 31) ^ hash(self.success)
+    value = (value * 31) ^ hash(self.e)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class reqOpenOrders_args:
+
+  thrift_spec = (
+  )
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('reqOpenOrders_args')
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __hash__(self):
+    value = 17
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class reqOpenOrders_result:
+  """
+  Attributes:
+   - success
+   - e
+  """
+
+  thrift_spec = (
+    (0, TType.LIST, 'success', (TType.STRUCT,(OrderStatus, OrderStatus.thrift_spec)), None, ), # 0
+    (1, TType.STRUCT, 'e', (Exception, Exception.thrift_spec), None, ), # 1
+  )
+
+  def __init__(self, success=None, e=None,):
+    self.success = success
+    self.e = e
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.LIST:
+          self.success = []
+          (_etype3, _size0) = iprot.readListBegin()
+          for _i4 in xrange(_size0):
+            _elem5 = OrderStatus()
+            _elem5.read(iprot)
+            self.success.append(_elem5)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 1:
+        if ftype == TType.STRUCT:
+          self.e = Exception()
+          self.e.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('reqOpenOrders_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.LIST, 0)
+      oprot.writeListBegin(TType.STRUCT, len(self.success))
+      for iter6 in self.success:
+        iter6.write(oprot)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    if self.e is not None:
+      oprot.writeFieldBegin('e', TType.STRUCT, 1)
+      self.e.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.success)
+    value = (value * 31) ^ hash(self.e)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class reqAllOpenOrders_args:
+
+  thrift_spec = (
+  )
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('reqAllOpenOrders_args')
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __hash__(self):
+    value = 17
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class reqAllOpenOrders_result:
+  """
+  Attributes:
+   - success
+   - e
+  """
+
+  thrift_spec = (
+    (0, TType.LIST, 'success', (TType.STRUCT,(OrderStatus, OrderStatus.thrift_spec)), None, ), # 0
+    (1, TType.STRUCT, 'e', (Exception, Exception.thrift_spec), None, ), # 1
+  )
+
+  def __init__(self, success=None, e=None,):
+    self.success = success
+    self.e = e
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.LIST:
+          self.success = []
+          (_etype10, _size7) = iprot.readListBegin()
+          for _i11 in xrange(_size7):
+            _elem12 = OrderStatus()
+            _elem12.read(iprot)
+            self.success.append(_elem12)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 1:
+        if ftype == TType.STRUCT:
+          self.e = Exception()
+          self.e.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('reqAllOpenOrders_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.LIST, 0)
+      oprot.writeListBegin(TType.STRUCT, len(self.success))
+      for iter13 in self.success:
+        iter13.write(oprot)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    if self.e is not None:
+      oprot.writeFieldBegin('e', TType.STRUCT, 1)
+      self.e.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.success)
+    value = (value * 31) ^ hash(self.e)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class reqGlobalCancel_args:
+
+  thrift_spec = (
+  )
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('reqGlobalCancel_args')
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __hash__(self):
+    value = 17
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class reqGlobalCancel_result:
+  """
+  Attributes:
+   - e
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRUCT, 'e', (Exception, Exception.thrift_spec), None, ), # 1
+  )
+
+  def __init__(self, e=None,):
+    self.e = e
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.e = Exception()
+          self.e.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('reqGlobalCancel_result')
+    if self.e is not None:
+      oprot.writeFieldBegin('e', TType.STRUCT, 1)
+      self.e.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __hash__(self):
+    value = 17
     value = (value * 31) ^ hash(self.e)
     return value
 
@@ -1403,10 +1917,10 @@ class addToWatchList_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.wl = []
-          (_etype3, _size0) = iprot.readListBegin()
-          for _i4 in xrange(_size0):
-            _elem5 = iprot.readString();
-            self.wl.append(_elem5)
+          (_etype17, _size14) = iprot.readListBegin()
+          for _i18 in xrange(_size14):
+            _elem19 = iprot.readString();
+            self.wl.append(_elem19)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1423,8 +1937,8 @@ class addToWatchList_args:
     if self.wl is not None:
       oprot.writeFieldBegin('wl', TType.LIST, 1)
       oprot.writeListBegin(TType.STRING, len(self.wl))
-      for iter6 in self.wl:
-        oprot.writeString(iter6)
+      for iter20 in self.wl:
+        oprot.writeString(iter20)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -1544,10 +2058,10 @@ class removeFromWatchList_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.rm = []
-          (_etype10, _size7) = iprot.readListBegin()
-          for _i11 in xrange(_size7):
-            _elem12 = iprot.readString();
-            self.rm.append(_elem12)
+          (_etype24, _size21) = iprot.readListBegin()
+          for _i25 in xrange(_size21):
+            _elem26 = iprot.readString();
+            self.rm.append(_elem26)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1564,8 +2078,8 @@ class removeFromWatchList_args:
     if self.rm is not None:
       oprot.writeFieldBegin('rm', TType.LIST, 1)
       oprot.writeListBegin(TType.STRING, len(self.rm))
-      for iter13 in self.rm:
-        oprot.writeString(iter13)
+      for iter27 in self.rm:
+        oprot.writeString(iter27)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -1685,10 +2199,10 @@ class removeZombieSymbols_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.rm = []
-          (_etype17, _size14) = iprot.readListBegin()
-          for _i18 in xrange(_size14):
-            _elem19 = iprot.readString();
-            self.rm.append(_elem19)
+          (_etype31, _size28) = iprot.readListBegin()
+          for _i32 in xrange(_size28):
+            _elem33 = iprot.readString();
+            self.rm.append(_elem33)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1705,8 +2219,8 @@ class removeZombieSymbols_args:
     if self.rm is not None:
       oprot.writeFieldBegin('rm', TType.LIST, 1)
       oprot.writeListBegin(TType.STRING, len(self.rm))
-      for iter20 in self.rm:
-        oprot.writeString(iter20)
+      for iter34 in self.rm:
+        oprot.writeString(iter34)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()

@@ -42,9 +42,24 @@ class SharpHandler : virtual public SharpIf {
     printf("cancelOrder\n");
   }
 
-  void orderStatus(OrderResponse& _return, const int64_t o_id) {
+  void getOrderStatus(OrderStatus& _return, const int64_t o_id) {
     // Your implementation goes here
-    printf("orderStatus\n");
+    printf("getOrderStatus\n");
+  }
+
+  void reqOpenOrders(std::vector<OrderStatus> & _return) {
+    // Your implementation goes here
+    printf("reqOpenOrders\n");
+  }
+
+  void reqAllOpenOrders(std::vector<OrderStatus> & _return) {
+    // Your implementation goes here
+    printf("reqAllOpenOrders\n");
+  }
+
+  void reqGlobalCancel() {
+    // Your implementation goes here
+    printf("reqGlobalCancel\n");
   }
 
   void requestRealTimeBars() {

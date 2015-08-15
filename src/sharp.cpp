@@ -162,12 +162,11 @@ void EWrapperImpl::placeOrder()
 
 bool EWrapperImpl::cancelOrder(OrderId orderId)
 {
-	printf( "Cancelling Order %ld\n", orderId);
+	LOG(info)<<"Cancelling Order "<<orderId;
 
 	auto & m = placed_contract_orders.orderId_index_map;
 	if(m.count(orderId) == 1){
 		m_pClient->cancelOrder(orderId);
-
 		std::lock_guard<std::mutex> lk(mutex);
 		auto & rds = placed_contract_orders.records;
 		auto & resp = rds[m.at(orderId)]->response;
@@ -211,6 +210,46 @@ void EWrapperImpl::orderStatus( OrderId orderId, const IBString &status, int fil
 
 	printf( "Order: id=%ld, status=%s\n", orderId, status.c_str());
 
+}
+
+void EWrapperImpl::reqOpenOrders(){
+	open_order_set.clear();
+	open_order_flag.store(false, std::memory_order_relaxed);
+	m_pClient->reqOpenOrders();
+}
+
+void EWrapperImpl::reqAllOpenOrders(){
+	open_order_set.clear();
+	open_order_flag.store(false, std::memory_order_relaxed);
+	m_pClient->reqAllOpenOrders();
+}
+bool EWrapperImpl::reqGlobalCancel(){
+	try{
+		m_pClient->reqGlobalCancel();
+		return true;
+	}catch(...){
+		return false;
+	}
+}
+
+// this function and orderStatus are never called at the same time, a lock is unnecessary.
+void EWrapperImpl::openOrder( OrderId orderId, const Contract& c, const Order& o, const OrderState& ostate) {
+	open_order_set.insert(orderId);
+	auto & m = placed_contract_orders.orderId_index_map;
+	if(m.count(orderId) == 0){
+		LOG(info)<<"get status messages for previously placed order, still open, orderId = "<<orderId;
+		ContractOrder co;
+		co.orderId = orderId;
+		co.contract = c;
+		co.order = o;
+		co.response.orderId = orderId;
+		co.response.status = ostate.status;
+		placed_contract_orders.insert(orderId, co);
+	}
+}
+
+void EWrapperImpl::openOrderEnd() {
+	open_order_flag.store(true, std::memory_order_relaxed);
 }
 
 void EWrapperImpl::nextValidId( OrderId orderId)
@@ -408,9 +447,6 @@ void EWrapperImpl::contractDetailsEnd( int reqId) {
 }
 
 
-
-void EWrapperImpl::openOrder( OrderId orderId, const Contract&, const Order&, const OrderState& ostate) {}
-void EWrapperImpl::openOrderEnd() {}
 void EWrapperImpl::winError( const IBString &str, int lastError) {}
 void EWrapperImpl::connectionClosed() {}
 void EWrapperImpl::updateAccountValue(const IBString& key, const IBString& val,

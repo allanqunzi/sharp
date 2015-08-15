@@ -29,6 +29,8 @@ class OrderRequest;
 
 class OrderResponse;
 
+class OrderStatus;
+
 class RealTimeBar;
 
 class Exception;
@@ -202,40 +204,40 @@ class OrderRequest {
 void swap(OrderRequest &a, OrderRequest &b);
 
 typedef struct _OrderResponse__isset {
-  _OrderResponse__isset() : status(true), filled(true), remaining(true), avgFillPrice(true), permId(true), parentId(true), lastFillPrice(true), clientId(true), whyHeld(true) {}
-  bool status :1;
+  _OrderResponse__isset() : clientId(true), permId(true), parentId(true), filled(true), remaining(true), avgFillPrice(true), lastFillPrice(true), status(true), whyHeld(true) {}
+  bool clientId :1;
+  bool permId :1;
+  bool parentId :1;
   bool filled :1;
   bool remaining :1;
   bool avgFillPrice :1;
-  bool permId :1;
-  bool parentId :1;
   bool lastFillPrice :1;
-  bool clientId :1;
+  bool status :1;
   bool whyHeld :1;
 } _OrderResponse__isset;
 
 class OrderResponse {
  public:
 
-  static const char* ascii_fingerprint; // = "DE64BB3AB12A58E9E9ED648EA2133E36";
-  static const uint8_t binary_fingerprint[16]; // = {0xDE,0x64,0xBB,0x3A,0xB1,0x2A,0x58,0xE9,0xE9,0xED,0x64,0x8E,0xA2,0x13,0x3E,0x36};
+  static const char* ascii_fingerprint; // = "680EE22116C370C060704223BB0B5482";
+  static const uint8_t binary_fingerprint[16]; // = {0x68,0x0E,0xE2,0x21,0x16,0xC3,0x70,0xC0,0x60,0x70,0x42,0x23,0xBB,0x0B,0x54,0x82};
 
   OrderResponse(const OrderResponse&);
   OrderResponse& operator=(const OrderResponse&);
-  OrderResponse() : orderId(0), state(0), status(""), filled(0), remaining(0), avgFillPrice(0), permId(0), parentId(0), lastFillPrice(0), clientId(0), whyHeld("") {
+  OrderResponse() : orderId(0), state(0), clientId(0), permId(0), parentId(0), filled(0), remaining(0), avgFillPrice(0), lastFillPrice(0), status(""), whyHeld("") {
   }
 
   virtual ~OrderResponse() throw();
   int64_t orderId;
   int16_t state;
-  std::string status;
+  int32_t clientId;
+  int32_t permId;
+  int32_t parentId;
   int32_t filled;
   int32_t remaining;
   double avgFillPrice;
-  int32_t permId;
-  int32_t parentId;
   double lastFillPrice;
-  int32_t clientId;
+  std::string status;
   std::string whyHeld;
 
   _OrderResponse__isset __isset;
@@ -244,7 +246,11 @@ class OrderResponse {
 
   void __set_state(const int16_t val);
 
-  void __set_status(const std::string& val);
+  void __set_clientId(const int32_t val);
+
+  void __set_permId(const int32_t val);
+
+  void __set_parentId(const int32_t val);
 
   void __set_filled(const int32_t val);
 
@@ -252,13 +258,9 @@ class OrderResponse {
 
   void __set_avgFillPrice(const double val);
 
-  void __set_permId(const int32_t val);
-
-  void __set_parentId(const int32_t val);
-
   void __set_lastFillPrice(const double val);
 
-  void __set_clientId(const int32_t val);
+  void __set_status(const std::string& val);
 
   void __set_whyHeld(const std::string& val);
 
@@ -268,9 +270,17 @@ class OrderResponse {
       return false;
     if (!(state == rhs.state))
       return false;
-    if (__isset.status != rhs.__isset.status)
+    if (__isset.clientId != rhs.__isset.clientId)
       return false;
-    else if (__isset.status && !(status == rhs.status))
+    else if (__isset.clientId && !(clientId == rhs.clientId))
+      return false;
+    if (__isset.permId != rhs.__isset.permId)
+      return false;
+    else if (__isset.permId && !(permId == rhs.permId))
+      return false;
+    if (__isset.parentId != rhs.__isset.parentId)
+      return false;
+    else if (__isset.parentId && !(parentId == rhs.parentId))
       return false;
     if (__isset.filled != rhs.__isset.filled)
       return false;
@@ -284,21 +294,13 @@ class OrderResponse {
       return false;
     else if (__isset.avgFillPrice && !(avgFillPrice == rhs.avgFillPrice))
       return false;
-    if (__isset.permId != rhs.__isset.permId)
-      return false;
-    else if (__isset.permId && !(permId == rhs.permId))
-      return false;
-    if (__isset.parentId != rhs.__isset.parentId)
-      return false;
-    else if (__isset.parentId && !(parentId == rhs.parentId))
-      return false;
     if (__isset.lastFillPrice != rhs.__isset.lastFillPrice)
       return false;
     else if (__isset.lastFillPrice && !(lastFillPrice == rhs.lastFillPrice))
       return false;
-    if (__isset.clientId != rhs.__isset.clientId)
+    if (__isset.status != rhs.__isset.status)
       return false;
-    else if (__isset.clientId && !(clientId == rhs.clientId))
+    else if (__isset.status && !(status == rhs.status))
       return false;
     if (__isset.whyHeld != rhs.__isset.whyHeld)
       return false;
@@ -319,6 +321,165 @@ class OrderResponse {
 };
 
 void swap(OrderResponse &a, OrderResponse &b);
+
+typedef struct _OrderStatus__isset {
+  _OrderStatus__isset() : clientId(true), permId(true), parentId(true), filled(true), remaining(true), avgFillPrice(true), lastFillPrice(true), status(true), whyHeld(true) {}
+  bool clientId :1;
+  bool permId :1;
+  bool parentId :1;
+  bool filled :1;
+  bool remaining :1;
+  bool avgFillPrice :1;
+  bool lastFillPrice :1;
+  bool status :1;
+  bool whyHeld :1;
+} _OrderStatus__isset;
+
+class OrderStatus {
+ public:
+
+  static const char* ascii_fingerprint; // = "B321648275444A105AF5A402D829640F";
+  static const uint8_t binary_fingerprint[16]; // = {0xB3,0x21,0x64,0x82,0x75,0x44,0x4A,0x10,0x5A,0xF5,0xA4,0x02,0xD8,0x29,0x64,0x0F};
+
+  OrderStatus(const OrderStatus&);
+  OrderStatus& operator=(const OrderStatus&);
+  OrderStatus() : symbol(), secType(), exchange(), currency(), action(), totalQuantity(0), orderType(), lmtPrice(0), orderId(0), state(0), clientId(0), permId(0), parentId(0), filled(0), remaining(0), avgFillPrice(0), lastFillPrice(0), status(""), whyHeld("") {
+  }
+
+  virtual ~OrderStatus() throw();
+  std::string symbol;
+  std::string secType;
+  std::string exchange;
+  std::string currency;
+  std::string action;
+  int64_t totalQuantity;
+  std::string orderType;
+  double lmtPrice;
+  int64_t orderId;
+  int16_t state;
+  int32_t clientId;
+  int32_t permId;
+  int32_t parentId;
+  int32_t filled;
+  int32_t remaining;
+  double avgFillPrice;
+  double lastFillPrice;
+  std::string status;
+  std::string whyHeld;
+
+  _OrderStatus__isset __isset;
+
+  void __set_symbol(const std::string& val);
+
+  void __set_secType(const std::string& val);
+
+  void __set_exchange(const std::string& val);
+
+  void __set_currency(const std::string& val);
+
+  void __set_action(const std::string& val);
+
+  void __set_totalQuantity(const int64_t val);
+
+  void __set_orderType(const std::string& val);
+
+  void __set_lmtPrice(const double val);
+
+  void __set_orderId(const int64_t val);
+
+  void __set_state(const int16_t val);
+
+  void __set_clientId(const int32_t val);
+
+  void __set_permId(const int32_t val);
+
+  void __set_parentId(const int32_t val);
+
+  void __set_filled(const int32_t val);
+
+  void __set_remaining(const int32_t val);
+
+  void __set_avgFillPrice(const double val);
+
+  void __set_lastFillPrice(const double val);
+
+  void __set_status(const std::string& val);
+
+  void __set_whyHeld(const std::string& val);
+
+  bool operator == (const OrderStatus & rhs) const
+  {
+    if (!(symbol == rhs.symbol))
+      return false;
+    if (!(secType == rhs.secType))
+      return false;
+    if (!(exchange == rhs.exchange))
+      return false;
+    if (!(currency == rhs.currency))
+      return false;
+    if (!(action == rhs.action))
+      return false;
+    if (!(totalQuantity == rhs.totalQuantity))
+      return false;
+    if (!(orderType == rhs.orderType))
+      return false;
+    if (!(lmtPrice == rhs.lmtPrice))
+      return false;
+    if (!(orderId == rhs.orderId))
+      return false;
+    if (!(state == rhs.state))
+      return false;
+    if (__isset.clientId != rhs.__isset.clientId)
+      return false;
+    else if (__isset.clientId && !(clientId == rhs.clientId))
+      return false;
+    if (__isset.permId != rhs.__isset.permId)
+      return false;
+    else if (__isset.permId && !(permId == rhs.permId))
+      return false;
+    if (__isset.parentId != rhs.__isset.parentId)
+      return false;
+    else if (__isset.parentId && !(parentId == rhs.parentId))
+      return false;
+    if (__isset.filled != rhs.__isset.filled)
+      return false;
+    else if (__isset.filled && !(filled == rhs.filled))
+      return false;
+    if (__isset.remaining != rhs.__isset.remaining)
+      return false;
+    else if (__isset.remaining && !(remaining == rhs.remaining))
+      return false;
+    if (__isset.avgFillPrice != rhs.__isset.avgFillPrice)
+      return false;
+    else if (__isset.avgFillPrice && !(avgFillPrice == rhs.avgFillPrice))
+      return false;
+    if (__isset.lastFillPrice != rhs.__isset.lastFillPrice)
+      return false;
+    else if (__isset.lastFillPrice && !(lastFillPrice == rhs.lastFillPrice))
+      return false;
+    if (__isset.status != rhs.__isset.status)
+      return false;
+    else if (__isset.status && !(status == rhs.status))
+      return false;
+    if (__isset.whyHeld != rhs.__isset.whyHeld)
+      return false;
+    else if (__isset.whyHeld && !(whyHeld == rhs.whyHeld))
+      return false;
+    return true;
+  }
+  bool operator != (const OrderStatus &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const OrderStatus & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const OrderStatus& obj);
+};
+
+void swap(OrderStatus &a, OrderStatus &b);
 
 
 class RealTimeBar {

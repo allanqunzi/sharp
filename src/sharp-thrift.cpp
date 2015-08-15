@@ -23,6 +23,7 @@ using namespace apache::thrift::concurrency;
 using namespace apache::thrift::server;
 
 inline void translate_realtimebar(const RealTimeBar & tb, api::RealTimeBar & time_bar);
+inline void translate_orderstatus(const ContractOrder & co, api::OrderStatus & os );
 
 class SharpHandler : virtual public api::SharpIf {
 
@@ -109,12 +110,11 @@ public:
     }
 
     void cancelOrder(api::OrderResponse& o_response, const int64_t o_id){
-
         protect( [this, &o_response, o_id](){
-
             auto ret = trader.cancelOrder(o_id);
             o_response.orderId = o_id;
             if(ret){ // order canceled successfully
+                std::lock_guard<std::mutex> lk(trader.mutex);
                 auto & m = trader.placed_contract_orders.orderId_index_map;
                 auto & rds = trader.placed_contract_orders.records;
                 auto & resp = rds[m.at(o_id)]->response;
@@ -136,29 +136,65 @@ public:
         } );
     }
 
-    void orderStatus(api::OrderResponse& o_response, const int64_t o_id){
-        protect( [this, &o_response, o_id](){
-
+    void getOrderStatus(api::OrderStatus & os, const int64_t o_id){
+        protect( [this, &os, o_id](){
+            std::lock_guard<std::mutex> lk(trader.mutex);
             auto & m = trader.placed_contract_orders.orderId_index_map;
-            if(m.count(o_id) == 0){
-                o_response.state = -2; // orderId doesn't exist
+            auto & rds = trader.placed_contract_orders.records;
+            try{
+                auto index = m.at(o_id);
+                auto & co = *(rds[index]);
+                assert(o_id == co.response.orderId && "error: assert in SharpHandler::orderStatus: o_id == response.orderId failed.");
+                translate_orderstatus(co, os);
                 return;
-            }else{
-                auto & rds = trader.placed_contract_orders.records;
-                auto & resp = rds[m.at(o_id)]->response;
-                assert(o_id == resp.orderId && "assert in SharpHandler::orderStatus: o_id == resp.orderId failed.");
-                o_response.orderId = o_id;
-                o_response.state = resp.state;
-                o_response.clientId = resp.clientId;
-                o_response.permId = resp.permId;
-                o_response.parentId = resp.parentId;
-                o_response.filled = resp.filled;
-                o_response.remaining = resp.remaining;
-                o_response.avgFillPrice = resp.avgFillPrice;
-                o_response.lastFillPrice = resp.lastFillPrice;
-                o_response.status = resp.status;
-                o_response.whyHeld = resp.whyHeld;
+            }catch(...){
+                os.state = -2; // orderId doesn't exist
+                return;
             }
+        } );
+    }
+
+    void reqOpens(std::vector<api::OrderStatus> & opens){
+        while(!trader.open_order_flag.load(std::memory_order_relaxed)){
+            std::this_thread::sleep_for(OPENORDER_WAITING_TIME);
+        }
+        opens.clear();
+        std::lock_guard<std::mutex> lk(trader.mutex);
+        auto & m = trader.placed_contract_orders.orderId_index_map;
+        auto & rds = trader.placed_contract_orders.records;
+        for(auto e : trader.open_order_set){
+            std::size_t index;
+            try{
+                index = m.at(e);
+            }catch(...){
+                LOG(error)<<"Why this orderId "<<e<<" is not inserted into placed_contract_orders?";
+                continue;
+            }
+            auto & co = *(rds[index]);
+            api::OrderStatus os;
+            translate_orderstatus(co, os);
+            opens.push_back(os);
+        }
+    }
+
+    // this function must be called by at most one thread on python client side
+    void reqOpenOrders(std::vector<api::OrderStatus> & opens){
+        protect( [this, &opens](){
+            trader.reqOpenOrders();
+            reqOpens(opens);
+        } );
+    }
+
+    void reqAllOpenOrders(std::vector<api::OrderStatus> & opens){
+        protect( [this, &opens](){
+            trader.reqAllOpenOrders();
+            reqOpens(opens);
+        } );
+    }
+
+    void reqGlobalCancel(){
+        protect( [this](){
+            trader.reqGlobalCancel();
         } );
     }
 
@@ -280,12 +316,10 @@ void run_server (EWrapperImpl & ibtrader) {
     {
         ++attempt;
         ibtrader.connect( ibtrader.host.c_str(), ibtrader.port, ibtrader.clientId);
-        // std::this_thread::sleep_for(MONITOR_WAITING_TIME);
         // ibtrader.reqMarketSnapshot();
 
         while( ibtrader.isConnected() ) {
             ibtrader.monitor();
-            //std::this_thread::sleep_for(MONITOR_WAITING_TIME);
         }
         if( attempt >= MAX_ATTEMPTS) {
             break;
@@ -339,6 +373,30 @@ inline void translate_response(OrderResponse & response, const api::OrderRespons
     response.lastFillPrice = resp.lastFillPrice;
     response.status = resp.status;
     response.whyHeld = resp.whyHeld;
+}
+
+inline void translate_orderstatus(const ContractOrder & co, api::OrderStatus & os ){
+    os.symbol = co.contract.symbol;
+    os.secType = co.contract.secType;
+    os.exchange = co.contract.exchange;
+    os.currency = co.contract.currency;
+
+    os.action = co.order.action;
+    os.totalQuantity = co.order.totalQuantity;
+    os. orderType = co.order.orderType;
+    os. lmtPrice = co.order.lmtPrice;
+
+    os.orderId = co.response.orderId;
+    os.state = co.response.state;
+    os.clientId = co.response.clientId;
+    os.permId = co.response.permId;
+    os.parentId = co.response.parentId;
+    os.filled = co.response.filled;
+    os.remaining = co.response.remaining;
+    os.avgFillPrice = co.response.avgFillPrice;
+    os.lastFillPrice = co.response.lastFillPrice;
+    os.status = co.response.status;
+    os.whyHeld = co.response.whyHeld;
 }
 
 
@@ -417,11 +475,10 @@ public:
         } );
     }
 
-    void orderStatus(OrderResponse & response, const int64_t o_id){
-        protect([this, &response, o_id](){
-            api::OrderResponse resp;
-            client.orderStatus(resp, o_id);
-            translate_response(response, resp);
+    void getOrderStatus(ContractOrder & co, const int64_t o_id){
+        protect([this, &co, o_id](){
+            api::OrderStatus os;
+            client.getOrderStatus(os, o_id);
         } );
     }
 

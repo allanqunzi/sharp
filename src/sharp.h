@@ -6,6 +6,7 @@
 
 #include "CommonDefs.h"
 #include "Contract.h"
+#include "OrderState.h"
 #include "Order.h"
 #include "ScannerSubscription.h"
 #include "EPosixClientSocket.h"
@@ -18,10 +19,12 @@
 #include <memory>
 #include <vector>
 #include <deque>
+#include <set>
 #include <string>
 #include <utility>
 #include <cassert>
 #include <mutex>
+#include <atomic>
 #include <unordered_map>
 #include <boost/log/trivial.hpp>
 #include <boost/log/attributes/named_scope.hpp>
@@ -29,12 +32,17 @@ class EPosixClientSocket;
 
 namespace sharp{
 
-static constexpr std::size_t DEFAULT_BUCKETS_NUM = 500; // initial number of buckets for std::unordered_map
+// setting initial number of buckets for std::unordered_map, max_load_factor()
+// is 1.0 on construction. According to the standard [23.2.5/14], rehashing
+// does not occur if the insertion does not cause the container's size to exceed z*B
+// where z is the maximum load factor and B the current number of buckets. So as long
+// as the watch_list doesn't exceed DEFAULT_BUCKETS_NUM, it should be safe.
+static constexpr std::size_t DEFAULT_BUCKETS_NUM = 200;
 static constexpr int PING_DEADLINE = 2; // seconds
 static constexpr int SLEEP_BETWEEN_PINGS = 30; // seconds
 static constexpr unsigned int MAX_ATTEMPTS = 50;
 const auto ATTEMPT_WAITING_TIME = std::chrono::seconds(10);
-const auto MONITOR_WAITING_TIME = std::chrono::milliseconds(50); // 0.05 second
+const auto OPENORDER_WAITING_TIME = std::chrono::milliseconds(100); // 0.10 second
 const auto BAR_WAITING_TIME = std::chrono::milliseconds(5000);
 
 template<typename T>
@@ -100,19 +108,24 @@ struct ContractOrder
 	OrderResponse response;
 
 	ContractOrder():orderId(-1), contract(),order(), response(){};
-	ContractOrder(const ContractOrder & contract_order):response(contract_order.response){
+	ContractOrder(const ContractOrder & contract_order)
+	: orderId(contract_order.orderId)
+	, contract(contract_order.contract)
+	, order(contract_order.order)
+	, response(contract_order.response) { }
+/*
+	{
 		orderId = contract_order.orderId;
-
 		contract.symbol = contract_order.contract.symbol;
 		contract.secType = contract_order.contract.secType;
 		contract.exchange = contract_order.contract.exchange;
 		contract.currency = contract_order.contract.currency;
-
 		order.action = contract_order.order.action;
 		order.totalQuantity = contract_order.order.totalQuantity;
 		order.orderType = contract_order.order.orderType;
 		order.lmtPrice = contract_order.order.lmtPrice;
 	}
+*/
 };
 
 template<typename K, typename V>
@@ -193,24 +206,24 @@ public:
 	void monitor();
 	void placeOrder();
 	bool cancelOrder(OrderId orderId);
-	void reqMarketSnapshot();
+	void reqOpenOrders(); // orders sent by api
+	void reqAllOpenOrders(); // orders sent by both api and tws
+	bool reqGlobalCancel();
+
+	void reqMarketSnapshot(); // TODO
+
 	bool checkValidId( OrderId orderId);
 	// calling this function will call
 	// m_pClient->reqRealTimeBars, otherwise it doesn't make sense to call this function.
-	//
 	bool addToWatchList( const std::vector<std::string> &);
 	bool removeFromWatchList(const std::vector<std::string> &);
 	bool removeZombieSymbols(const std::vector<std::string> &);
-
 
 	bool requestRealTimeBars();
 
 	// getNextBar is done at thrift level
 
 	std::string getField(TickType tickType);
-
-
-
 
 private:
 	void reqCurrentTime();
@@ -290,6 +303,10 @@ public:
 	unsigned int port;
 	int clientId;
 	std::mutex mutex; // mutex for order statuses
+
+	std::atomic<bool> open_order_flag;
+	std::set<OrderId> open_order_set;
+
 	ContractOrder contract_order_request;
 	// placed_contract_orders is written by three member functions: placeOrder, cancelOrder and orderStatus,
 	// so these functions should be synchronized.
@@ -300,14 +317,12 @@ public:
 	// all possible symbols (A - ZZZZ) have been tested to be hashed
 	// to different values.
 	std::unordered_map<std::string, TickerId>watch_list;
-
 	// non-const operation on std::deque is not thread-safe,
 	// so the following needs to be synchronized.
 	std::unordered_map<TickerId, sharpdeque<RealTimeBar> >watch_list_bars;
 	// bar_mutexes should be initialized on construction and modification of watch_list
 	std::unordered_map<TickerId, std::mutex>bar_mutexes;
 };
-
 
 void run_server (EWrapperImpl & ibtrader);
 
@@ -318,11 +333,10 @@ public:
 	virtual void placeOrder(OrderResponse& response, const Contract& c_request, const Order& o_request) = 0;
 	virtual int64_t getOrderID() = 0;
 	virtual void cancelOrder(OrderResponse & response, const int64_t o_id) = 0;
-	virtual void orderStatus(OrderResponse & response, const int64_t o_id) = 0;
+	virtual void getOrderStatus(ContractOrder & co, const int64_t o_id) = 0;
 };
 
 SharpClientService *make_client ();
-
 
 
 } // end of namespace sharp

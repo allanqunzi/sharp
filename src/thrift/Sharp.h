@@ -19,7 +19,10 @@ class SharpIf {
   virtual int64_t getOrderID() = 0;
   virtual void placeOrder(OrderResponse& _return, const ContractRequest& c_req, const OrderRequest& o_req) = 0;
   virtual void cancelOrder(OrderResponse& _return, const int64_t o_id) = 0;
-  virtual void orderStatus(OrderResponse& _return, const int64_t o_id) = 0;
+  virtual void getOrderStatus(OrderStatus& _return, const int64_t o_id) = 0;
+  virtual void reqOpenOrders(std::vector<OrderStatus> & _return) = 0;
+  virtual void reqAllOpenOrders(std::vector<OrderStatus> & _return) = 0;
+  virtual void reqGlobalCancel() = 0;
   virtual void requestRealTimeBars() = 0;
   virtual void addToWatchList(const std::vector<std::string> & wl) = 0;
   virtual void removeFromWatchList(const std::vector<std::string> & rm) = 0;
@@ -67,7 +70,16 @@ class SharpNull : virtual public SharpIf {
   void cancelOrder(OrderResponse& /* _return */, const int64_t /* o_id */) {
     return;
   }
-  void orderStatus(OrderResponse& /* _return */, const int64_t /* o_id */) {
+  void getOrderStatus(OrderStatus& /* _return */, const int64_t /* o_id */) {
+    return;
+  }
+  void reqOpenOrders(std::vector<OrderStatus> & /* _return */) {
+    return;
+  }
+  void reqAllOpenOrders(std::vector<OrderStatus> & /* _return */) {
+    return;
+  }
+  void reqGlobalCancel() {
     return;
   }
   void requestRealTimeBars() {
@@ -375,8 +387,8 @@ typedef struct _Sharp_placeOrder_result__isset {
 class Sharp_placeOrder_result {
  public:
 
-  static const char* ascii_fingerprint; // = "DC1C3122B8F2BEF805647403197F0FF3";
-  static const uint8_t binary_fingerprint[16]; // = {0xDC,0x1C,0x31,0x22,0xB8,0xF2,0xBE,0xF8,0x05,0x64,0x74,0x03,0x19,0x7F,0x0F,0xF3};
+  static const char* ascii_fingerprint; // = "B3A23C3400EEC8FB2AD7AE457642A6E3";
+  static const uint8_t binary_fingerprint[16]; // = {0xB3,0xA2,0x3C,0x34,0x00,0xEE,0xC8,0xFB,0x2A,0xD7,0xAE,0x45,0x76,0x42,0xA6,0xE3};
 
   Sharp_placeOrder_result(const Sharp_placeOrder_result&);
   Sharp_placeOrder_result& operator=(const Sharp_placeOrder_result&);
@@ -422,8 +434,8 @@ typedef struct _Sharp_placeOrder_presult__isset {
 class Sharp_placeOrder_presult {
  public:
 
-  static const char* ascii_fingerprint; // = "DC1C3122B8F2BEF805647403197F0FF3";
-  static const uint8_t binary_fingerprint[16]; // = {0xDC,0x1C,0x31,0x22,0xB8,0xF2,0xBE,0xF8,0x05,0x64,0x74,0x03,0x19,0x7F,0x0F,0xF3};
+  static const char* ascii_fingerprint; // = "B3A23C3400EEC8FB2AD7AE457642A6E3";
+  static const uint8_t binary_fingerprint[16]; // = {0xB3,0xA2,0x3C,0x34,0x00,0xEE,0xC8,0xFB,0x2A,0xD7,0xAE,0x45,0x76,0x42,0xA6,0xE3};
 
 
   virtual ~Sharp_placeOrder_presult() throw();
@@ -497,8 +509,8 @@ typedef struct _Sharp_cancelOrder_result__isset {
 class Sharp_cancelOrder_result {
  public:
 
-  static const char* ascii_fingerprint; // = "DC1C3122B8F2BEF805647403197F0FF3";
-  static const uint8_t binary_fingerprint[16]; // = {0xDC,0x1C,0x31,0x22,0xB8,0xF2,0xBE,0xF8,0x05,0x64,0x74,0x03,0x19,0x7F,0x0F,0xF3};
+  static const char* ascii_fingerprint; // = "B3A23C3400EEC8FB2AD7AE457642A6E3";
+  static const uint8_t binary_fingerprint[16]; // = {0xB3,0xA2,0x3C,0x34,0x00,0xEE,0xC8,0xFB,0x2A,0xD7,0xAE,0x45,0x76,0x42,0xA6,0xE3};
 
   Sharp_cancelOrder_result(const Sharp_cancelOrder_result&);
   Sharp_cancelOrder_result& operator=(const Sharp_cancelOrder_result&);
@@ -544,8 +556,8 @@ typedef struct _Sharp_cancelOrder_presult__isset {
 class Sharp_cancelOrder_presult {
  public:
 
-  static const char* ascii_fingerprint; // = "DC1C3122B8F2BEF805647403197F0FF3";
-  static const uint8_t binary_fingerprint[16]; // = {0xDC,0x1C,0x31,0x22,0xB8,0xF2,0xBE,0xF8,0x05,0x64,0x74,0x03,0x19,0x7F,0x0F,0xF3};
+  static const char* ascii_fingerprint; // = "B3A23C3400EEC8FB2AD7AE457642A6E3";
+  static const uint8_t binary_fingerprint[16]; // = {0xB3,0xA2,0x3C,0x34,0x00,0xEE,0xC8,0xFB,0x2A,0xD7,0xAE,0x45,0x76,0x42,0xA6,0xE3};
 
 
   virtual ~Sharp_cancelOrder_presult() throw();
@@ -560,84 +572,84 @@ class Sharp_cancelOrder_presult {
 };
 
 
-class Sharp_orderStatus_args {
+class Sharp_getOrderStatus_args {
  public:
 
   static const char* ascii_fingerprint; // = "56A59CE7FFAF82BCA8A19FAACDE4FB75";
   static const uint8_t binary_fingerprint[16]; // = {0x56,0xA5,0x9C,0xE7,0xFF,0xAF,0x82,0xBC,0xA8,0xA1,0x9F,0xAA,0xCD,0xE4,0xFB,0x75};
 
-  Sharp_orderStatus_args(const Sharp_orderStatus_args&);
-  Sharp_orderStatus_args& operator=(const Sharp_orderStatus_args&);
-  Sharp_orderStatus_args() : o_id(0) {
+  Sharp_getOrderStatus_args(const Sharp_getOrderStatus_args&);
+  Sharp_getOrderStatus_args& operator=(const Sharp_getOrderStatus_args&);
+  Sharp_getOrderStatus_args() : o_id(0) {
   }
 
-  virtual ~Sharp_orderStatus_args() throw();
+  virtual ~Sharp_getOrderStatus_args() throw();
   int64_t o_id;
 
   void __set_o_id(const int64_t val);
 
-  bool operator == (const Sharp_orderStatus_args & rhs) const
+  bool operator == (const Sharp_getOrderStatus_args & rhs) const
   {
     if (!(o_id == rhs.o_id))
       return false;
     return true;
   }
-  bool operator != (const Sharp_orderStatus_args &rhs) const {
+  bool operator != (const Sharp_getOrderStatus_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const Sharp_orderStatus_args & ) const;
+  bool operator < (const Sharp_getOrderStatus_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
-  friend std::ostream& operator<<(std::ostream& out, const Sharp_orderStatus_args& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_getOrderStatus_args& obj);
 };
 
 
-class Sharp_orderStatus_pargs {
+class Sharp_getOrderStatus_pargs {
  public:
 
   static const char* ascii_fingerprint; // = "56A59CE7FFAF82BCA8A19FAACDE4FB75";
   static const uint8_t binary_fingerprint[16]; // = {0x56,0xA5,0x9C,0xE7,0xFF,0xAF,0x82,0xBC,0xA8,0xA1,0x9F,0xAA,0xCD,0xE4,0xFB,0x75};
 
 
-  virtual ~Sharp_orderStatus_pargs() throw();
+  virtual ~Sharp_getOrderStatus_pargs() throw();
   const int64_t* o_id;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
-  friend std::ostream& operator<<(std::ostream& out, const Sharp_orderStatus_pargs& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_getOrderStatus_pargs& obj);
 };
 
-typedef struct _Sharp_orderStatus_result__isset {
-  _Sharp_orderStatus_result__isset() : success(false), e(false) {}
+typedef struct _Sharp_getOrderStatus_result__isset {
+  _Sharp_getOrderStatus_result__isset() : success(false), e(false) {}
   bool success :1;
   bool e :1;
-} _Sharp_orderStatus_result__isset;
+} _Sharp_getOrderStatus_result__isset;
 
-class Sharp_orderStatus_result {
+class Sharp_getOrderStatus_result {
  public:
 
-  static const char* ascii_fingerprint; // = "DC1C3122B8F2BEF805647403197F0FF3";
-  static const uint8_t binary_fingerprint[16]; // = {0xDC,0x1C,0x31,0x22,0xB8,0xF2,0xBE,0xF8,0x05,0x64,0x74,0x03,0x19,0x7F,0x0F,0xF3};
+  static const char* ascii_fingerprint; // = "95AC8DB7BE1A23D91C2F0814CAB546F6";
+  static const uint8_t binary_fingerprint[16]; // = {0x95,0xAC,0x8D,0xB7,0xBE,0x1A,0x23,0xD9,0x1C,0x2F,0x08,0x14,0xCA,0xB5,0x46,0xF6};
 
-  Sharp_orderStatus_result(const Sharp_orderStatus_result&);
-  Sharp_orderStatus_result& operator=(const Sharp_orderStatus_result&);
-  Sharp_orderStatus_result() {
+  Sharp_getOrderStatus_result(const Sharp_getOrderStatus_result&);
+  Sharp_getOrderStatus_result& operator=(const Sharp_getOrderStatus_result&);
+  Sharp_getOrderStatus_result() {
   }
 
-  virtual ~Sharp_orderStatus_result() throw();
-  OrderResponse success;
+  virtual ~Sharp_getOrderStatus_result() throw();
+  OrderStatus success;
   Exception e;
 
-  _Sharp_orderStatus_result__isset __isset;
+  _Sharp_getOrderStatus_result__isset __isset;
 
-  void __set_success(const OrderResponse& val);
+  void __set_success(const OrderStatus& val);
 
   void __set_e(const Exception& val);
 
-  bool operator == (const Sharp_orderStatus_result & rhs) const
+  bool operator == (const Sharp_getOrderStatus_result & rhs) const
   {
     if (!(success == rhs.success))
       return false;
@@ -645,40 +657,380 @@ class Sharp_orderStatus_result {
       return false;
     return true;
   }
-  bool operator != (const Sharp_orderStatus_result &rhs) const {
+  bool operator != (const Sharp_getOrderStatus_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const Sharp_orderStatus_result & ) const;
+  bool operator < (const Sharp_getOrderStatus_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
-  friend std::ostream& operator<<(std::ostream& out, const Sharp_orderStatus_result& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_getOrderStatus_result& obj);
 };
 
-typedef struct _Sharp_orderStatus_presult__isset {
-  _Sharp_orderStatus_presult__isset() : success(false), e(false) {}
+typedef struct _Sharp_getOrderStatus_presult__isset {
+  _Sharp_getOrderStatus_presult__isset() : success(false), e(false) {}
   bool success :1;
   bool e :1;
-} _Sharp_orderStatus_presult__isset;
+} _Sharp_getOrderStatus_presult__isset;
 
-class Sharp_orderStatus_presult {
+class Sharp_getOrderStatus_presult {
  public:
 
-  static const char* ascii_fingerprint; // = "DC1C3122B8F2BEF805647403197F0FF3";
-  static const uint8_t binary_fingerprint[16]; // = {0xDC,0x1C,0x31,0x22,0xB8,0xF2,0xBE,0xF8,0x05,0x64,0x74,0x03,0x19,0x7F,0x0F,0xF3};
+  static const char* ascii_fingerprint; // = "95AC8DB7BE1A23D91C2F0814CAB546F6";
+  static const uint8_t binary_fingerprint[16]; // = {0x95,0xAC,0x8D,0xB7,0xBE,0x1A,0x23,0xD9,0x1C,0x2F,0x08,0x14,0xCA,0xB5,0x46,0xF6};
 
 
-  virtual ~Sharp_orderStatus_presult() throw();
-  OrderResponse* success;
+  virtual ~Sharp_getOrderStatus_presult() throw();
+  OrderStatus* success;
   Exception e;
 
-  _Sharp_orderStatus_presult__isset __isset;
+  _Sharp_getOrderStatus_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
-  friend std::ostream& operator<<(std::ostream& out, const Sharp_orderStatus_presult& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_getOrderStatus_presult& obj);
+};
+
+
+class Sharp_reqOpenOrders_args {
+ public:
+
+  static const char* ascii_fingerprint; // = "99914B932BD37A50B983C5E7C90AE93B";
+  static const uint8_t binary_fingerprint[16]; // = {0x99,0x91,0x4B,0x93,0x2B,0xD3,0x7A,0x50,0xB9,0x83,0xC5,0xE7,0xC9,0x0A,0xE9,0x3B};
+
+  Sharp_reqOpenOrders_args(const Sharp_reqOpenOrders_args&);
+  Sharp_reqOpenOrders_args& operator=(const Sharp_reqOpenOrders_args&);
+  Sharp_reqOpenOrders_args() {
+  }
+
+  virtual ~Sharp_reqOpenOrders_args() throw();
+
+  bool operator == (const Sharp_reqOpenOrders_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const Sharp_reqOpenOrders_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Sharp_reqOpenOrders_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_reqOpenOrders_args& obj);
+};
+
+
+class Sharp_reqOpenOrders_pargs {
+ public:
+
+  static const char* ascii_fingerprint; // = "99914B932BD37A50B983C5E7C90AE93B";
+  static const uint8_t binary_fingerprint[16]; // = {0x99,0x91,0x4B,0x93,0x2B,0xD3,0x7A,0x50,0xB9,0x83,0xC5,0xE7,0xC9,0x0A,0xE9,0x3B};
+
+
+  virtual ~Sharp_reqOpenOrders_pargs() throw();
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_reqOpenOrders_pargs& obj);
+};
+
+typedef struct _Sharp_reqOpenOrders_result__isset {
+  _Sharp_reqOpenOrders_result__isset() : success(false), e(false) {}
+  bool success :1;
+  bool e :1;
+} _Sharp_reqOpenOrders_result__isset;
+
+class Sharp_reqOpenOrders_result {
+ public:
+
+  static const char* ascii_fingerprint; // = "3E9EDCE501D0ED74EFA1D8933407C54D";
+  static const uint8_t binary_fingerprint[16]; // = {0x3E,0x9E,0xDC,0xE5,0x01,0xD0,0xED,0x74,0xEF,0xA1,0xD8,0x93,0x34,0x07,0xC5,0x4D};
+
+  Sharp_reqOpenOrders_result(const Sharp_reqOpenOrders_result&);
+  Sharp_reqOpenOrders_result& operator=(const Sharp_reqOpenOrders_result&);
+  Sharp_reqOpenOrders_result() {
+  }
+
+  virtual ~Sharp_reqOpenOrders_result() throw();
+  std::vector<OrderStatus>  success;
+  Exception e;
+
+  _Sharp_reqOpenOrders_result__isset __isset;
+
+  void __set_success(const std::vector<OrderStatus> & val);
+
+  void __set_e(const Exception& val);
+
+  bool operator == (const Sharp_reqOpenOrders_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(e == rhs.e))
+      return false;
+    return true;
+  }
+  bool operator != (const Sharp_reqOpenOrders_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Sharp_reqOpenOrders_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_reqOpenOrders_result& obj);
+};
+
+typedef struct _Sharp_reqOpenOrders_presult__isset {
+  _Sharp_reqOpenOrders_presult__isset() : success(false), e(false) {}
+  bool success :1;
+  bool e :1;
+} _Sharp_reqOpenOrders_presult__isset;
+
+class Sharp_reqOpenOrders_presult {
+ public:
+
+  static const char* ascii_fingerprint; // = "3E9EDCE501D0ED74EFA1D8933407C54D";
+  static const uint8_t binary_fingerprint[16]; // = {0x3E,0x9E,0xDC,0xE5,0x01,0xD0,0xED,0x74,0xEF,0xA1,0xD8,0x93,0x34,0x07,0xC5,0x4D};
+
+
+  virtual ~Sharp_reqOpenOrders_presult() throw();
+  std::vector<OrderStatus> * success;
+  Exception e;
+
+  _Sharp_reqOpenOrders_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_reqOpenOrders_presult& obj);
+};
+
+
+class Sharp_reqAllOpenOrders_args {
+ public:
+
+  static const char* ascii_fingerprint; // = "99914B932BD37A50B983C5E7C90AE93B";
+  static const uint8_t binary_fingerprint[16]; // = {0x99,0x91,0x4B,0x93,0x2B,0xD3,0x7A,0x50,0xB9,0x83,0xC5,0xE7,0xC9,0x0A,0xE9,0x3B};
+
+  Sharp_reqAllOpenOrders_args(const Sharp_reqAllOpenOrders_args&);
+  Sharp_reqAllOpenOrders_args& operator=(const Sharp_reqAllOpenOrders_args&);
+  Sharp_reqAllOpenOrders_args() {
+  }
+
+  virtual ~Sharp_reqAllOpenOrders_args() throw();
+
+  bool operator == (const Sharp_reqAllOpenOrders_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const Sharp_reqAllOpenOrders_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Sharp_reqAllOpenOrders_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_reqAllOpenOrders_args& obj);
+};
+
+
+class Sharp_reqAllOpenOrders_pargs {
+ public:
+
+  static const char* ascii_fingerprint; // = "99914B932BD37A50B983C5E7C90AE93B";
+  static const uint8_t binary_fingerprint[16]; // = {0x99,0x91,0x4B,0x93,0x2B,0xD3,0x7A,0x50,0xB9,0x83,0xC5,0xE7,0xC9,0x0A,0xE9,0x3B};
+
+
+  virtual ~Sharp_reqAllOpenOrders_pargs() throw();
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_reqAllOpenOrders_pargs& obj);
+};
+
+typedef struct _Sharp_reqAllOpenOrders_result__isset {
+  _Sharp_reqAllOpenOrders_result__isset() : success(false), e(false) {}
+  bool success :1;
+  bool e :1;
+} _Sharp_reqAllOpenOrders_result__isset;
+
+class Sharp_reqAllOpenOrders_result {
+ public:
+
+  static const char* ascii_fingerprint; // = "3E9EDCE501D0ED74EFA1D8933407C54D";
+  static const uint8_t binary_fingerprint[16]; // = {0x3E,0x9E,0xDC,0xE5,0x01,0xD0,0xED,0x74,0xEF,0xA1,0xD8,0x93,0x34,0x07,0xC5,0x4D};
+
+  Sharp_reqAllOpenOrders_result(const Sharp_reqAllOpenOrders_result&);
+  Sharp_reqAllOpenOrders_result& operator=(const Sharp_reqAllOpenOrders_result&);
+  Sharp_reqAllOpenOrders_result() {
+  }
+
+  virtual ~Sharp_reqAllOpenOrders_result() throw();
+  std::vector<OrderStatus>  success;
+  Exception e;
+
+  _Sharp_reqAllOpenOrders_result__isset __isset;
+
+  void __set_success(const std::vector<OrderStatus> & val);
+
+  void __set_e(const Exception& val);
+
+  bool operator == (const Sharp_reqAllOpenOrders_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(e == rhs.e))
+      return false;
+    return true;
+  }
+  bool operator != (const Sharp_reqAllOpenOrders_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Sharp_reqAllOpenOrders_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_reqAllOpenOrders_result& obj);
+};
+
+typedef struct _Sharp_reqAllOpenOrders_presult__isset {
+  _Sharp_reqAllOpenOrders_presult__isset() : success(false), e(false) {}
+  bool success :1;
+  bool e :1;
+} _Sharp_reqAllOpenOrders_presult__isset;
+
+class Sharp_reqAllOpenOrders_presult {
+ public:
+
+  static const char* ascii_fingerprint; // = "3E9EDCE501D0ED74EFA1D8933407C54D";
+  static const uint8_t binary_fingerprint[16]; // = {0x3E,0x9E,0xDC,0xE5,0x01,0xD0,0xED,0x74,0xEF,0xA1,0xD8,0x93,0x34,0x07,0xC5,0x4D};
+
+
+  virtual ~Sharp_reqAllOpenOrders_presult() throw();
+  std::vector<OrderStatus> * success;
+  Exception e;
+
+  _Sharp_reqAllOpenOrders_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_reqAllOpenOrders_presult& obj);
+};
+
+
+class Sharp_reqGlobalCancel_args {
+ public:
+
+  static const char* ascii_fingerprint; // = "99914B932BD37A50B983C5E7C90AE93B";
+  static const uint8_t binary_fingerprint[16]; // = {0x99,0x91,0x4B,0x93,0x2B,0xD3,0x7A,0x50,0xB9,0x83,0xC5,0xE7,0xC9,0x0A,0xE9,0x3B};
+
+  Sharp_reqGlobalCancel_args(const Sharp_reqGlobalCancel_args&);
+  Sharp_reqGlobalCancel_args& operator=(const Sharp_reqGlobalCancel_args&);
+  Sharp_reqGlobalCancel_args() {
+  }
+
+  virtual ~Sharp_reqGlobalCancel_args() throw();
+
+  bool operator == (const Sharp_reqGlobalCancel_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const Sharp_reqGlobalCancel_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Sharp_reqGlobalCancel_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_reqGlobalCancel_args& obj);
+};
+
+
+class Sharp_reqGlobalCancel_pargs {
+ public:
+
+  static const char* ascii_fingerprint; // = "99914B932BD37A50B983C5E7C90AE93B";
+  static const uint8_t binary_fingerprint[16]; // = {0x99,0x91,0x4B,0x93,0x2B,0xD3,0x7A,0x50,0xB9,0x83,0xC5,0xE7,0xC9,0x0A,0xE9,0x3B};
+
+
+  virtual ~Sharp_reqGlobalCancel_pargs() throw();
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_reqGlobalCancel_pargs& obj);
+};
+
+typedef struct _Sharp_reqGlobalCancel_result__isset {
+  _Sharp_reqGlobalCancel_result__isset() : e(false) {}
+  bool e :1;
+} _Sharp_reqGlobalCancel_result__isset;
+
+class Sharp_reqGlobalCancel_result {
+ public:
+
+  static const char* ascii_fingerprint; // = "0A23AF95FD017F7C6C78570E7E17112A";
+  static const uint8_t binary_fingerprint[16]; // = {0x0A,0x23,0xAF,0x95,0xFD,0x01,0x7F,0x7C,0x6C,0x78,0x57,0x0E,0x7E,0x17,0x11,0x2A};
+
+  Sharp_reqGlobalCancel_result(const Sharp_reqGlobalCancel_result&);
+  Sharp_reqGlobalCancel_result& operator=(const Sharp_reqGlobalCancel_result&);
+  Sharp_reqGlobalCancel_result() {
+  }
+
+  virtual ~Sharp_reqGlobalCancel_result() throw();
+  Exception e;
+
+  _Sharp_reqGlobalCancel_result__isset __isset;
+
+  void __set_e(const Exception& val);
+
+  bool operator == (const Sharp_reqGlobalCancel_result & rhs) const
+  {
+    if (!(e == rhs.e))
+      return false;
+    return true;
+  }
+  bool operator != (const Sharp_reqGlobalCancel_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Sharp_reqGlobalCancel_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_reqGlobalCancel_result& obj);
+};
+
+typedef struct _Sharp_reqGlobalCancel_presult__isset {
+  _Sharp_reqGlobalCancel_presult__isset() : e(false) {}
+  bool e :1;
+} _Sharp_reqGlobalCancel_presult__isset;
+
+class Sharp_reqGlobalCancel_presult {
+ public:
+
+  static const char* ascii_fingerprint; // = "0A23AF95FD017F7C6C78570E7E17112A";
+  static const uint8_t binary_fingerprint[16]; // = {0x0A,0x23,0xAF,0x95,0xFD,0x01,0x7F,0x7C,0x6C,0x78,0x57,0x0E,0x7E,0x17,0x11,0x2A};
+
+
+  virtual ~Sharp_reqGlobalCancel_presult() throw();
+  Exception e;
+
+  _Sharp_reqGlobalCancel_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_reqGlobalCancel_presult& obj);
 };
 
 
@@ -1290,9 +1642,18 @@ class SharpClient : virtual public SharpIf {
   void cancelOrder(OrderResponse& _return, const int64_t o_id);
   void send_cancelOrder(const int64_t o_id);
   void recv_cancelOrder(OrderResponse& _return);
-  void orderStatus(OrderResponse& _return, const int64_t o_id);
-  void send_orderStatus(const int64_t o_id);
-  void recv_orderStatus(OrderResponse& _return);
+  void getOrderStatus(OrderStatus& _return, const int64_t o_id);
+  void send_getOrderStatus(const int64_t o_id);
+  void recv_getOrderStatus(OrderStatus& _return);
+  void reqOpenOrders(std::vector<OrderStatus> & _return);
+  void send_reqOpenOrders();
+  void recv_reqOpenOrders(std::vector<OrderStatus> & _return);
+  void reqAllOpenOrders(std::vector<OrderStatus> & _return);
+  void send_reqAllOpenOrders();
+  void recv_reqAllOpenOrders(std::vector<OrderStatus> & _return);
+  void reqGlobalCancel();
+  void send_reqGlobalCancel();
+  void recv_reqGlobalCancel();
   void requestRealTimeBars();
   void send_requestRealTimeBars();
   void recv_requestRealTimeBars();
@@ -1327,7 +1688,10 @@ class SharpProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_getOrderID(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_placeOrder(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_cancelOrder(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_orderStatus(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_getOrderStatus(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_reqOpenOrders(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_reqAllOpenOrders(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_reqGlobalCancel(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_requestRealTimeBars(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_addToWatchList(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_removeFromWatchList(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -1340,7 +1704,10 @@ class SharpProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["getOrderID"] = &SharpProcessor::process_getOrderID;
     processMap_["placeOrder"] = &SharpProcessor::process_placeOrder;
     processMap_["cancelOrder"] = &SharpProcessor::process_cancelOrder;
-    processMap_["orderStatus"] = &SharpProcessor::process_orderStatus;
+    processMap_["getOrderStatus"] = &SharpProcessor::process_getOrderStatus;
+    processMap_["reqOpenOrders"] = &SharpProcessor::process_reqOpenOrders;
+    processMap_["reqAllOpenOrders"] = &SharpProcessor::process_reqAllOpenOrders;
+    processMap_["reqGlobalCancel"] = &SharpProcessor::process_reqGlobalCancel;
     processMap_["requestRealTimeBars"] = &SharpProcessor::process_requestRealTimeBars;
     processMap_["addToWatchList"] = &SharpProcessor::process_addToWatchList;
     processMap_["removeFromWatchList"] = &SharpProcessor::process_removeFromWatchList;
@@ -1413,14 +1780,43 @@ class SharpMultiface : virtual public SharpIf {
     return;
   }
 
-  void orderStatus(OrderResponse& _return, const int64_t o_id) {
+  void getOrderStatus(OrderStatus& _return, const int64_t o_id) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->orderStatus(_return, o_id);
+      ifaces_[i]->getOrderStatus(_return, o_id);
     }
-    ifaces_[i]->orderStatus(_return, o_id);
+    ifaces_[i]->getOrderStatus(_return, o_id);
     return;
+  }
+
+  void reqOpenOrders(std::vector<OrderStatus> & _return) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->reqOpenOrders(_return);
+    }
+    ifaces_[i]->reqOpenOrders(_return);
+    return;
+  }
+
+  void reqAllOpenOrders(std::vector<OrderStatus> & _return) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->reqAllOpenOrders(_return);
+    }
+    ifaces_[i]->reqAllOpenOrders(_return);
+    return;
+  }
+
+  void reqGlobalCancel() {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->reqGlobalCancel();
+    }
+    ifaces_[i]->reqGlobalCancel();
   }
 
   void requestRealTimeBars() {

@@ -338,14 +338,14 @@ class OrderResponse:
   Attributes:
    - orderId
    - state
-   - status
+   - clientId
+   - permId
+   - parentId
    - filled
    - remaining
    - avgFillPrice
-   - permId
-   - parentId
    - lastFillPrice
-   - clientId
+   - status
    - whyHeld
   """
 
@@ -353,28 +353,28 @@ class OrderResponse:
     None, # 0
     (1, TType.I64, 'orderId', None, None, ), # 1
     (2, TType.I16, 'state', None, None, ), # 2
-    (3, TType.STRING, 'status', None, "", ), # 3
-    (4, TType.I32, 'filled', None, 0, ), # 4
-    (5, TType.I32, 'remaining', None, 0, ), # 5
-    (6, TType.DOUBLE, 'avgFillPrice', None, 0, ), # 6
-    (7, TType.I32, 'permId', None, 0, ), # 7
-    (8, TType.I32, 'parentId', None, 0, ), # 8
+    (3, TType.I32, 'clientId', None, 0, ), # 3
+    (4, TType.I32, 'permId', None, 0, ), # 4
+    (5, TType.I32, 'parentId', None, 0, ), # 5
+    (6, TType.I32, 'filled', None, 0, ), # 6
+    (7, TType.I32, 'remaining', None, 0, ), # 7
+    (8, TType.DOUBLE, 'avgFillPrice', None, 0, ), # 8
     (9, TType.DOUBLE, 'lastFillPrice', None, 0, ), # 9
-    (10, TType.I32, 'clientId', None, 0, ), # 10
+    (10, TType.STRING, 'status', None, "", ), # 10
     (11, TType.STRING, 'whyHeld', None, "", ), # 11
   )
 
-  def __init__(self, orderId=None, state=None, status=thrift_spec[3][4], filled=thrift_spec[4][4], remaining=thrift_spec[5][4], avgFillPrice=thrift_spec[6][4], permId=thrift_spec[7][4], parentId=thrift_spec[8][4], lastFillPrice=thrift_spec[9][4], clientId=thrift_spec[10][4], whyHeld=thrift_spec[11][4],):
+  def __init__(self, orderId=None, state=None, clientId=thrift_spec[3][4], permId=thrift_spec[4][4], parentId=thrift_spec[5][4], filled=thrift_spec[6][4], remaining=thrift_spec[7][4], avgFillPrice=thrift_spec[8][4], lastFillPrice=thrift_spec[9][4], status=thrift_spec[10][4], whyHeld=thrift_spec[11][4],):
     self.orderId = orderId
     self.state = state
-    self.status = status
+    self.clientId = clientId
+    self.permId = permId
+    self.parentId = parentId
     self.filled = filled
     self.remaining = remaining
     self.avgFillPrice = avgFillPrice
-    self.permId = permId
-    self.parentId = parentId
     self.lastFillPrice = lastFillPrice
-    self.clientId = clientId
+    self.status = status
     self.whyHeld = whyHeld
 
   def read(self, iprot):
@@ -397,33 +397,33 @@ class OrderResponse:
         else:
           iprot.skip(ftype)
       elif fid == 3:
-        if ftype == TType.STRING:
-          self.status = iprot.readString();
+        if ftype == TType.I32:
+          self.clientId = iprot.readI32();
         else:
           iprot.skip(ftype)
       elif fid == 4:
         if ftype == TType.I32:
-          self.filled = iprot.readI32();
+          self.permId = iprot.readI32();
         else:
           iprot.skip(ftype)
       elif fid == 5:
         if ftype == TType.I32:
-          self.remaining = iprot.readI32();
+          self.parentId = iprot.readI32();
         else:
           iprot.skip(ftype)
       elif fid == 6:
-        if ftype == TType.DOUBLE:
-          self.avgFillPrice = iprot.readDouble();
+        if ftype == TType.I32:
+          self.filled = iprot.readI32();
         else:
           iprot.skip(ftype)
       elif fid == 7:
         if ftype == TType.I32:
-          self.permId = iprot.readI32();
+          self.remaining = iprot.readI32();
         else:
           iprot.skip(ftype)
       elif fid == 8:
-        if ftype == TType.I32:
-          self.parentId = iprot.readI32();
+        if ftype == TType.DOUBLE:
+          self.avgFillPrice = iprot.readDouble();
         else:
           iprot.skip(ftype)
       elif fid == 9:
@@ -432,8 +432,8 @@ class OrderResponse:
         else:
           iprot.skip(ftype)
       elif fid == 10:
-        if ftype == TType.I32:
-          self.clientId = iprot.readI32();
+        if ftype == TType.STRING:
+          self.status = iprot.readString();
         else:
           iprot.skip(ftype)
       elif fid == 11:
@@ -459,37 +459,37 @@ class OrderResponse:
       oprot.writeFieldBegin('state', TType.I16, 2)
       oprot.writeI16(self.state)
       oprot.writeFieldEnd()
-    if self.status is not None:
-      oprot.writeFieldBegin('status', TType.STRING, 3)
-      oprot.writeString(self.status)
-      oprot.writeFieldEnd()
-    if self.filled is not None:
-      oprot.writeFieldBegin('filled', TType.I32, 4)
-      oprot.writeI32(self.filled)
-      oprot.writeFieldEnd()
-    if self.remaining is not None:
-      oprot.writeFieldBegin('remaining', TType.I32, 5)
-      oprot.writeI32(self.remaining)
-      oprot.writeFieldEnd()
-    if self.avgFillPrice is not None:
-      oprot.writeFieldBegin('avgFillPrice', TType.DOUBLE, 6)
-      oprot.writeDouble(self.avgFillPrice)
+    if self.clientId is not None:
+      oprot.writeFieldBegin('clientId', TType.I32, 3)
+      oprot.writeI32(self.clientId)
       oprot.writeFieldEnd()
     if self.permId is not None:
-      oprot.writeFieldBegin('permId', TType.I32, 7)
+      oprot.writeFieldBegin('permId', TType.I32, 4)
       oprot.writeI32(self.permId)
       oprot.writeFieldEnd()
     if self.parentId is not None:
-      oprot.writeFieldBegin('parentId', TType.I32, 8)
+      oprot.writeFieldBegin('parentId', TType.I32, 5)
       oprot.writeI32(self.parentId)
+      oprot.writeFieldEnd()
+    if self.filled is not None:
+      oprot.writeFieldBegin('filled', TType.I32, 6)
+      oprot.writeI32(self.filled)
+      oprot.writeFieldEnd()
+    if self.remaining is not None:
+      oprot.writeFieldBegin('remaining', TType.I32, 7)
+      oprot.writeI32(self.remaining)
+      oprot.writeFieldEnd()
+    if self.avgFillPrice is not None:
+      oprot.writeFieldBegin('avgFillPrice', TType.DOUBLE, 8)
+      oprot.writeDouble(self.avgFillPrice)
       oprot.writeFieldEnd()
     if self.lastFillPrice is not None:
       oprot.writeFieldBegin('lastFillPrice', TType.DOUBLE, 9)
       oprot.writeDouble(self.lastFillPrice)
       oprot.writeFieldEnd()
-    if self.clientId is not None:
-      oprot.writeFieldBegin('clientId', TType.I32, 10)
-      oprot.writeI32(self.clientId)
+    if self.status is not None:
+      oprot.writeFieldBegin('status', TType.STRING, 10)
+      oprot.writeString(self.status)
       oprot.writeFieldEnd()
     if self.whyHeld is not None:
       oprot.writeFieldBegin('whyHeld', TType.STRING, 11)
@@ -510,14 +510,333 @@ class OrderResponse:
     value = 17
     value = (value * 31) ^ hash(self.orderId)
     value = (value * 31) ^ hash(self.state)
-    value = (value * 31) ^ hash(self.status)
+    value = (value * 31) ^ hash(self.clientId)
+    value = (value * 31) ^ hash(self.permId)
+    value = (value * 31) ^ hash(self.parentId)
     value = (value * 31) ^ hash(self.filled)
     value = (value * 31) ^ hash(self.remaining)
     value = (value * 31) ^ hash(self.avgFillPrice)
+    value = (value * 31) ^ hash(self.lastFillPrice)
+    value = (value * 31) ^ hash(self.status)
+    value = (value * 31) ^ hash(self.whyHeld)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class OrderStatus:
+  """
+  Attributes:
+   - symbol
+   - secType
+   - exchange
+   - currency
+   - action
+   - totalQuantity
+   - orderType
+   - lmtPrice
+   - orderId
+   - state
+   - clientId
+   - permId
+   - parentId
+   - filled
+   - remaining
+   - avgFillPrice
+   - lastFillPrice
+   - status
+   - whyHeld
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'symbol', None, None, ), # 1
+    (2, TType.STRING, 'secType', None, None, ), # 2
+    (3, TType.STRING, 'exchange', None, None, ), # 3
+    (4, TType.STRING, 'currency', None, None, ), # 4
+    (5, TType.STRING, 'action', None, None, ), # 5
+    (6, TType.I64, 'totalQuantity', None, None, ), # 6
+    (7, TType.STRING, 'orderType', None, None, ), # 7
+    (8, TType.DOUBLE, 'lmtPrice', None, None, ), # 8
+    (9, TType.I64, 'orderId', None, None, ), # 9
+    (10, TType.I16, 'state', None, None, ), # 10
+    (11, TType.I32, 'clientId', None, 0, ), # 11
+    (12, TType.I32, 'permId', None, 0, ), # 12
+    (13, TType.I32, 'parentId', None, 0, ), # 13
+    (14, TType.I32, 'filled', None, 0, ), # 14
+    (15, TType.I32, 'remaining', None, 0, ), # 15
+    (16, TType.DOUBLE, 'avgFillPrice', None, 0, ), # 16
+    (17, TType.DOUBLE, 'lastFillPrice', None, 0, ), # 17
+    (18, TType.STRING, 'status', None, "", ), # 18
+    (19, TType.STRING, 'whyHeld', None, "", ), # 19
+  )
+
+  def __init__(self, symbol=None, secType=None, exchange=None, currency=None, action=None, totalQuantity=None, orderType=None, lmtPrice=None, orderId=None, state=None, clientId=thrift_spec[11][4], permId=thrift_spec[12][4], parentId=thrift_spec[13][4], filled=thrift_spec[14][4], remaining=thrift_spec[15][4], avgFillPrice=thrift_spec[16][4], lastFillPrice=thrift_spec[17][4], status=thrift_spec[18][4], whyHeld=thrift_spec[19][4],):
+    self.symbol = symbol
+    self.secType = secType
+    self.exchange = exchange
+    self.currency = currency
+    self.action = action
+    self.totalQuantity = totalQuantity
+    self.orderType = orderType
+    self.lmtPrice = lmtPrice
+    self.orderId = orderId
+    self.state = state
+    self.clientId = clientId
+    self.permId = permId
+    self.parentId = parentId
+    self.filled = filled
+    self.remaining = remaining
+    self.avgFillPrice = avgFillPrice
+    self.lastFillPrice = lastFillPrice
+    self.status = status
+    self.whyHeld = whyHeld
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.symbol = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.secType = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.STRING:
+          self.exchange = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.STRING:
+          self.currency = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.STRING:
+          self.action = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 6:
+        if ftype == TType.I64:
+          self.totalQuantity = iprot.readI64();
+        else:
+          iprot.skip(ftype)
+      elif fid == 7:
+        if ftype == TType.STRING:
+          self.orderType = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 8:
+        if ftype == TType.DOUBLE:
+          self.lmtPrice = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      elif fid == 9:
+        if ftype == TType.I64:
+          self.orderId = iprot.readI64();
+        else:
+          iprot.skip(ftype)
+      elif fid == 10:
+        if ftype == TType.I16:
+          self.state = iprot.readI16();
+        else:
+          iprot.skip(ftype)
+      elif fid == 11:
+        if ftype == TType.I32:
+          self.clientId = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      elif fid == 12:
+        if ftype == TType.I32:
+          self.permId = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      elif fid == 13:
+        if ftype == TType.I32:
+          self.parentId = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      elif fid == 14:
+        if ftype == TType.I32:
+          self.filled = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      elif fid == 15:
+        if ftype == TType.I32:
+          self.remaining = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      elif fid == 16:
+        if ftype == TType.DOUBLE:
+          self.avgFillPrice = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      elif fid == 17:
+        if ftype == TType.DOUBLE:
+          self.lastFillPrice = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      elif fid == 18:
+        if ftype == TType.STRING:
+          self.status = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 19:
+        if ftype == TType.STRING:
+          self.whyHeld = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('OrderStatus')
+    if self.symbol is not None:
+      oprot.writeFieldBegin('symbol', TType.STRING, 1)
+      oprot.writeString(self.symbol)
+      oprot.writeFieldEnd()
+    if self.secType is not None:
+      oprot.writeFieldBegin('secType', TType.STRING, 2)
+      oprot.writeString(self.secType)
+      oprot.writeFieldEnd()
+    if self.exchange is not None:
+      oprot.writeFieldBegin('exchange', TType.STRING, 3)
+      oprot.writeString(self.exchange)
+      oprot.writeFieldEnd()
+    if self.currency is not None:
+      oprot.writeFieldBegin('currency', TType.STRING, 4)
+      oprot.writeString(self.currency)
+      oprot.writeFieldEnd()
+    if self.action is not None:
+      oprot.writeFieldBegin('action', TType.STRING, 5)
+      oprot.writeString(self.action)
+      oprot.writeFieldEnd()
+    if self.totalQuantity is not None:
+      oprot.writeFieldBegin('totalQuantity', TType.I64, 6)
+      oprot.writeI64(self.totalQuantity)
+      oprot.writeFieldEnd()
+    if self.orderType is not None:
+      oprot.writeFieldBegin('orderType', TType.STRING, 7)
+      oprot.writeString(self.orderType)
+      oprot.writeFieldEnd()
+    if self.lmtPrice is not None:
+      oprot.writeFieldBegin('lmtPrice', TType.DOUBLE, 8)
+      oprot.writeDouble(self.lmtPrice)
+      oprot.writeFieldEnd()
+    if self.orderId is not None:
+      oprot.writeFieldBegin('orderId', TType.I64, 9)
+      oprot.writeI64(self.orderId)
+      oprot.writeFieldEnd()
+    if self.state is not None:
+      oprot.writeFieldBegin('state', TType.I16, 10)
+      oprot.writeI16(self.state)
+      oprot.writeFieldEnd()
+    if self.clientId is not None:
+      oprot.writeFieldBegin('clientId', TType.I32, 11)
+      oprot.writeI32(self.clientId)
+      oprot.writeFieldEnd()
+    if self.permId is not None:
+      oprot.writeFieldBegin('permId', TType.I32, 12)
+      oprot.writeI32(self.permId)
+      oprot.writeFieldEnd()
+    if self.parentId is not None:
+      oprot.writeFieldBegin('parentId', TType.I32, 13)
+      oprot.writeI32(self.parentId)
+      oprot.writeFieldEnd()
+    if self.filled is not None:
+      oprot.writeFieldBegin('filled', TType.I32, 14)
+      oprot.writeI32(self.filled)
+      oprot.writeFieldEnd()
+    if self.remaining is not None:
+      oprot.writeFieldBegin('remaining', TType.I32, 15)
+      oprot.writeI32(self.remaining)
+      oprot.writeFieldEnd()
+    if self.avgFillPrice is not None:
+      oprot.writeFieldBegin('avgFillPrice', TType.DOUBLE, 16)
+      oprot.writeDouble(self.avgFillPrice)
+      oprot.writeFieldEnd()
+    if self.lastFillPrice is not None:
+      oprot.writeFieldBegin('lastFillPrice', TType.DOUBLE, 17)
+      oprot.writeDouble(self.lastFillPrice)
+      oprot.writeFieldEnd()
+    if self.status is not None:
+      oprot.writeFieldBegin('status', TType.STRING, 18)
+      oprot.writeString(self.status)
+      oprot.writeFieldEnd()
+    if self.whyHeld is not None:
+      oprot.writeFieldBegin('whyHeld', TType.STRING, 19)
+      oprot.writeString(self.whyHeld)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    if self.symbol is None:
+      raise TProtocol.TProtocolException(message='Required field symbol is unset!')
+    if self.secType is None:
+      raise TProtocol.TProtocolException(message='Required field secType is unset!')
+    if self.exchange is None:
+      raise TProtocol.TProtocolException(message='Required field exchange is unset!')
+    if self.currency is None:
+      raise TProtocol.TProtocolException(message='Required field currency is unset!')
+    if self.action is None:
+      raise TProtocol.TProtocolException(message='Required field action is unset!')
+    if self.totalQuantity is None:
+      raise TProtocol.TProtocolException(message='Required field totalQuantity is unset!')
+    if self.orderType is None:
+      raise TProtocol.TProtocolException(message='Required field orderType is unset!')
+    if self.lmtPrice is None:
+      raise TProtocol.TProtocolException(message='Required field lmtPrice is unset!')
+    if self.orderId is None:
+      raise TProtocol.TProtocolException(message='Required field orderId is unset!')
+    if self.state is None:
+      raise TProtocol.TProtocolException(message='Required field state is unset!')
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.symbol)
+    value = (value * 31) ^ hash(self.secType)
+    value = (value * 31) ^ hash(self.exchange)
+    value = (value * 31) ^ hash(self.currency)
+    value = (value * 31) ^ hash(self.action)
+    value = (value * 31) ^ hash(self.totalQuantity)
+    value = (value * 31) ^ hash(self.orderType)
+    value = (value * 31) ^ hash(self.lmtPrice)
+    value = (value * 31) ^ hash(self.orderId)
+    value = (value * 31) ^ hash(self.state)
+    value = (value * 31) ^ hash(self.clientId)
     value = (value * 31) ^ hash(self.permId)
     value = (value * 31) ^ hash(self.parentId)
+    value = (value * 31) ^ hash(self.filled)
+    value = (value * 31) ^ hash(self.remaining)
+    value = (value * 31) ^ hash(self.avgFillPrice)
     value = (value * 31) ^ hash(self.lastFillPrice)
-    value = (value * 31) ^ hash(self.clientId)
+    value = (value * 31) ^ hash(self.status)
     value = (value * 31) ^ hash(self.whyHeld)
     return value
 
