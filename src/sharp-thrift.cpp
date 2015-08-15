@@ -77,6 +77,7 @@ public:
 
             trader.placeOrder();
 
+            std::lock_guard<std::mutex> lk(trader.mutex);
             auto & m = trader.placed_contract_orders.orderId_index_map;
             auto & rds = trader.placed_contract_orders.records;
             auto & resp = rds[m.at(m_req.orderId)]->response;
