@@ -155,6 +155,7 @@ public:
     // modern compilers make exceptions usually faster
     // on the non-exceptional path compared to error code handling.
     void reqOpens(std::vector<api::OrderStatus> & opens){
+        // waiting for EWrapperImpl::openOrderEnd() to be called.
         while(!trader.open_order_flag.load(std::memory_order_relaxed)){
             std::this_thread::sleep_for(OPENORDER_WAITING_TIME);
         }
@@ -185,6 +186,8 @@ public:
         } );
     }
 
+    // ib api c++ reference doesn't explicitly say calling reqAllOpenOrders()
+    // will call EWrapperImpl::openOrderEnd(), here assuming it should.
     void reqAllOpenOrders(std::vector<api::OrderStatus> & opens){
         protect( [this, &opens](){
             trader.reqAllOpenOrders();
