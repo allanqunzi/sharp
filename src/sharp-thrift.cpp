@@ -269,24 +269,20 @@ public:
             auto & bars = trader.watch_list_bars.at(id);
             auto & mutx = trader.bar_mutexes.at(id);
 
-            if(bars.flag){ // bars is not empty, no need to wait
-                std::lock_guard<std::mutex> lk(mutx);
+            std::unique_lock<std::mutex> lk(mutx);
+            if(!bars.empty()){
                 translate_realtimebar(bars.front(), next_bar);
                 bars.pop_front();
-                bars.empty() ? (bars.flag = false) : (bars.flag = true);
             }else{         // bars is empty, need to wait
-                std::unique_lock<std::mutex> lk(mutx);
                 bars.cv.wait_for(lk, BAR_WAITING_TIME);
                 if(!bars.empty()){
                     translate_realtimebar(bars.front(), next_bar);
                     bars.pop_front();
-                    bars.empty() ? (bars.flag = false) : (bars.flag = true);
                 }else{     // still empty after waiting
                     LOG(info)<<"timeout for "<<symbol;
-                    translate_realtimebar(invalid_bar, next_bar);
-                }
-                lk.unlock();
+                    translate_realtimebar(invalid_bar, next_bar);}
             }
+            lk.unlock();
         } );
     }
 
