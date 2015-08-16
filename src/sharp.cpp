@@ -395,12 +395,16 @@ void EWrapperImpl::realtimeBar(TickerId reqId, long time, double open, double hi
 								double close, long volume, double wap, int count)
 {
 	LOG(info)<<"EWrapperImpl::realtimeBar";
-	auto & bars = watch_list_bars.at(reqId);
-	{
-		std::lock_guard<std::mutex> lk(bar_mutexes[reqId]);
-		bars.push(RealTimeBar(reqId, time, open,	low, high, close, volume, wap, count));
+	try{
+		auto & bars = watch_list_bars.at(reqId);
+		{
+			std::lock_guard<std::mutex> lk(bar_mutexes[reqId]);
+			bars.push(RealTimeBar(reqId, time, open, low, high, close, volume, wap, count));
+		}
+		bars.cv.notify_one();
+	}catch(const std::out_of_range& oor){
+		LOG(error)<<"I haven't requested yet, why I am getting bars for reqId = "<<reqId;
 	}
-	bars.cv.notify_one();
 }
 
 void EWrapperImpl::scannerParameters(const IBString &xml) {

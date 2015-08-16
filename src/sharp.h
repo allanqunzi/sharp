@@ -27,6 +27,7 @@
 #include <atomic>
 #include <condition_variable>
 #include <unordered_map>
+#include <stdexcept>
 #include <boost/log/trivial.hpp>
 #include <boost/log/attributes/named_scope.hpp>
 class EPosixClientSocket;
