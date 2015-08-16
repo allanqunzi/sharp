@@ -398,7 +398,7 @@ void EWrapperImpl::realtimeBar(TickerId reqId, long time, double open, double hi
 	try{
 		auto & bars = watch_list_bars.at(reqId);
 		{
-			std::lock_guard<std::mutex> lk(bar_mutexes[reqId]);
+			std::lock_guard<std::mutex> lk(bar_mutexes.at(reqId));
 			bars.push(RealTimeBar(reqId, time, open, low, high, close, volume, wap, count));
 		}
 		bars.cv.notify_one();
@@ -517,8 +517,13 @@ bool EWrapperImpl::removeFromWatchList( const std::vector<std::string> & rm){
 		if(it != watch_list.end()){
 			LOG(info)<<"removing "<<e<<" from watch_list";
 			m_pClient->cancelRealTimeBars(it->second);
-			watch_list_bars.erase(it->second);
-			bar_mutexes.erase(it->second);
+			// not sure when ib tws stops calling EWrapperImpl::realtimeBar
+			// the safest way is not to erase the corresponding watch_list_bars and
+			// bar_mutexes, this is a not big issue unless there is a huge number of
+			// unerased ones, which happens very rarely.
+			// std::this_thread::sleep_for(2 * BAR_WAITING_TIME);
+			// watch_list_bars.erase(it->second);
+			// bar_mutexes.erase(it->second);
 			watch_list.erase(it);
 		}
 	}

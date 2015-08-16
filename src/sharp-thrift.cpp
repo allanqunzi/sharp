@@ -80,7 +80,7 @@ public:
             std::lock_guard<std::mutex> lk(trader.mutex);
             auto & m = trader.placed_contract_orders.orderId_index_map;
             auto & rds = trader.placed_contract_orders.records;
-            auto & resp = rds[m.at(m_req.orderId)]->response;
+            auto & resp = rds.at(m.at(m_req.orderId))->response;
 
             assert(m_req.orderId == resp.orderId && "error: assert in SharpHandler::placeOrder: m_req.orderId == resp.orderId failed." );
             o_response.orderId = m_req.orderId;
@@ -115,7 +115,7 @@ public:
                 std::lock_guard<std::mutex> lk(trader.mutex);
                 auto & m = trader.placed_contract_orders.orderId_index_map;
                 auto & rds = trader.placed_contract_orders.records;
-                auto & resp = rds[m.at(o_id)]->response;
+                auto & resp = rds.at(m.at(o_id))->response;
                 assert(o_id == resp.orderId && "error: assert in SharpHandler::cancelOrder: o_id == resp.orderId failed.");
                 o_response.state = -1;
                 o_response.clientId = resp.clientId;
@@ -141,7 +141,7 @@ public:
             auto & rds = trader.placed_contract_orders.records;
             try{
                 auto index = m.at(o_id);
-                auto & co = *(rds[index]);
+                auto & co = *(rds.at(index));
                 assert(o_id == co.response.orderId && "error: assert in SharpHandler::orderStatus: o_id == response.orderId failed.");
                 translate_orderstatus(co, os);
                 return;
@@ -171,7 +171,7 @@ public:
                 LOG(error)<<"Why this orderId "<<e<<" is not inserted into placed_contract_orders?";
                 continue;
             }
-            auto & co = *(rds[index]);
+            auto & co = *(rds.at(index));
             api::OrderStatus os;
             translate_orderstatus(co, os);
             opens.push_back(os);
