@@ -501,6 +501,7 @@ bool EWrapperImpl::addToWatchList( const std::vector<std::string> & wl){
 		if(watch_list.count(e) == 0){
 			auto id = watch_list[e] = ticker_id.getNewId();
 			LOG(info)<<"adding "<<e<<" to watch_list, reqId = "<<id;
+			// no need to put a lock here, the key is id (a number)
 			bar_mutexes[id];
 			watch_list_bars[id];
 			contract.symbol = e;
