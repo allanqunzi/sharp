@@ -252,7 +252,7 @@ void EWrapperImpl::openOrderEnd() {
 void EWrapperImpl::nextValidId( OrderId orderId)
 {
 	m_orderId = orderId;
-	order_id.setInitial(orderId - 1);
+	order_id.setInitial(orderId - 1L);
 	LOG(info)<<"m_orderId updated, order_id.id is initialized to "<<(orderId - 1);
 }
 
@@ -395,11 +395,12 @@ void EWrapperImpl::realtimeBar(TickerId reqId, long time, double open, double hi
 								double close, long volume, double wap, int count)
 {
 	LOG(info)<<"EWrapperImpl::realtimeBar";
+	auto & bars = watch_list_bars.at(reqId);
 	{
 		std::lock_guard<std::mutex> lk(bar_mutexes[reqId]);
-		watch_list_bars[reqId].push(RealTimeBar(reqId, time, open,	low, high, close, volume, wap, count));
+		bars.push(RealTimeBar(reqId, time, open,	low, high, close, volume, wap, count));
 	}
-	watch_list_bars[reqId].cv.notify_one();
+	bars.cv.notify_one();
 }
 
 void EWrapperImpl::scannerParameters(const IBString &xml) {
@@ -494,12 +495,13 @@ bool EWrapperImpl::addToWatchList( const std::vector<std::string> & wl){
 
 	for(auto & e : wl){
 		if(watch_list.count(e) == 0){
-			watch_list[e] = ticker_id.getNewId();
-			LOG(info)<<"adding "<<e<<" to watch_list, reqId = "<<watch_list[e];
-			bar_mutexes[watch_list[e]];
+			auto id = watch_list[e] = ticker_id.getNewId();
+			LOG(info)<<"adding "<<e<<" to watch_list, reqId = "<<id;
+			bar_mutexes[id];
+			watch_list_bars[id];
 			contract.symbol = e;
 			// true: only trading hours data
-			m_pClient->reqRealTimeBars(watch_list[e], contract, 5, whatToShow, false, realTimeBarsOptions);
+			m_pClient->reqRealTimeBars(id, contract, 5, whatToShow, false, realTimeBarsOptions);
 		}
 	}
 	return true;
@@ -529,6 +531,7 @@ bool EWrapperImpl::removeZombieSymbols(const std::vector<std::string> & wl){
 	return removeFromWatchList(rm);
 }
 
+// this function is rarely used
 bool EWrapperImpl::requestRealTimeBars(){
 	Contract contract;
 	contract.secType = "STK";
