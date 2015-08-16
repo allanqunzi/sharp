@@ -25,6 +25,7 @@
 #include <cassert>
 #include <mutex>
 #include <atomic>
+#include <condition_variable>
 #include <unordered_map>
 #include <boost/log/trivial.hpp>
 #include <boost/log/attributes/named_scope.hpp>
@@ -43,7 +44,7 @@ static constexpr int SLEEP_BETWEEN_PINGS = 30; // seconds
 static constexpr unsigned int MAX_ATTEMPTS = 50;
 const auto ATTEMPT_WAITING_TIME = std::chrono::seconds(10);
 const auto OPENORDER_WAITING_TIME = std::chrono::milliseconds(100); // 0.10 second
-const auto BAR_WAITING_TIME = std::chrono::milliseconds(5000);
+const auto BAR_WAITING_TIME = std::chrono::milliseconds(10000);
 
 template<typename T>
 class TypeDisplayer; // usage: TypeDisplayer<decltype(x)>xType;
@@ -56,7 +57,11 @@ class sharpdeque: public std::deque<T>
 {
 public:
     static const std::size_t limit = 20;
-    void push(T&& e){ // this is not universal reference, there is no type deduction here, only binds to
+    bool flag = false; // according to the new standard, this is a different memory location with
+    // respect to the other parts of this class, thus can be accessed and modified concurrently with
+    // respect to the rest.
+    std::condition_variable cv;
+    void push(T&& e){  // this is not universal reference, there is no type deduction here, only binds to
     	// rvalue
         if(this->size() >= limit){
         	this->pop_front();

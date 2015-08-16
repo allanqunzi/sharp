@@ -69,7 +69,7 @@ def monitor(dict, list, threads):
     threads.append(worker)
     worker.setDaemon(True)
     worker.start()
-
+'''
 c_req = ContractRequest('V', 'STK', 'SMART', 'USD')
 o_req = OrderRequest('BUY', 1000, 'LMT', 0.12)
 place_resp = client.placeOrder(c_req, o_req)
@@ -127,7 +127,7 @@ client.removeFromWatchList(wlist)
 time.sleep(10)
 
 print("done")
-'''
+
 #while threading.active_count() > 0: # this while responds to ctrl + c
 #  time.sleep(0.1)
 

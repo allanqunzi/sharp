@@ -267,22 +267,24 @@ public:
                 return;
             }
             auto & bars = trader.watch_list_bars[id];
-            auto start = std::chrono::steady_clock::now();
-            auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
-                std::chrono::steady_clock::now() - start);
 
-            while(bars.empty() && elapsed < BAR_WAITING_TIME){
-                elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
-                    std::chrono::steady_clock::now() - start);
-            }
-
-            if(!bars.empty()){
+            if(bars.flag){ // bars is not empty, no need to wait
                 std::lock_guard<std::mutex> lk(trader.bar_mutexes[id]);
                 translate_realtimebar(bars.front(), next_bar);
                 bars.pop_front();
-            }else{
-                LOG(info)<<"timeout for "<<symbol;
-                translate_realtimebar(invalid_bar, next_bar);
+                bars.empty() ? (bars.flag = false) : (bars.flag = true);
+            }else{         // bars is empty, need to wait
+                std::unique_lock<std::mutex> lk(trader.bar_mutexes[id]);
+                bars.cv.wait_for(lk, BAR_WAITING_TIME);
+                if(!bars.empty()){
+                    translate_realtimebar(bars.front(), next_bar);
+                    bars.pop_front();
+                    bars.empty() ? (bars.flag = false) : (bars.flag = true);
+                }else{     // still empty after waiting
+                    LOG(info)<<"timeout for "<<symbol;
+                    translate_realtimebar(invalid_bar, next_bar);
+                }
+                lk.unlock();
             }
         } );
     }
@@ -316,7 +318,6 @@ void run_server (EWrapperImpl & ibtrader) {
     {
         ++attempt;
         ibtrader.connect( ibtrader.host.c_str(), ibtrader.port, ibtrader.clientId);
-        // ibtrader.reqMarketSnapshot();
 
         while( ibtrader.isConnected() ) {
             ibtrader.monitor();

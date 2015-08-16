@@ -275,9 +275,6 @@ void EWrapperImpl::error(const int id, const int errorCode, const IBString error
 }
 
 void EWrapperImpl::reqMarketSnapshot()
-	// TickerId tickerId, const Contract& contract,
-	//						   const IBString& genericTicks, bool snapshot,
-	//						   const TagValueListSPtr& mktDataOptions)
 {
 	Contract contract;
 	contract.symbol = "AMZN";
@@ -296,15 +293,14 @@ void EWrapperImpl::reqMarketSnapshot()
 	IBString whatToShow = "TRADES";
 	int useRTH = 0;
 	int formatDate = 1;
-    /*
-    m_pClient->reqHistoricalData( 0, contract,
-									   endDateTime, durationStr,
-									   barSizeSetting, whatToShow,
-									   useRTH, formatDate, chartOptions);
-	*/
-    // m_pClient->reqMarketDataType(2);
-    // m_pClient->reqMktData(0, contract, genericTicks, true, mktDataOptions);
 /*
+    m_pClient->reqHistoricalData( 0, contract, endDateTime, durationStr, barSizeSetting, whatToShow,
+    	useRTH, formatDate, chartOptions);
+
+    m_pClient->reqMarketDataType(2);
+    // calling reqMktData returns noisy ticks
+    m_pClient->reqMktData(0, contract, genericTicks, true, mktDataOptions);
+
     m_pClient->reqRealTimeBars(0, contract, 5, whatToShow, false, realTimeBarsOptions);
     contract.symbol = "AAPL";
     m_pClient->reqRealTimeBars(1, contract, 5, whatToShow, false, realTimeBarsOptions);
@@ -327,7 +323,6 @@ void EWrapperImpl::reqMarketSnapshot()
     contract.symbol = "DOM";
     m_pClient->reqRealTimeBars(10, contract, 5, whatToShow, false, realTimeBarsOptions);
 */
-
     // m_pClient->reqScannerParameters();
 
     ScannerSubscription scanner;
@@ -347,12 +342,11 @@ void EWrapperImpl::reqMarketSnapshot()
 */
     contract.conId = 202465243;
     contract.exchange = "SMART";
+    // calling reqContractDetails can get all the info for an option chain
     // m_pClient->reqContractDetails(0, contract);
+    // still need to check and make sure with IB on if they provide market data for options
     // m_pClient->reqMktData(0, contract, genericTicks, true, mktDataOptions);
-    //m_pClient->reqRealTimeBars(10, contract, 5, whatToShow, false, realTimeBarsOptions);
-
-
-
+    // m_pClient->reqRealTimeBars(10, contract, 5, whatToShow, false, realTimeBarsOptions);
 }
 
 void EWrapperImpl::tickPrice( TickerId tickerId, TickType field, double price, int canAutoExecute) {
@@ -401,9 +395,11 @@ void EWrapperImpl::realtimeBar(TickerId reqId, long time, double open, double hi
 								double close, long volume, double wap, int count)
 {
 	LOG(info)<<"EWrapperImpl::realtimeBar";
-	std::cout<<" open ="<<open<<std::endl;
-	std::lock_guard<std::mutex> lk(bar_mutexes[reqId]);
-	watch_list_bars[reqId].push(RealTimeBar(reqId, time, open,	low, high, close, volume, wap, count));
+	{
+		std::lock_guard<std::mutex> lk(bar_mutexes[reqId]);
+		watch_list_bars[reqId].push(RealTimeBar(reqId, time, open,	low, high, close, volume, wap, count));
+	}
+	watch_list_bars[reqId].cv.notify_one();
 }
 
 void EWrapperImpl::scannerParameters(const IBString &xml) {
