@@ -266,8 +266,8 @@ public:
                 translate_realtimebar(invalid_bar, next_bar);
                 return;
             }
-            auto & bars = trader.watch_list_bars.at(id);
-            auto & mutx = trader.bar_mutexes.at(id);
+            auto & bars = *(trader.watch_list_bars.at(id));
+            auto & mutx = bars.mx;
 
             std::unique_lock<std::mutex> lk(mutx);
             if(!bars.empty()){

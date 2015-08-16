@@ -16,11 +16,13 @@ EWrapperImpl::EWrapperImpl( const std::vector<std::string> wl )
 	, clientId(0)
 	, watch_list(DEFAULT_BUCKETS_NUM)
 	, watch_list_bars(DEFAULT_BUCKETS_NUM)
-	, bar_mutexes(DEFAULT_BUCKETS_NUM)
+	//, bar_mutexes(DEFAULT_BUCKETS_NUM)
 {
 	for(auto e : wl){
-		watch_list[e] = ticker_id.getNewId();
-		bar_mutexes[watch_list[e]];
+		auto id = watch_list[e] = ticker_id.getNewId();
+		watch_list_bars.insert(
+			std::make_pair(id, std::unique_ptr< sharpdeque<RealTimeBar> >(new sharpdeque<RealTimeBar>)));
+		// bar_mutexes[watch_list[e]];
 	}
 }
 
@@ -291,8 +293,8 @@ void EWrapperImpl::reqMarketSnapshot()
 	IBString durationStr = "2 D";
 	IBString barSizeSetting = "1 min";
 	IBString whatToShow = "TRADES";
-	int useRTH = 0;
-	int formatDate = 1;
+	// int useRTH = 0;
+	// int formatDate = 1;
 /*
     m_pClient->reqHistoricalData( 0, contract, endDateTime, durationStr, barSizeSetting, whatToShow,
     	useRTH, formatDate, chartOptions);
@@ -396,9 +398,9 @@ void EWrapperImpl::realtimeBar(TickerId reqId, long time, double open, double hi
 {
 	LOG(info)<<"EWrapperImpl::realtimeBar";
 	try{
-		auto & bars = watch_list_bars.at(reqId);
+		auto & bars = *(watch_list_bars.at(reqId));
 		{
-			std::lock_guard<std::mutex> lk(bar_mutexes.at(reqId));
+			std::lock_guard<std::mutex> lk(bars.mx);
 			bars.push(RealTimeBar(reqId, time, open, low, high, close, volume, wap, count));
 		}
 		bars.cv.notify_one();
@@ -501,9 +503,10 @@ bool EWrapperImpl::addToWatchList( const std::vector<std::string> & wl){
 		if(watch_list.count(e) == 0){
 			auto id = watch_list[e] = ticker_id.getNewId();
 			LOG(info)<<"adding "<<e<<" to watch_list, reqId = "<<id;
-			// no need to put a lock here, the key is id (a number)
-			bar_mutexes[id];
-			watch_list_bars[id];
+			// no need to put a lock here if rehashing is not happening,
+			// the value (unique_ptr) is not being modified concurrently
+			watch_list_bars.insert(
+				std::make_pair(id, std::unique_ptr< sharpdeque<RealTimeBar> >(new sharpdeque<RealTimeBar>)));
 			contract.symbol = e;
 			// true: only trading hours data
 			m_pClient->reqRealTimeBars(id, contract, 5, whatToShow, false, realTimeBarsOptions);
@@ -523,8 +526,6 @@ bool EWrapperImpl::removeFromWatchList( const std::vector<std::string> & rm){
 			// bar_mutexes, this is a not big issue unless there is a huge number of
 			// unerased ones, which happens very rarely.
 			// std::this_thread::sleep_for(2 * BAR_WAITING_TIME);
-			// watch_list_bars.erase(it->second);
-			// bar_mutexes.erase(it->second);
 			watch_list.erase(it);
 		}
 	}

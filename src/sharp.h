@@ -58,9 +58,10 @@ class sharpdeque: public std::deque<T>
 {
 public:
     static const std::size_t limit = 20;
-    bool flag = false; // according to the new standard, this is a different memory location with
+    // bool flag = false; // according to the new standard, this is a different memory location with
     // respect to the other parts of this class, thus can be accessed and modified concurrently with
     // respect to the rest.
+    std::mutex mx;
     std::condition_variable cv;
     void push(T&& e){  // this is not universal reference, there is no type deduction here, only binds to
     	// rvalue
@@ -313,9 +314,7 @@ public:
 	std::unordered_map<std::string, TickerId>watch_list;
 	// non-const operation on std::deque is not thread-safe,
 	// so the following needs to be synchronized.
-	std::unordered_map<TickerId, sharpdeque<RealTimeBar> >watch_list_bars;
-	// bar_mutexes should be initialized on construction and modification of watch_list
-	std::unordered_map<TickerId, std::mutex>bar_mutexes;
+	std::unordered_map<TickerId, std::unique_ptr< sharpdeque<RealTimeBar> > >watch_list_bars;
 };
 
 void run_server (EWrapperImpl & ibtrader);
