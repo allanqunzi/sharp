@@ -245,11 +245,11 @@ public:
     // during the time both C++ thrift server and python client are running, if addToWatchList is
     // called, watch_list will get modified, at the same time, however, it is not safe to access
     // other exsisting symbols in watch_list if watch_list is std::map. std::unordered_map will
-    // probably work fine, since all possible symbols (A - ZZZZ) have been tested to be hashed
-    // to different values. Thus adding buckets will not affect the existing buckets. This may
-    // be subject to change due to compiler updates, etc. Another alternative without explicitly
-    // using lock is concurrent_unordered_map or lock-free maps.
-    // after addToWatchList returns on the python client side, the new sybmol is already in
+    // probably work fine, since in the absence of rehashing, even collision happens, changing
+    // the existing element's address is unlikely to happen in the implementation of the unordered_
+    // map, this has been tested to be true for all possible (A - ZZZZZ) combinations.
+    // Another alternative without explicitly using lock is concurrent_unordered_map or lock-free
+    // maps. After addToWatchList returns on the python client side, the new sybmol is already in
     // watch_list.
 
     // if getNextBar is called, that means the python client is running, which means that

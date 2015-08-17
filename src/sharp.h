@@ -39,7 +39,7 @@ namespace sharp{
 // does not occur if the insertion does not cause the container's size to exceed z*B
 // where z is the maximum load factor and B the current number of buckets. So as long
 // as the watch_list doesn't exceed DEFAULT_BUCKETS_NUM, it should be safe.
-static constexpr std::size_t DEFAULT_BUCKETS_NUM = 200;
+static constexpr std::size_t DEFAULT_BUCKETS_NUM = 223; // a prime
 static constexpr int PING_DEADLINE = 2; // seconds
 static constexpr int SLEEP_BETWEEN_PINGS = 30; // seconds
 static constexpr unsigned int MAX_ATTEMPTS = 50;
@@ -57,7 +57,7 @@ template<typename T>
 class sharpdeque: public std::deque<T>
 {
 public:
-    static const std::size_t limit = 20;
+    static const std::size_t limit = 10;
     // bool flag = false; // according to the new standard, this is a different memory location with
     // respect to the other parts of this class, thus can be accessed and modified concurrently with
     // respect to the rest.
