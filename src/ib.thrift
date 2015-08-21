@@ -83,6 +83,41 @@ struct RealTimeBar {
     9:required i32 count = 1;
 }
 
+struct RealTimeBar {
+    1:required i32 reqId;
+    2:required string account;
+    3:required string value = "";
+    4:required string currency = "";
+    5:required string AccountType = "";
+    6:required string TotalCashValue = "";
+    7:required string SettledCash = "";
+    8:required string AccruedCash = "";
+    9:required string BuyingPower = "";
+    10:required string EquityWithLoanValue = "";
+    11:required string PreviousEquityWithLoanValue = "";
+    12:required string GrossPositionValue = "";
+    13:required string RegTEquity = "";
+    14:required string RegTMargin = "";
+    15:required string SMA = "";
+    16:required string InitMarginReq = "";
+    17:required string MaintMarginReq = "";
+    18:required string AvailableFunds = "";
+    19:required string ExcessLiquidity = "";
+    20:required string Cushion = "";
+    21:required string FullInitMarginReq = "";
+    22:required string FullMaintMarginReq = "";
+    23:required string FullAvailableFunds = "";
+    24:required string FullExcessLiquidity = "";
+    25:required string LookAheadNextChange = "";
+    26:required string LookAheadInitMarginReq = "";
+    27:required string LookAheadMaintMarginReq = "";
+    28:required string LookAheadAvailableFunds = "";
+    29:required string LookAheadExcessLiquidity = "";
+    30:required string HighestSeverity = "";
+    31:required string DayTradesRemaining = "";
+    32:required string Leverage = "";
+}
+
 exception Exception {
       1: i32 what;
       2: string why;
