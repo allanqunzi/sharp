@@ -111,10 +111,20 @@ print('cancel_resp.state =', cancel_resp.state)
 qdict = {}
 wlist = ["AAPL", "GOOG"]
 ts = []
-client.removeZombieSymbols(wlist)
-time.sleep(60)
+client.removeZombieSymbols([])
+time.sleep(30)
 
-monitor(qdict, wlist, ts)
+
+client.addToWatchList(wlist)
+
+while True:
+  res = client.getNextBar(wlist[0])
+  print(wlist[0], "open = ", res.open)
+  res = client.getNextBar(wlist[1])
+  print(wlist[1], "open = ", res.open)
+
+
+#monitor(qdict, wlist, ts)
 
 
 time.sleep(20)

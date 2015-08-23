@@ -851,6 +851,725 @@ class OrderStatus:
   def __ne__(self, other):
     return not (self == other)
 
+class ExecutionFilter:
+  """
+  Attributes:
+   - clientId
+   - acctCode
+   - time
+   - symbol
+   - secType
+   - exchange
+   - side
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.I64, 'clientId', None, 0, ), # 1
+    (2, TType.STRING, 'acctCode', None, None, ), # 2
+    (3, TType.STRING, 'time', None, None, ), # 3
+    (4, TType.STRING, 'symbol', None, None, ), # 4
+    (5, TType.STRING, 'secType', None, None, ), # 5
+    (6, TType.STRING, 'exchange', None, None, ), # 6
+    (7, TType.STRING, 'side', None, None, ), # 7
+  )
+
+  def __init__(self, clientId=thrift_spec[1][4], acctCode=None, time=None, symbol=None, secType=None, exchange=None, side=None,):
+    self.clientId = clientId
+    self.acctCode = acctCode
+    self.time = time
+    self.symbol = symbol
+    self.secType = secType
+    self.exchange = exchange
+    self.side = side
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I64:
+          self.clientId = iprot.readI64();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.acctCode = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.STRING:
+          self.time = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.STRING:
+          self.symbol = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.STRING:
+          self.secType = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 6:
+        if ftype == TType.STRING:
+          self.exchange = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 7:
+        if ftype == TType.STRING:
+          self.side = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('ExecutionFilter')
+    if self.clientId is not None:
+      oprot.writeFieldBegin('clientId', TType.I64, 1)
+      oprot.writeI64(self.clientId)
+      oprot.writeFieldEnd()
+    if self.acctCode is not None:
+      oprot.writeFieldBegin('acctCode', TType.STRING, 2)
+      oprot.writeString(self.acctCode)
+      oprot.writeFieldEnd()
+    if self.time is not None:
+      oprot.writeFieldBegin('time', TType.STRING, 3)
+      oprot.writeString(self.time)
+      oprot.writeFieldEnd()
+    if self.symbol is not None:
+      oprot.writeFieldBegin('symbol', TType.STRING, 4)
+      oprot.writeString(self.symbol)
+      oprot.writeFieldEnd()
+    if self.secType is not None:
+      oprot.writeFieldBegin('secType', TType.STRING, 5)
+      oprot.writeString(self.secType)
+      oprot.writeFieldEnd()
+    if self.exchange is not None:
+      oprot.writeFieldBegin('exchange', TType.STRING, 6)
+      oprot.writeString(self.exchange)
+      oprot.writeFieldEnd()
+    if self.side is not None:
+      oprot.writeFieldBegin('side', TType.STRING, 7)
+      oprot.writeString(self.side)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    if self.clientId is None:
+      raise TProtocol.TProtocolException(message='Required field clientId is unset!')
+    if self.acctCode is None:
+      raise TProtocol.TProtocolException(message='Required field acctCode is unset!')
+    if self.time is None:
+      raise TProtocol.TProtocolException(message='Required field time is unset!')
+    if self.symbol is None:
+      raise TProtocol.TProtocolException(message='Required field symbol is unset!')
+    if self.secType is None:
+      raise TProtocol.TProtocolException(message='Required field secType is unset!')
+    if self.exchange is None:
+      raise TProtocol.TProtocolException(message='Required field exchange is unset!')
+    if self.side is None:
+      raise TProtocol.TProtocolException(message='Required field side is unset!')
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.clientId)
+    value = (value * 31) ^ hash(self.acctCode)
+    value = (value * 31) ^ hash(self.time)
+    value = (value * 31) ^ hash(self.symbol)
+    value = (value * 31) ^ hash(self.secType)
+    value = (value * 31) ^ hash(self.exchange)
+    value = (value * 31) ^ hash(self.side)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class ExecutedContract:
+  """
+  Attributes:
+   - symbol
+   - secType
+   - expiry
+   - right
+   - multiplier
+   - exchange
+   - primaryExchange
+   - currency
+   - localSymbol
+   - tradingClass
+   - secIdType
+   - secId
+   - conId
+   - strike
+   - execId
+   - time
+   - acctNumber
+   - side
+   - shares
+   - price
+   - permId
+   - clientId
+   - orderId
+   - liquidation
+   - cumQty
+   - avgPrice
+   - evMultiplier
+   - orderRef
+   - evRule
+   - c_currency
+   - yieldRedemptionDate
+   - commission
+   - realizedPNL
+   - gain
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'symbol', None, "", ), # 1
+    (2, TType.STRING, 'secType', None, "", ), # 2
+    (3, TType.STRING, 'expiry', None, "", ), # 3
+    (4, TType.STRING, 'right', None, "", ), # 4
+    (5, TType.STRING, 'multiplier', None, "", ), # 5
+    (6, TType.STRING, 'exchange', None, None, ), # 6
+    (7, TType.STRING, 'primaryExchange', None, "", ), # 7
+    (8, TType.STRING, 'currency', None, "", ), # 8
+    (9, TType.STRING, 'localSymbol', None, "", ), # 9
+    (10, TType.STRING, 'tradingClass', None, "", ), # 10
+    (11, TType.STRING, 'secIdType', None, "", ), # 11
+    (12, TType.STRING, 'secId', None, "", ), # 12
+    (13, TType.I64, 'conId', None, -1, ), # 13
+    (14, TType.DOUBLE, 'strike', None, 0, ), # 14
+    (15, TType.STRING, 'execId', None, "", ), # 15
+    (16, TType.STRING, 'time', None, "", ), # 16
+    (17, TType.STRING, 'acctNumber', None, "", ), # 17
+    (18, TType.STRING, 'side', None, "", ), # 18
+    (19, TType.I32, 'shares', None, 0, ), # 19
+    (20, TType.DOUBLE, 'price', None, 0, ), # 20
+    (21, TType.I32, 'permId', None, 0, ), # 21
+    (22, TType.I64, 'clientId', None, 0, ), # 22
+    (23, TType.I64, 'orderId', None, 0, ), # 23
+    (24, TType.I32, 'liquidation', None, 0, ), # 24
+    (25, TType.I32, 'cumQty', None, 0, ), # 25
+    (26, TType.DOUBLE, 'avgPrice', None, 0, ), # 26
+    (27, TType.DOUBLE, 'evMultiplier', None, 0, ), # 27
+    (28, TType.STRING, 'orderRef', None, "", ), # 28
+    (29, TType.STRING, 'evRule', None, "", ), # 29
+    (30, TType.STRING, 'c_currency', None, "", ), # 30
+    (31, TType.I32, 'yieldRedemptionDate', None, 0, ), # 31
+    (32, TType.DOUBLE, 'commission', None, 0, ), # 32
+    (33, TType.DOUBLE, 'realizedPNL', None, 0, ), # 33
+    (34, TType.DOUBLE, 'gain', None, 0, ), # 34
+  )
+
+  def __init__(self, symbol=thrift_spec[1][4], secType=thrift_spec[2][4], expiry=thrift_spec[3][4], right=thrift_spec[4][4], multiplier=thrift_spec[5][4], exchange=None, primaryExchange=thrift_spec[7][4], currency=thrift_spec[8][4], localSymbol=thrift_spec[9][4], tradingClass=thrift_spec[10][4], secIdType=thrift_spec[11][4], secId=thrift_spec[12][4], conId=thrift_spec[13][4], strike=thrift_spec[14][4], execId=thrift_spec[15][4], time=thrift_spec[16][4], acctNumber=thrift_spec[17][4], side=thrift_spec[18][4], shares=thrift_spec[19][4], price=thrift_spec[20][4], permId=thrift_spec[21][4], clientId=thrift_spec[22][4], orderId=thrift_spec[23][4], liquidation=thrift_spec[24][4], cumQty=thrift_spec[25][4], avgPrice=thrift_spec[26][4], evMultiplier=thrift_spec[27][4], orderRef=thrift_spec[28][4], evRule=thrift_spec[29][4], c_currency=thrift_spec[30][4], yieldRedemptionDate=thrift_spec[31][4], commission=thrift_spec[32][4], realizedPNL=thrift_spec[33][4], gain=thrift_spec[34][4],):
+    self.symbol = symbol
+    self.secType = secType
+    self.expiry = expiry
+    self.right = right
+    self.multiplier = multiplier
+    self.exchange = exchange
+    self.primaryExchange = primaryExchange
+    self.currency = currency
+    self.localSymbol = localSymbol
+    self.tradingClass = tradingClass
+    self.secIdType = secIdType
+    self.secId = secId
+    self.conId = conId
+    self.strike = strike
+    self.execId = execId
+    self.time = time
+    self.acctNumber = acctNumber
+    self.side = side
+    self.shares = shares
+    self.price = price
+    self.permId = permId
+    self.clientId = clientId
+    self.orderId = orderId
+    self.liquidation = liquidation
+    self.cumQty = cumQty
+    self.avgPrice = avgPrice
+    self.evMultiplier = evMultiplier
+    self.orderRef = orderRef
+    self.evRule = evRule
+    self.c_currency = c_currency
+    self.yieldRedemptionDate = yieldRedemptionDate
+    self.commission = commission
+    self.realizedPNL = realizedPNL
+    self.gain = gain
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.symbol = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.secType = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.STRING:
+          self.expiry = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.STRING:
+          self.right = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.STRING:
+          self.multiplier = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 6:
+        if ftype == TType.STRING:
+          self.exchange = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 7:
+        if ftype == TType.STRING:
+          self.primaryExchange = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 8:
+        if ftype == TType.STRING:
+          self.currency = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 9:
+        if ftype == TType.STRING:
+          self.localSymbol = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 10:
+        if ftype == TType.STRING:
+          self.tradingClass = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 11:
+        if ftype == TType.STRING:
+          self.secIdType = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 12:
+        if ftype == TType.STRING:
+          self.secId = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 13:
+        if ftype == TType.I64:
+          self.conId = iprot.readI64();
+        else:
+          iprot.skip(ftype)
+      elif fid == 14:
+        if ftype == TType.DOUBLE:
+          self.strike = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      elif fid == 15:
+        if ftype == TType.STRING:
+          self.execId = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 16:
+        if ftype == TType.STRING:
+          self.time = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 17:
+        if ftype == TType.STRING:
+          self.acctNumber = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 18:
+        if ftype == TType.STRING:
+          self.side = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 19:
+        if ftype == TType.I32:
+          self.shares = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      elif fid == 20:
+        if ftype == TType.DOUBLE:
+          self.price = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      elif fid == 21:
+        if ftype == TType.I32:
+          self.permId = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      elif fid == 22:
+        if ftype == TType.I64:
+          self.clientId = iprot.readI64();
+        else:
+          iprot.skip(ftype)
+      elif fid == 23:
+        if ftype == TType.I64:
+          self.orderId = iprot.readI64();
+        else:
+          iprot.skip(ftype)
+      elif fid == 24:
+        if ftype == TType.I32:
+          self.liquidation = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      elif fid == 25:
+        if ftype == TType.I32:
+          self.cumQty = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      elif fid == 26:
+        if ftype == TType.DOUBLE:
+          self.avgPrice = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      elif fid == 27:
+        if ftype == TType.DOUBLE:
+          self.evMultiplier = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      elif fid == 28:
+        if ftype == TType.STRING:
+          self.orderRef = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 29:
+        if ftype == TType.STRING:
+          self.evRule = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 30:
+        if ftype == TType.STRING:
+          self.c_currency = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 31:
+        if ftype == TType.I32:
+          self.yieldRedemptionDate = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      elif fid == 32:
+        if ftype == TType.DOUBLE:
+          self.commission = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      elif fid == 33:
+        if ftype == TType.DOUBLE:
+          self.realizedPNL = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      elif fid == 34:
+        if ftype == TType.DOUBLE:
+          self.gain = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('ExecutedContract')
+    if self.symbol is not None:
+      oprot.writeFieldBegin('symbol', TType.STRING, 1)
+      oprot.writeString(self.symbol)
+      oprot.writeFieldEnd()
+    if self.secType is not None:
+      oprot.writeFieldBegin('secType', TType.STRING, 2)
+      oprot.writeString(self.secType)
+      oprot.writeFieldEnd()
+    if self.expiry is not None:
+      oprot.writeFieldBegin('expiry', TType.STRING, 3)
+      oprot.writeString(self.expiry)
+      oprot.writeFieldEnd()
+    if self.right is not None:
+      oprot.writeFieldBegin('right', TType.STRING, 4)
+      oprot.writeString(self.right)
+      oprot.writeFieldEnd()
+    if self.multiplier is not None:
+      oprot.writeFieldBegin('multiplier', TType.STRING, 5)
+      oprot.writeString(self.multiplier)
+      oprot.writeFieldEnd()
+    if self.exchange is not None:
+      oprot.writeFieldBegin('exchange', TType.STRING, 6)
+      oprot.writeString(self.exchange)
+      oprot.writeFieldEnd()
+    if self.primaryExchange is not None:
+      oprot.writeFieldBegin('primaryExchange', TType.STRING, 7)
+      oprot.writeString(self.primaryExchange)
+      oprot.writeFieldEnd()
+    if self.currency is not None:
+      oprot.writeFieldBegin('currency', TType.STRING, 8)
+      oprot.writeString(self.currency)
+      oprot.writeFieldEnd()
+    if self.localSymbol is not None:
+      oprot.writeFieldBegin('localSymbol', TType.STRING, 9)
+      oprot.writeString(self.localSymbol)
+      oprot.writeFieldEnd()
+    if self.tradingClass is not None:
+      oprot.writeFieldBegin('tradingClass', TType.STRING, 10)
+      oprot.writeString(self.tradingClass)
+      oprot.writeFieldEnd()
+    if self.secIdType is not None:
+      oprot.writeFieldBegin('secIdType', TType.STRING, 11)
+      oprot.writeString(self.secIdType)
+      oprot.writeFieldEnd()
+    if self.secId is not None:
+      oprot.writeFieldBegin('secId', TType.STRING, 12)
+      oprot.writeString(self.secId)
+      oprot.writeFieldEnd()
+    if self.conId is not None:
+      oprot.writeFieldBegin('conId', TType.I64, 13)
+      oprot.writeI64(self.conId)
+      oprot.writeFieldEnd()
+    if self.strike is not None:
+      oprot.writeFieldBegin('strike', TType.DOUBLE, 14)
+      oprot.writeDouble(self.strike)
+      oprot.writeFieldEnd()
+    if self.execId is not None:
+      oprot.writeFieldBegin('execId', TType.STRING, 15)
+      oprot.writeString(self.execId)
+      oprot.writeFieldEnd()
+    if self.time is not None:
+      oprot.writeFieldBegin('time', TType.STRING, 16)
+      oprot.writeString(self.time)
+      oprot.writeFieldEnd()
+    if self.acctNumber is not None:
+      oprot.writeFieldBegin('acctNumber', TType.STRING, 17)
+      oprot.writeString(self.acctNumber)
+      oprot.writeFieldEnd()
+    if self.side is not None:
+      oprot.writeFieldBegin('side', TType.STRING, 18)
+      oprot.writeString(self.side)
+      oprot.writeFieldEnd()
+    if self.shares is not None:
+      oprot.writeFieldBegin('shares', TType.I32, 19)
+      oprot.writeI32(self.shares)
+      oprot.writeFieldEnd()
+    if self.price is not None:
+      oprot.writeFieldBegin('price', TType.DOUBLE, 20)
+      oprot.writeDouble(self.price)
+      oprot.writeFieldEnd()
+    if self.permId is not None:
+      oprot.writeFieldBegin('permId', TType.I32, 21)
+      oprot.writeI32(self.permId)
+      oprot.writeFieldEnd()
+    if self.clientId is not None:
+      oprot.writeFieldBegin('clientId', TType.I64, 22)
+      oprot.writeI64(self.clientId)
+      oprot.writeFieldEnd()
+    if self.orderId is not None:
+      oprot.writeFieldBegin('orderId', TType.I64, 23)
+      oprot.writeI64(self.orderId)
+      oprot.writeFieldEnd()
+    if self.liquidation is not None:
+      oprot.writeFieldBegin('liquidation', TType.I32, 24)
+      oprot.writeI32(self.liquidation)
+      oprot.writeFieldEnd()
+    if self.cumQty is not None:
+      oprot.writeFieldBegin('cumQty', TType.I32, 25)
+      oprot.writeI32(self.cumQty)
+      oprot.writeFieldEnd()
+    if self.avgPrice is not None:
+      oprot.writeFieldBegin('avgPrice', TType.DOUBLE, 26)
+      oprot.writeDouble(self.avgPrice)
+      oprot.writeFieldEnd()
+    if self.evMultiplier is not None:
+      oprot.writeFieldBegin('evMultiplier', TType.DOUBLE, 27)
+      oprot.writeDouble(self.evMultiplier)
+      oprot.writeFieldEnd()
+    if self.orderRef is not None:
+      oprot.writeFieldBegin('orderRef', TType.STRING, 28)
+      oprot.writeString(self.orderRef)
+      oprot.writeFieldEnd()
+    if self.evRule is not None:
+      oprot.writeFieldBegin('evRule', TType.STRING, 29)
+      oprot.writeString(self.evRule)
+      oprot.writeFieldEnd()
+    if self.c_currency is not None:
+      oprot.writeFieldBegin('c_currency', TType.STRING, 30)
+      oprot.writeString(self.c_currency)
+      oprot.writeFieldEnd()
+    if self.yieldRedemptionDate is not None:
+      oprot.writeFieldBegin('yieldRedemptionDate', TType.I32, 31)
+      oprot.writeI32(self.yieldRedemptionDate)
+      oprot.writeFieldEnd()
+    if self.commission is not None:
+      oprot.writeFieldBegin('commission', TType.DOUBLE, 32)
+      oprot.writeDouble(self.commission)
+      oprot.writeFieldEnd()
+    if self.realizedPNL is not None:
+      oprot.writeFieldBegin('realizedPNL', TType.DOUBLE, 33)
+      oprot.writeDouble(self.realizedPNL)
+      oprot.writeFieldEnd()
+    if self.gain is not None:
+      oprot.writeFieldBegin('gain', TType.DOUBLE, 34)
+      oprot.writeDouble(self.gain)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    if self.symbol is None:
+      raise TProtocol.TProtocolException(message='Required field symbol is unset!')
+    if self.secType is None:
+      raise TProtocol.TProtocolException(message='Required field secType is unset!')
+    if self.expiry is None:
+      raise TProtocol.TProtocolException(message='Required field expiry is unset!')
+    if self.right is None:
+      raise TProtocol.TProtocolException(message='Required field right is unset!')
+    if self.multiplier is None:
+      raise TProtocol.TProtocolException(message='Required field multiplier is unset!')
+    if self.exchange is None:
+      raise TProtocol.TProtocolException(message='Required field exchange is unset!')
+    if self.primaryExchange is None:
+      raise TProtocol.TProtocolException(message='Required field primaryExchange is unset!')
+    if self.currency is None:
+      raise TProtocol.TProtocolException(message='Required field currency is unset!')
+    if self.localSymbol is None:
+      raise TProtocol.TProtocolException(message='Required field localSymbol is unset!')
+    if self.tradingClass is None:
+      raise TProtocol.TProtocolException(message='Required field tradingClass is unset!')
+    if self.secIdType is None:
+      raise TProtocol.TProtocolException(message='Required field secIdType is unset!')
+    if self.secId is None:
+      raise TProtocol.TProtocolException(message='Required field secId is unset!')
+    if self.conId is None:
+      raise TProtocol.TProtocolException(message='Required field conId is unset!')
+    if self.strike is None:
+      raise TProtocol.TProtocolException(message='Required field strike is unset!')
+    if self.execId is None:
+      raise TProtocol.TProtocolException(message='Required field execId is unset!')
+    if self.time is None:
+      raise TProtocol.TProtocolException(message='Required field time is unset!')
+    if self.acctNumber is None:
+      raise TProtocol.TProtocolException(message='Required field acctNumber is unset!')
+    if self.side is None:
+      raise TProtocol.TProtocolException(message='Required field side is unset!')
+    if self.shares is None:
+      raise TProtocol.TProtocolException(message='Required field shares is unset!')
+    if self.price is None:
+      raise TProtocol.TProtocolException(message='Required field price is unset!')
+    if self.permId is None:
+      raise TProtocol.TProtocolException(message='Required field permId is unset!')
+    if self.clientId is None:
+      raise TProtocol.TProtocolException(message='Required field clientId is unset!')
+    if self.orderId is None:
+      raise TProtocol.TProtocolException(message='Required field orderId is unset!')
+    if self.liquidation is None:
+      raise TProtocol.TProtocolException(message='Required field liquidation is unset!')
+    if self.cumQty is None:
+      raise TProtocol.TProtocolException(message='Required field cumQty is unset!')
+    if self.avgPrice is None:
+      raise TProtocol.TProtocolException(message='Required field avgPrice is unset!')
+    if self.evMultiplier is None:
+      raise TProtocol.TProtocolException(message='Required field evMultiplier is unset!')
+    if self.orderRef is None:
+      raise TProtocol.TProtocolException(message='Required field orderRef is unset!')
+    if self.evRule is None:
+      raise TProtocol.TProtocolException(message='Required field evRule is unset!')
+    if self.c_currency is None:
+      raise TProtocol.TProtocolException(message='Required field c_currency is unset!')
+    if self.yieldRedemptionDate is None:
+      raise TProtocol.TProtocolException(message='Required field yieldRedemptionDate is unset!')
+    if self.commission is None:
+      raise TProtocol.TProtocolException(message='Required field commission is unset!')
+    if self.realizedPNL is None:
+      raise TProtocol.TProtocolException(message='Required field realizedPNL is unset!')
+    if self.gain is None:
+      raise TProtocol.TProtocolException(message='Required field gain is unset!')
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.symbol)
+    value = (value * 31) ^ hash(self.secType)
+    value = (value * 31) ^ hash(self.expiry)
+    value = (value * 31) ^ hash(self.right)
+    value = (value * 31) ^ hash(self.multiplier)
+    value = (value * 31) ^ hash(self.exchange)
+    value = (value * 31) ^ hash(self.primaryExchange)
+    value = (value * 31) ^ hash(self.currency)
+    value = (value * 31) ^ hash(self.localSymbol)
+    value = (value * 31) ^ hash(self.tradingClass)
+    value = (value * 31) ^ hash(self.secIdType)
+    value = (value * 31) ^ hash(self.secId)
+    value = (value * 31) ^ hash(self.conId)
+    value = (value * 31) ^ hash(self.strike)
+    value = (value * 31) ^ hash(self.execId)
+    value = (value * 31) ^ hash(self.time)
+    value = (value * 31) ^ hash(self.acctNumber)
+    value = (value * 31) ^ hash(self.side)
+    value = (value * 31) ^ hash(self.shares)
+    value = (value * 31) ^ hash(self.price)
+    value = (value * 31) ^ hash(self.permId)
+    value = (value * 31) ^ hash(self.clientId)
+    value = (value * 31) ^ hash(self.orderId)
+    value = (value * 31) ^ hash(self.liquidation)
+    value = (value * 31) ^ hash(self.cumQty)
+    value = (value * 31) ^ hash(self.avgPrice)
+    value = (value * 31) ^ hash(self.evMultiplier)
+    value = (value * 31) ^ hash(self.orderRef)
+    value = (value * 31) ^ hash(self.evRule)
+    value = (value * 31) ^ hash(self.c_currency)
+    value = (value * 31) ^ hash(self.yieldRedemptionDate)
+    value = (value * 31) ^ hash(self.commission)
+    value = (value * 31) ^ hash(self.realizedPNL)
+    value = (value * 31) ^ hash(self.gain)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
 class RealTimeBar:
   """
   Attributes:
@@ -1025,6 +1744,777 @@ class RealTimeBar:
     value = (value * 31) ^ hash(self.volume)
     value = (value * 31) ^ hash(self.wap)
     value = (value * 31) ^ hash(self.count)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class Asset:
+  """
+  Attributes:
+   - conId
+   - strike
+   - position
+   - marketPrice
+   - marketValue
+   - averageCost
+   - unrealizedPNL
+   - realizedPNL
+   - accountName
+   - symbol
+   - secType
+   - expiry
+   - right
+   - multiplier
+   - exchange
+   - primaryExchange
+   - currency
+   - localSymbol
+   - tradingClass
+   - secIdType
+   - secId
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.I64, 'conId', None, None, ), # 1
+    (2, TType.DOUBLE, 'strike', None, None, ), # 2
+    (3, TType.I32, 'position', None, None, ), # 3
+    (4, TType.DOUBLE, 'marketPrice', None, None, ), # 4
+    (5, TType.DOUBLE, 'marketValue', None, None, ), # 5
+    (6, TType.DOUBLE, 'averageCost', None, None, ), # 6
+    (7, TType.DOUBLE, 'unrealizedPNL', None, None, ), # 7
+    (8, TType.DOUBLE, 'realizedPNL', None, None, ), # 8
+    (9, TType.STRING, 'accountName', None, None, ), # 9
+    (10, TType.STRING, 'symbol', None, None, ), # 10
+    (11, TType.STRING, 'secType', None, None, ), # 11
+    (12, TType.STRING, 'expiry', None, None, ), # 12
+    (13, TType.STRING, 'right', None, None, ), # 13
+    (14, TType.STRING, 'multiplier', None, None, ), # 14
+    (15, TType.STRING, 'exchange', None, None, ), # 15
+    (16, TType.STRING, 'primaryExchange', None, None, ), # 16
+    (17, TType.STRING, 'currency', None, None, ), # 17
+    (18, TType.STRING, 'localSymbol', None, None, ), # 18
+    (19, TType.STRING, 'tradingClass', None, None, ), # 19
+    (20, TType.STRING, 'secIdType', None, None, ), # 20
+    (21, TType.STRING, 'secId', None, None, ), # 21
+  )
+
+  def __init__(self, conId=None, strike=None, position=None, marketPrice=None, marketValue=None, averageCost=None, unrealizedPNL=None, realizedPNL=None, accountName=None, symbol=None, secType=None, expiry=None, right=None, multiplier=None, exchange=None, primaryExchange=None, currency=None, localSymbol=None, tradingClass=None, secIdType=None, secId=None,):
+    self.conId = conId
+    self.strike = strike
+    self.position = position
+    self.marketPrice = marketPrice
+    self.marketValue = marketValue
+    self.averageCost = averageCost
+    self.unrealizedPNL = unrealizedPNL
+    self.realizedPNL = realizedPNL
+    self.accountName = accountName
+    self.symbol = symbol
+    self.secType = secType
+    self.expiry = expiry
+    self.right = right
+    self.multiplier = multiplier
+    self.exchange = exchange
+    self.primaryExchange = primaryExchange
+    self.currency = currency
+    self.localSymbol = localSymbol
+    self.tradingClass = tradingClass
+    self.secIdType = secIdType
+    self.secId = secId
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I64:
+          self.conId = iprot.readI64();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.DOUBLE:
+          self.strike = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.I32:
+          self.position = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.DOUBLE:
+          self.marketPrice = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.DOUBLE:
+          self.marketValue = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      elif fid == 6:
+        if ftype == TType.DOUBLE:
+          self.averageCost = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      elif fid == 7:
+        if ftype == TType.DOUBLE:
+          self.unrealizedPNL = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      elif fid == 8:
+        if ftype == TType.DOUBLE:
+          self.realizedPNL = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      elif fid == 9:
+        if ftype == TType.STRING:
+          self.accountName = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 10:
+        if ftype == TType.STRING:
+          self.symbol = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 11:
+        if ftype == TType.STRING:
+          self.secType = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 12:
+        if ftype == TType.STRING:
+          self.expiry = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 13:
+        if ftype == TType.STRING:
+          self.right = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 14:
+        if ftype == TType.STRING:
+          self.multiplier = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 15:
+        if ftype == TType.STRING:
+          self.exchange = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 16:
+        if ftype == TType.STRING:
+          self.primaryExchange = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 17:
+        if ftype == TType.STRING:
+          self.currency = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 18:
+        if ftype == TType.STRING:
+          self.localSymbol = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 19:
+        if ftype == TType.STRING:
+          self.tradingClass = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 20:
+        if ftype == TType.STRING:
+          self.secIdType = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 21:
+        if ftype == TType.STRING:
+          self.secId = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('Asset')
+    if self.conId is not None:
+      oprot.writeFieldBegin('conId', TType.I64, 1)
+      oprot.writeI64(self.conId)
+      oprot.writeFieldEnd()
+    if self.strike is not None:
+      oprot.writeFieldBegin('strike', TType.DOUBLE, 2)
+      oprot.writeDouble(self.strike)
+      oprot.writeFieldEnd()
+    if self.position is not None:
+      oprot.writeFieldBegin('position', TType.I32, 3)
+      oprot.writeI32(self.position)
+      oprot.writeFieldEnd()
+    if self.marketPrice is not None:
+      oprot.writeFieldBegin('marketPrice', TType.DOUBLE, 4)
+      oprot.writeDouble(self.marketPrice)
+      oprot.writeFieldEnd()
+    if self.marketValue is not None:
+      oprot.writeFieldBegin('marketValue', TType.DOUBLE, 5)
+      oprot.writeDouble(self.marketValue)
+      oprot.writeFieldEnd()
+    if self.averageCost is not None:
+      oprot.writeFieldBegin('averageCost', TType.DOUBLE, 6)
+      oprot.writeDouble(self.averageCost)
+      oprot.writeFieldEnd()
+    if self.unrealizedPNL is not None:
+      oprot.writeFieldBegin('unrealizedPNL', TType.DOUBLE, 7)
+      oprot.writeDouble(self.unrealizedPNL)
+      oprot.writeFieldEnd()
+    if self.realizedPNL is not None:
+      oprot.writeFieldBegin('realizedPNL', TType.DOUBLE, 8)
+      oprot.writeDouble(self.realizedPNL)
+      oprot.writeFieldEnd()
+    if self.accountName is not None:
+      oprot.writeFieldBegin('accountName', TType.STRING, 9)
+      oprot.writeString(self.accountName)
+      oprot.writeFieldEnd()
+    if self.symbol is not None:
+      oprot.writeFieldBegin('symbol', TType.STRING, 10)
+      oprot.writeString(self.symbol)
+      oprot.writeFieldEnd()
+    if self.secType is not None:
+      oprot.writeFieldBegin('secType', TType.STRING, 11)
+      oprot.writeString(self.secType)
+      oprot.writeFieldEnd()
+    if self.expiry is not None:
+      oprot.writeFieldBegin('expiry', TType.STRING, 12)
+      oprot.writeString(self.expiry)
+      oprot.writeFieldEnd()
+    if self.right is not None:
+      oprot.writeFieldBegin('right', TType.STRING, 13)
+      oprot.writeString(self.right)
+      oprot.writeFieldEnd()
+    if self.multiplier is not None:
+      oprot.writeFieldBegin('multiplier', TType.STRING, 14)
+      oprot.writeString(self.multiplier)
+      oprot.writeFieldEnd()
+    if self.exchange is not None:
+      oprot.writeFieldBegin('exchange', TType.STRING, 15)
+      oprot.writeString(self.exchange)
+      oprot.writeFieldEnd()
+    if self.primaryExchange is not None:
+      oprot.writeFieldBegin('primaryExchange', TType.STRING, 16)
+      oprot.writeString(self.primaryExchange)
+      oprot.writeFieldEnd()
+    if self.currency is not None:
+      oprot.writeFieldBegin('currency', TType.STRING, 17)
+      oprot.writeString(self.currency)
+      oprot.writeFieldEnd()
+    if self.localSymbol is not None:
+      oprot.writeFieldBegin('localSymbol', TType.STRING, 18)
+      oprot.writeString(self.localSymbol)
+      oprot.writeFieldEnd()
+    if self.tradingClass is not None:
+      oprot.writeFieldBegin('tradingClass', TType.STRING, 19)
+      oprot.writeString(self.tradingClass)
+      oprot.writeFieldEnd()
+    if self.secIdType is not None:
+      oprot.writeFieldBegin('secIdType', TType.STRING, 20)
+      oprot.writeString(self.secIdType)
+      oprot.writeFieldEnd()
+    if self.secId is not None:
+      oprot.writeFieldBegin('secId', TType.STRING, 21)
+      oprot.writeString(self.secId)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    if self.conId is None:
+      raise TProtocol.TProtocolException(message='Required field conId is unset!')
+    if self.strike is None:
+      raise TProtocol.TProtocolException(message='Required field strike is unset!')
+    if self.position is None:
+      raise TProtocol.TProtocolException(message='Required field position is unset!')
+    if self.marketPrice is None:
+      raise TProtocol.TProtocolException(message='Required field marketPrice is unset!')
+    if self.marketValue is None:
+      raise TProtocol.TProtocolException(message='Required field marketValue is unset!')
+    if self.averageCost is None:
+      raise TProtocol.TProtocolException(message='Required field averageCost is unset!')
+    if self.unrealizedPNL is None:
+      raise TProtocol.TProtocolException(message='Required field unrealizedPNL is unset!')
+    if self.realizedPNL is None:
+      raise TProtocol.TProtocolException(message='Required field realizedPNL is unset!')
+    if self.accountName is None:
+      raise TProtocol.TProtocolException(message='Required field accountName is unset!')
+    if self.symbol is None:
+      raise TProtocol.TProtocolException(message='Required field symbol is unset!')
+    if self.secType is None:
+      raise TProtocol.TProtocolException(message='Required field secType is unset!')
+    if self.expiry is None:
+      raise TProtocol.TProtocolException(message='Required field expiry is unset!')
+    if self.right is None:
+      raise TProtocol.TProtocolException(message='Required field right is unset!')
+    if self.multiplier is None:
+      raise TProtocol.TProtocolException(message='Required field multiplier is unset!')
+    if self.exchange is None:
+      raise TProtocol.TProtocolException(message='Required field exchange is unset!')
+    if self.primaryExchange is None:
+      raise TProtocol.TProtocolException(message='Required field primaryExchange is unset!')
+    if self.currency is None:
+      raise TProtocol.TProtocolException(message='Required field currency is unset!')
+    if self.localSymbol is None:
+      raise TProtocol.TProtocolException(message='Required field localSymbol is unset!')
+    if self.tradingClass is None:
+      raise TProtocol.TProtocolException(message='Required field tradingClass is unset!')
+    if self.secIdType is None:
+      raise TProtocol.TProtocolException(message='Required field secIdType is unset!')
+    if self.secId is None:
+      raise TProtocol.TProtocolException(message='Required field secId is unset!')
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.conId)
+    value = (value * 31) ^ hash(self.strike)
+    value = (value * 31) ^ hash(self.position)
+    value = (value * 31) ^ hash(self.marketPrice)
+    value = (value * 31) ^ hash(self.marketValue)
+    value = (value * 31) ^ hash(self.averageCost)
+    value = (value * 31) ^ hash(self.unrealizedPNL)
+    value = (value * 31) ^ hash(self.realizedPNL)
+    value = (value * 31) ^ hash(self.accountName)
+    value = (value * 31) ^ hash(self.symbol)
+    value = (value * 31) ^ hash(self.secType)
+    value = (value * 31) ^ hash(self.expiry)
+    value = (value * 31) ^ hash(self.right)
+    value = (value * 31) ^ hash(self.multiplier)
+    value = (value * 31) ^ hash(self.exchange)
+    value = (value * 31) ^ hash(self.primaryExchange)
+    value = (value * 31) ^ hash(self.currency)
+    value = (value * 31) ^ hash(self.localSymbol)
+    value = (value * 31) ^ hash(self.tradingClass)
+    value = (value * 31) ^ hash(self.secIdType)
+    value = (value * 31) ^ hash(self.secId)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class StkPosition:
+  """
+  Attributes:
+   - account
+   - position
+   - avgCost
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'account', None, None, ), # 1
+    (2, TType.I32, 'position', None, None, ), # 2
+    (3, TType.DOUBLE, 'avgCost', None, None, ), # 3
+  )
+
+  def __init__(self, account=None, position=None, avgCost=None,):
+    self.account = account
+    self.position = position
+    self.avgCost = avgCost
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.account = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.I32:
+          self.position = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.DOUBLE:
+          self.avgCost = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('StkPosition')
+    if self.account is not None:
+      oprot.writeFieldBegin('account', TType.STRING, 1)
+      oprot.writeString(self.account)
+      oprot.writeFieldEnd()
+    if self.position is not None:
+      oprot.writeFieldBegin('position', TType.I32, 2)
+      oprot.writeI32(self.position)
+      oprot.writeFieldEnd()
+    if self.avgCost is not None:
+      oprot.writeFieldBegin('avgCost', TType.DOUBLE, 3)
+      oprot.writeDouble(self.avgCost)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    if self.account is None:
+      raise TProtocol.TProtocolException(message='Required field account is unset!')
+    if self.position is None:
+      raise TProtocol.TProtocolException(message='Required field position is unset!')
+    if self.avgCost is None:
+      raise TProtocol.TProtocolException(message='Required field avgCost is unset!')
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.account)
+    value = (value * 31) ^ hash(self.position)
+    value = (value * 31) ^ hash(self.avgCost)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class OptPosition:
+  """
+  Attributes:
+   - account
+   - conId
+   - position
+   - avgCost
+   - strike
+   - symbol
+   - secType
+   - expiry
+   - right
+   - multiplier
+   - exchange
+   - primaryExchange
+   - currency
+   - localSymbol
+   - tradingClass
+   - secIdType
+   - secId
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'account', None, None, ), # 1
+    (2, TType.I64, 'conId', None, None, ), # 2
+    (3, TType.I32, 'position', None, None, ), # 3
+    (4, TType.DOUBLE, 'avgCost', None, None, ), # 4
+    (5, TType.DOUBLE, 'strike', None, None, ), # 5
+    (6, TType.STRING, 'symbol', None, None, ), # 6
+    (7, TType.STRING, 'secType', None, None, ), # 7
+    (8, TType.STRING, 'expiry', None, None, ), # 8
+    (9, TType.STRING, 'right', None, None, ), # 9
+    (10, TType.STRING, 'multiplier', None, None, ), # 10
+    (11, TType.STRING, 'exchange', None, None, ), # 11
+    (12, TType.STRING, 'primaryExchange', None, None, ), # 12
+    (13, TType.STRING, 'currency', None, None, ), # 13
+    (14, TType.STRING, 'localSymbol', None, None, ), # 14
+    (15, TType.STRING, 'tradingClass', None, None, ), # 15
+    (16, TType.STRING, 'secIdType', None, None, ), # 16
+    (17, TType.STRING, 'secId', None, None, ), # 17
+  )
+
+  def __init__(self, account=None, conId=None, position=None, avgCost=None, strike=None, symbol=None, secType=None, expiry=None, right=None, multiplier=None, exchange=None, primaryExchange=None, currency=None, localSymbol=None, tradingClass=None, secIdType=None, secId=None,):
+    self.account = account
+    self.conId = conId
+    self.position = position
+    self.avgCost = avgCost
+    self.strike = strike
+    self.symbol = symbol
+    self.secType = secType
+    self.expiry = expiry
+    self.right = right
+    self.multiplier = multiplier
+    self.exchange = exchange
+    self.primaryExchange = primaryExchange
+    self.currency = currency
+    self.localSymbol = localSymbol
+    self.tradingClass = tradingClass
+    self.secIdType = secIdType
+    self.secId = secId
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.account = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.I64:
+          self.conId = iprot.readI64();
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.I32:
+          self.position = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.DOUBLE:
+          self.avgCost = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.DOUBLE:
+          self.strike = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      elif fid == 6:
+        if ftype == TType.STRING:
+          self.symbol = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 7:
+        if ftype == TType.STRING:
+          self.secType = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 8:
+        if ftype == TType.STRING:
+          self.expiry = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 9:
+        if ftype == TType.STRING:
+          self.right = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 10:
+        if ftype == TType.STRING:
+          self.multiplier = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 11:
+        if ftype == TType.STRING:
+          self.exchange = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 12:
+        if ftype == TType.STRING:
+          self.primaryExchange = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 13:
+        if ftype == TType.STRING:
+          self.currency = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 14:
+        if ftype == TType.STRING:
+          self.localSymbol = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 15:
+        if ftype == TType.STRING:
+          self.tradingClass = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 16:
+        if ftype == TType.STRING:
+          self.secIdType = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 17:
+        if ftype == TType.STRING:
+          self.secId = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('OptPosition')
+    if self.account is not None:
+      oprot.writeFieldBegin('account', TType.STRING, 1)
+      oprot.writeString(self.account)
+      oprot.writeFieldEnd()
+    if self.conId is not None:
+      oprot.writeFieldBegin('conId', TType.I64, 2)
+      oprot.writeI64(self.conId)
+      oprot.writeFieldEnd()
+    if self.position is not None:
+      oprot.writeFieldBegin('position', TType.I32, 3)
+      oprot.writeI32(self.position)
+      oprot.writeFieldEnd()
+    if self.avgCost is not None:
+      oprot.writeFieldBegin('avgCost', TType.DOUBLE, 4)
+      oprot.writeDouble(self.avgCost)
+      oprot.writeFieldEnd()
+    if self.strike is not None:
+      oprot.writeFieldBegin('strike', TType.DOUBLE, 5)
+      oprot.writeDouble(self.strike)
+      oprot.writeFieldEnd()
+    if self.symbol is not None:
+      oprot.writeFieldBegin('symbol', TType.STRING, 6)
+      oprot.writeString(self.symbol)
+      oprot.writeFieldEnd()
+    if self.secType is not None:
+      oprot.writeFieldBegin('secType', TType.STRING, 7)
+      oprot.writeString(self.secType)
+      oprot.writeFieldEnd()
+    if self.expiry is not None:
+      oprot.writeFieldBegin('expiry', TType.STRING, 8)
+      oprot.writeString(self.expiry)
+      oprot.writeFieldEnd()
+    if self.right is not None:
+      oprot.writeFieldBegin('right', TType.STRING, 9)
+      oprot.writeString(self.right)
+      oprot.writeFieldEnd()
+    if self.multiplier is not None:
+      oprot.writeFieldBegin('multiplier', TType.STRING, 10)
+      oprot.writeString(self.multiplier)
+      oprot.writeFieldEnd()
+    if self.exchange is not None:
+      oprot.writeFieldBegin('exchange', TType.STRING, 11)
+      oprot.writeString(self.exchange)
+      oprot.writeFieldEnd()
+    if self.primaryExchange is not None:
+      oprot.writeFieldBegin('primaryExchange', TType.STRING, 12)
+      oprot.writeString(self.primaryExchange)
+      oprot.writeFieldEnd()
+    if self.currency is not None:
+      oprot.writeFieldBegin('currency', TType.STRING, 13)
+      oprot.writeString(self.currency)
+      oprot.writeFieldEnd()
+    if self.localSymbol is not None:
+      oprot.writeFieldBegin('localSymbol', TType.STRING, 14)
+      oprot.writeString(self.localSymbol)
+      oprot.writeFieldEnd()
+    if self.tradingClass is not None:
+      oprot.writeFieldBegin('tradingClass', TType.STRING, 15)
+      oprot.writeString(self.tradingClass)
+      oprot.writeFieldEnd()
+    if self.secIdType is not None:
+      oprot.writeFieldBegin('secIdType', TType.STRING, 16)
+      oprot.writeString(self.secIdType)
+      oprot.writeFieldEnd()
+    if self.secId is not None:
+      oprot.writeFieldBegin('secId', TType.STRING, 17)
+      oprot.writeString(self.secId)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    if self.account is None:
+      raise TProtocol.TProtocolException(message='Required field account is unset!')
+    if self.conId is None:
+      raise TProtocol.TProtocolException(message='Required field conId is unset!')
+    if self.position is None:
+      raise TProtocol.TProtocolException(message='Required field position is unset!')
+    if self.avgCost is None:
+      raise TProtocol.TProtocolException(message='Required field avgCost is unset!')
+    if self.strike is None:
+      raise TProtocol.TProtocolException(message='Required field strike is unset!')
+    if self.symbol is None:
+      raise TProtocol.TProtocolException(message='Required field symbol is unset!')
+    if self.secType is None:
+      raise TProtocol.TProtocolException(message='Required field secType is unset!')
+    if self.expiry is None:
+      raise TProtocol.TProtocolException(message='Required field expiry is unset!')
+    if self.right is None:
+      raise TProtocol.TProtocolException(message='Required field right is unset!')
+    if self.multiplier is None:
+      raise TProtocol.TProtocolException(message='Required field multiplier is unset!')
+    if self.exchange is None:
+      raise TProtocol.TProtocolException(message='Required field exchange is unset!')
+    if self.primaryExchange is None:
+      raise TProtocol.TProtocolException(message='Required field primaryExchange is unset!')
+    if self.currency is None:
+      raise TProtocol.TProtocolException(message='Required field currency is unset!')
+    if self.localSymbol is None:
+      raise TProtocol.TProtocolException(message='Required field localSymbol is unset!')
+    if self.tradingClass is None:
+      raise TProtocol.TProtocolException(message='Required field tradingClass is unset!')
+    if self.secIdType is None:
+      raise TProtocol.TProtocolException(message='Required field secIdType is unset!')
+    if self.secId is None:
+      raise TProtocol.TProtocolException(message='Required field secId is unset!')
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.account)
+    value = (value * 31) ^ hash(self.conId)
+    value = (value * 31) ^ hash(self.position)
+    value = (value * 31) ^ hash(self.avgCost)
+    value = (value * 31) ^ hash(self.strike)
+    value = (value * 31) ^ hash(self.symbol)
+    value = (value * 31) ^ hash(self.secType)
+    value = (value * 31) ^ hash(self.expiry)
+    value = (value * 31) ^ hash(self.right)
+    value = (value * 31) ^ hash(self.multiplier)
+    value = (value * 31) ^ hash(self.exchange)
+    value = (value * 31) ^ hash(self.primaryExchange)
+    value = (value * 31) ^ hash(self.currency)
+    value = (value * 31) ^ hash(self.localSymbol)
+    value = (value * 31) ^ hash(self.tradingClass)
+    value = (value * 31) ^ hash(self.secIdType)
+    value = (value * 31) ^ hash(self.secId)
     return value
 
   def __repr__(self):

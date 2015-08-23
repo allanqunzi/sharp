@@ -5,7 +5,9 @@
 #define QUNZI_SHARP_HEADER
 
 #include "CommonDefs.h"
+#include "CommissionReport.h"
 #include "Contract.h"
+#include "Execution.h"
 #include "OrderState.h"
 #include "Order.h"
 #include "ScannerSubscription.h"
@@ -29,7 +31,15 @@
 #include <unordered_map>
 #include <stdexcept>
 #include <boost/log/trivial.hpp>
-#include <boost/log/attributes/named_scope.hpp>
+#include <boost/log/expressions.hpp>
+#include <boost/log/utility/setup/file.hpp>
+#include <boost/log/sources/record_ostream.hpp>
+#include <boost/log/utility/setup/common_attributes.hpp>
+#include <boost/log/utility/setup/console.hpp>
+#include <boost/log/support/date_time.hpp>
+
+#include <boost/shared_ptr.hpp>
+
 class EPosixClientSocket;
 
 namespace sharp{
@@ -52,6 +62,7 @@ class TypeDisplayer; // usage: TypeDisplayer<decltype(x)>xType;
 
 #define BOOST_LOG_DYN_LINK 1
 #define LOG(x) BOOST_LOG_TRIVIAL(x)
+void init_logging();
 
 template<typename T>
 class sharpdeque: public std::deque<T>
@@ -158,14 +169,25 @@ struct PlacedOrderContracts
 	}
 };
 
+struct ExecutedContract
+{
+    Contract contract;
+    Execution execution;
+    CommissionReport report;
+    ExecutedContract() = default;
+    ExecutedContract(const Contract & c, const Execution & e)
+    :contract(c), execution(e){}
+};
+
+template <typename T>
 class IdType{
 private:
-	std::atomic<TickerId> id; // TickerId is long = 8 bytes
+	std::atomic<T> id; // TickerId is long = 8 bytes
 public:
-	IdType():id(-1L){ }
-	void setInitial(TickerId id_){ id = id_; }
-	TickerId getNewId(){ return ++id; }
-	TickerId getCurrentId(){ return id;	}
+	IdType(T id_):id(id_){}
+	void setInitial(T id_){ id = id_; }
+	T getNewId(){ return ++id; }
+	T getCurrentId(){ return id; }
 };
 
 struct RealTimeBar
@@ -185,7 +207,25 @@ struct RealTimeBar
 		low(l), high(h), close(c), volume(v), wap(w), count(ct){}
 };
 
+struct OptionPosition
+ {
+    long conId = -1L;
+    int32_t position = 0;
+    double avgCost = 0.0;
+    Contract contract;
+ };
 
+struct Asset
+{
+    Contract contract;
+    int32_t position;
+    double marketPrice;
+    double marketValue;
+    double averageCost;
+    double unrealizedPNL;
+    double realizedPNL;
+    double accountName;
+};
 
 class EWrapperImpl : public EWrapper
 {
@@ -200,25 +240,32 @@ public:
 
 public:
 	void monitor();
+
+    // order related
 	void placeOrder();
 	bool cancelOrder(OrderId orderId);
 	void reqOpenOrders();    // orders placed by api
 	void reqAllOpenOrders(); // orders placed by both api and tws
 	bool reqGlobalCancel();  // cancel orders placed by both api and tws
+    int reqExecutions(const ExecutionFilter & ef);
 
+	// watchlist, market data related
 	void reqMarketSnapshot(); // TODO
-
-	bool checkValidId( OrderId orderId);
 	// calling this function will call
 	// m_pClient->reqRealTimeBars, otherwise it doesn't make sense to call this function.
 	bool addToWatchList( const std::vector<std::string> &);
 	bool removeFromWatchList(const std::vector<std::string> &);
 	bool removeZombieSymbols(const std::vector<std::string> &);
-
-	bool requestRealTimeBars();
-
+	bool reqRealTimeBars();
 	// getNextBar is done at thrift level
 
+
+    // account, portfolio, position related
+    void reqAccountUpdates(bool subscribe, const std::string & acctCode);
+    void reqPositions();
+
+
+    bool checkValidId( OrderId orderId);
 	std::string getField(TickType tickType);
 
 private:
@@ -300,6 +347,11 @@ public:
 	int clientId;
 	std::mutex mutex; // mutex for order statuses
 
+    IdType<TickerId> ticker_id{-1L};
+    IdType<OrderId> order_id{-1L};
+    IdType<int> req_id{1};
+
+
 	std::atomic<bool> open_order_flag;
 	std::set<OrderId> open_order_set;
 
@@ -308,13 +360,28 @@ public:
 	// and thrift handler functions, these functions should be synchronized.
 	PlacedOrderContracts placed_contract_orders;
 	std::vector<OrderId> used_order_ids;
-	IdType ticker_id;
-	IdType order_id;
+
+    std::unordered_map<int, std::pair<std::atomic<bool>,
+                        std::set<std::string> > > requested_execs;
+    std::unordered_map<std::string, ExecutedContract> received_execs; // key is execId
+
 
 	std::unordered_map<std::string, TickerId>watch_list;
 	// non-const operation on std::deque is not thread-safe,
 	// so the following needs to be synchronized.
 	std::unordered_map<TickerId, std::unique_ptr< sharpdeque<RealTimeBar> > >watch_list_bars;
+
+    // account, portfolio, position related
+    std::unordered_map<std::string, std::unordered_map<std::string, std::string>> accounts;
+    // stk_positions are symbol based, opt_positions are conId based.
+    // portfolio is conId based. conId is long.
+    std::atomic<bool> position_flag;
+    std::atomic<bool> account_flag;
+    // std::pair<position, avgCost> for stk_positions
+    std::unordered_map<std::string, std::unordered_map<std::string, std::pair<int, double>>> stk_positions;
+    std::unordered_map<std::string, std::unordered_map<long, OptionPosition>> opt_positions;
+    std::unordered_map<std::string, std::unordered_map<long, Asset>> portfolio;
+
 };
 
 void run_server (EWrapperImpl & ibtrader);

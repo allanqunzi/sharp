@@ -62,9 +62,14 @@ class SharpHandler : virtual public SharpIf {
     printf("reqGlobalCancel\n");
   }
 
-  void requestRealTimeBars() {
+  void reqExecutions(std::vector<ExecutedContract> & _return, const ExecutionFilter& ef) {
     // Your implementation goes here
-    printf("requestRealTimeBars\n");
+    printf("reqExecutions\n");
+  }
+
+  void reqRealTimeBars() {
+    // Your implementation goes here
+    printf("reqRealTimeBars\n");
   }
 
   void addToWatchList(const std::vector<std::string> & wl) {
@@ -85,6 +90,26 @@ class SharpHandler : virtual public SharpIf {
   void getNextBar(RealTimeBar& _return, const std::string& symbol) {
     // Your implementation goes here
     printf("getNextBar\n");
+  }
+
+  void reqStkPositions(std::map<std::string, StkPosition> & _return, const bool refresh) {
+    // Your implementation goes here
+    printf("reqStkPositions\n");
+  }
+
+  void reqOptPositions(std::map<int64_t, OptPosition> & _return, const bool refresh) {
+    // Your implementation goes here
+    printf("reqOptPositions\n");
+  }
+
+  void reqAccountValue(std::map<std::string, std::string> & _return, const std::string& acctCode, const bool refresh) {
+    // Your implementation goes here
+    printf("reqAccountValue\n");
+  }
+
+  void reqPortfolio(std::map<int64_t, Asset> & _return, const std::string& acctCode, const bool refresh) {
+    // Your implementation goes here
+    printf("reqPortfolio\n");
   }
 
 };

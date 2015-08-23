@@ -1,26 +1,26 @@
 namespace cpp sharp.api
 
-struct PingRequest {
+struct PingRequest{
 }
 
-struct PingResponse {
+struct PingResponse{
 }
 
-struct ContractRequest {
+struct ContractRequest{
     1:required string symbol;
     2:required string secType;
     3:required string exchange;
     4:required string currency;
 }
 
-struct OrderRequest {
+struct OrderRequest{
     1:required string action;
     2:required i64 totalQuantity;
     3:required string orderType;
     4:required double lmtPrice;
 }
 
-struct OrderResponse {
+struct OrderResponse{
     1:required i64 orderId;
     2:required i16 state;
     3:optional i32 clientId = 0;
@@ -38,7 +38,7 @@ struct OrderResponse {
 * need to know contract order details also, although thrift seems to support
 * nested structs, working with flattened out data is safer.
 */
-struct OrderStatus {
+struct OrderStatus{
 
 /*
     1:required ContractRequest ctrt;
@@ -71,7 +71,56 @@ struct OrderStatus {
     19:optional string whyHeld = "";
 }
 
-struct RealTimeBar {
+struct ExecutionFilter{
+    1:required i64 clientId = 0;
+    2:required string acctCode;
+    3:required string time;
+    4:required string symbol;
+    5:required string secType;
+    6:required string exchange;
+    7:required string side;
+}
+
+struct ExecutedContract{
+
+    1:required string symbol = "";
+    2:required string secType = "";
+    3:required string expiry = "";
+    4:required string right = "";
+    5:required string multiplier = "";
+    6:required string exchange;
+    7:required string primaryExchange = "";
+    8:required string currency = "";
+    9:required string localSymbol = "";
+    10:required string tradingClass = "";
+    11:required string secIdType = "";
+    12:required string secId = "";
+    13:required i64 conId = -1;
+    14:required double strike = 0.0;
+
+    15:required string execId = "";
+    16:required string time = "";
+    17:required string acctNumber = "";
+    18:required string side = "";
+    19:required i32 shares = 0;
+    20:required double price = 0.0;
+    21:required i32 permId = 0;
+    22:required i64 clientId = 0;
+    23:required i64 orderId = 0;
+    24:required i32 liquidation = 0;
+    25:required i32 cumQty = 0;
+    26:required double avgPrice = 0.0;
+    27:required double evMultiplier = 0.0;
+    28:required string orderRef = "";
+    29:required string evRule = "";
+    30:required string c_currency = "";
+    31:required i32 yieldRedemptionDate = 0; // YYYYMMDD format
+    32:required double commission = 0.0;
+    33:required double realizedPNL = 0.0;
+    34:required double gain = 0.0; // yield
+}
+
+struct RealTimeBar{
     1:required i64 reqId = -2;
     2:required i64 time = 1;
     3:required double open = 1.0;
@@ -83,48 +132,66 @@ struct RealTimeBar {
     9:required i32 count = 1;
 }
 
-struct RealTimeBar {
-    1:required i32 reqId;
-    2:required string account;
-    3:required string value = "";
-    4:required string currency = "";
-    5:required string AccountType = "";
-    6:required string TotalCashValue = "";
-    7:required string SettledCash = "";
-    8:required string AccruedCash = "";
-    9:required string BuyingPower = "";
-    10:required string EquityWithLoanValue = "";
-    11:required string PreviousEquityWithLoanValue = "";
-    12:required string GrossPositionValue = "";
-    13:required string RegTEquity = "";
-    14:required string RegTMargin = "";
-    15:required string SMA = "";
-    16:required string InitMarginReq = "";
-    17:required string MaintMarginReq = "";
-    18:required string AvailableFunds = "";
-    19:required string ExcessLiquidity = "";
-    20:required string Cushion = "";
-    21:required string FullInitMarginReq = "";
-    22:required string FullMaintMarginReq = "";
-    23:required string FullAvailableFunds = "";
-    24:required string FullExcessLiquidity = "";
-    25:required string LookAheadNextChange = "";
-    26:required string LookAheadInitMarginReq = "";
-    27:required string LookAheadMaintMarginReq = "";
-    28:required string LookAheadAvailableFunds = "";
-    29:required string LookAheadExcessLiquidity = "";
-    30:required string HighestSeverity = "";
-    31:required string DayTradesRemaining = "";
-    32:required string Leverage = "";
+struct Asset{
+    1:required i64 conId;
+    2:required double strike;
+    3:required i32 position;
+    4:required double marketPrice;
+    5:required double marketValue;
+    6:required double averageCost;
+    7:required double unrealizedPNL;
+    8:required double realizedPNL;
+
+    9:required string accountName;
+    10:required string symbol;
+    11:required string secType;
+    12:required string expiry;
+    13:required string right;
+    14:required string multiplier;
+    15:required string exchange;
+    16:required string primaryExchange;
+    17:required string currency;
+    18:required string localSymbol;
+    19:required string tradingClass;
+    20:required string secIdType;
+    21:required string secId;
 }
 
-exception Exception {
+struct StkPosition{
+    1:required string account;
+    2:required i32 position;
+    3:required double avgCost;
+}
+
+struct OptPosition{
+    1:required string account;
+    2:required i64 conId;
+    3:required i32 position;
+    4:required double avgCost;
+    5:required double strike;
+
+    6:required string symbol;
+    7:required string secType;
+    8:required string expiry;
+    9:required string right;
+    10:required string multiplier;
+    11:required string exchange;
+    12:required string primaryExchange;
+    13:required string currency;
+    14:required string localSymbol;
+    15:required string tradingClass;
+    16:required string secIdType;
+    17:required string secId;
+}
+
+exception Exception{
       1: i32 what;
       2: string why;
 }
 
-service Sharp {
+service Sharp{
     PingResponse ping (1:required PingRequest request);
+
     i64 getOrderID();
     OrderResponse placeOrder (1:required ContractRequest c_req, 2:required OrderRequest o_req) throws (1:Exception e);
     OrderResponse cancelOrder (1:required i64 o_id) throws (1:Exception e);
@@ -132,11 +199,17 @@ service Sharp {
     list<OrderStatus> reqOpenOrders() throws (1:Exception e);
     list<OrderStatus> reqAllOpenOrders() throws (1:Exception e);
     void reqGlobalCancel() throws (1:Exception e);
+    list<ExecutedContract> reqExecutions(1:required ExecutionFilter ef) throws (1:Exception e);
 
-    void requestRealTimeBars() throws (1:Exception e);
+    void reqRealTimeBars() throws (1:Exception e);
     void addToWatchList(1:required list<string> wl) throws (1:Exception e);
     void removeFromWatchList(1:required list<string> rm) throws (1:Exception e);
     void removeZombieSymbols(1:required list<string> rm) throws (1:Exception e);
     RealTimeBar getNextBar(1:required string symbol) throws (1:Exception e);
+
+    map<string,StkPosition> reqStkPositions(1:required bool refresh) throws (1:Exception e);
+    map<i64,OptPosition> reqOptPositions(1:required bool refresh) throws (1:Exception e);
+    map<string, string> reqAccountValue(1:required string acctCode, 2:required bool refresh) throws (1:Exception e);
+    map<i64, Asset> reqPortfolio(1:required string acctCode, 2:required bool refresh) throws (1:Exception e);
 }
 

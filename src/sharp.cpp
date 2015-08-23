@@ -6,6 +6,36 @@
 
 namespace sharp{
 
+void init_logging(){
+
+	//boost::log::register_simple_formatter_factory< boost::log::trivial::severity_level, char >("Severity");
+
+    boost::log::add_file_log(
+        boost::log::keywords::file_name = "./logs/thriftServer_%Y%m%d.log",
+        boost::log::keywords::open_mode = (std::ios::out | std::ios::app),
+        boost::log::keywords::auto_flush = true,
+        boost::log::keywords::format =
+        (
+            boost::log::expressions::stream
+                << boost::log::expressions::format_date_time< boost::posix_time::ptime >("TimeStamp", "%H:%M:%S.%f")
+                << ": <" << boost::log::trivial::severity
+                << "> " << boost::log::expressions::smessage
+        )
+    );
+    boost::log::add_console_log(
+    	std::cout,
+    	boost::log::keywords::format =
+    	(
+            boost::log::expressions::stream
+                << boost::log::expressions::format_date_time< boost::posix_time::ptime >("TimeStamp", "%H:%M:%S.%f")
+                << ": <" << boost::log::trivial::severity
+                << "> " << boost::log::expressions::smessage
+        )
+    );
+
+    boost::log::add_common_attributes();
+}
+
 EWrapperImpl::EWrapperImpl( const std::vector<std::string> wl )
 	: m_pClient(new EPosixClientSocket(this))
 	, m_state(ST_CONNECT)
@@ -56,6 +86,14 @@ void EWrapperImpl::disconnect() const
 bool EWrapperImpl::isConnected() const
 {
 	return m_pClient->isConnected();
+}
+
+void EWrapperImpl::connectionClosed(){
+	LOG(info)<<"connection is closed";
+}
+
+void EWrapperImpl::winError( const IBString &str, int lastError){
+	LOG(info)<<"calling EWrapperImpl::winError";
 }
 
 void EWrapperImpl::monitor()
@@ -145,12 +183,11 @@ void EWrapperImpl::placeOrder()
 	req.orderId = order_id.getNewId();
 	used_order_ids.push_back(req.orderId);
 
-	printf( "Placing Order %ld: %s %ld %s at %f\n", req.orderId,
-		req.order.action.c_str(), req.order.totalQuantity,
-		req.contract.symbol.c_str(), req.order.lmtPrice);
+	LOG(info)<<"Placing Order, orderId = "<<req.orderId<<", "<<req.order.action
+			 <<" "<<req.order.totalQuantity<<" "<<req.contract.symbol
+			 <<" at "<<req.order.lmtPrice;
 
 	m_pClient->placeOrder( req.orderId, req.contract, req.order);
-
 	std::lock_guard<std::mutex> lk(mutex);
 	req.response.orderId = req.orderId;
 	req.response.state = 0;
@@ -260,7 +297,6 @@ void EWrapperImpl::nextValidId( OrderId orderId)
 
 void EWrapperImpl::currentTime( long time)
 {
-
 	time_t t = ( time_t)time;
 	struct tm * timeinfo = localtime ( &t);
 	printf( "The current date/time is: %s", asctime( timeinfo));
@@ -351,11 +387,11 @@ void EWrapperImpl::reqMarketSnapshot()
     // m_pClient->reqRealTimeBars(10, contract, 5, whatToShow, false, realTimeBarsOptions);
 }
 
-void EWrapperImpl::tickPrice( TickerId tickerId, TickType field, double price, int canAutoExecute) {
+void EWrapperImpl::tickPrice( TickerId tickerId, TickType field, double price, int canAutoExecute){
 	LOG(info)<<"calling EWrapperImpl::tickPrice";
 }
 
-void EWrapperImpl::tickSize( TickerId tickerId, TickType field, int size) {
+void EWrapperImpl::tickSize( TickerId tickerId, TickType field, int size){
 	LOG(info)<<"calling EWrapperImpl::tickSize";
 }
 
@@ -366,11 +402,11 @@ void EWrapperImpl::tickOptionComputation( TickerId tickerId, TickType tickType, 
 	LOG(info)<<"calling EWrapperImpl::tickOptionComputation";
 }
 
-void EWrapperImpl::tickGeneric(TickerId tickerId, TickType tickType, double value) {
+void EWrapperImpl::tickGeneric(TickerId tickerId, TickType tickType, double value){
 	LOG(info)<<"calling EWrapperImpl::tickGeneric";
 }
 
-void EWrapperImpl::tickString(TickerId tickerId, TickType tickType, const IBString& value) {
+void EWrapperImpl::tickString(TickerId tickerId, TickType tickType, const IBString& value){
 	LOG(info)<<"calling EWrapperImpl::tickString";
 }
 
@@ -382,7 +418,7 @@ void EWrapperImpl::tickEFP(TickerId tickerId, TickType tickType, double basisPoi
 	LOG(info)<<"calling EWrapperImpl::tickEFP";
 }
 
-void EWrapperImpl::tickSnapshotEnd(int reqId) {
+void EWrapperImpl::tickSnapshotEnd(int reqId){
 	LOG(info)<<"calling EWrapperImpl::tickSnapshotEnd";
 }
 
@@ -409,7 +445,7 @@ void EWrapperImpl::realtimeBar(TickerId reqId, long time, double open, double hi
 	}
 }
 
-void EWrapperImpl::scannerParameters(const IBString &xml) {
+void EWrapperImpl::scannerParameters(const IBString &xml){
 	LOG(info)<<"calling EWrapperImpl::scannerParameters";
 }
 
@@ -418,11 +454,11 @@ void EWrapperImpl::scannerData(int reqId, int rank, const ContractDetails &contr
 	   const IBString &legsStr) {
 	LOG(info)<<"calling EWrapperImpl::scannerData";
 }
-void EWrapperImpl::scannerDataEnd(int reqId) {
+void EWrapperImpl::scannerDataEnd(int reqId){
 	LOG(info)<<"calling EWrapperImpl::scannerDataEnd";
 }
 
-void EWrapperImpl::contractDetails( int reqId, const ContractDetails& contractDetails) {
+void EWrapperImpl::contractDetails( int reqId, const ContractDetails& contractDetails){
 	LOG(info)<<"calling EWrapperImpl::contractDetails";
 	std::cout<<contractDetails.category<<std::endl;
 	std::cout<<contractDetails.contractMonth<<std::endl;
@@ -442,47 +478,135 @@ void EWrapperImpl::contractDetails( int reqId, const ContractDetails& contractDe
 	std::cout<<contractDetails.validExchanges<<std::endl;
 }
 
-void EWrapperImpl::contractDetailsEnd( int reqId) {
+void EWrapperImpl::contractDetailsEnd( int reqId){
 	LOG(info)<<"calling EWrapperImpl::contractDetailsEnd";
 }
 
+// acctCode is the same as the accountName.
+void EWrapperImpl::reqAccountUpdates(bool subscribe, const std::string & acctCode){
+	LOG(info)<<"calling EWrapperImpl::reqAccountUpdates, subscribe = "
+	<<subscribe<<", acctCode = "<<acctCode;
+	accounts.clear();
+	portfolio.clear();
+	account_flag.store(false, std::memory_order_relaxed);
+	m_pClient->reqAccountUpdates(subscribe, acctCode);
+}
 
-void EWrapperImpl::winError( const IBString &str, int lastError) {}
-void EWrapperImpl::connectionClosed() {}
 void EWrapperImpl::updateAccountValue(const IBString& key, const IBString& val,
-										  const IBString& currency, const IBString& accountName) {}
+										  const IBString& currency, const IBString& accountName)
+{
+	LOG(info)<<"calling EWrapperImpl::updateAccountValue, accountName = "<<accountName<<" "<<key<<"  "<<val;
+	auto & account = accounts[accountName];
+	account[key] = currency + ":" +val;
+}
+
+void EWrapperImpl::reqPositions(){
+	stk_positions.clear();
+	opt_positions.clear();
+	position_flag.store(false, std::memory_order_relaxed);
+	m_pClient->reqPositions();
+}
+
+void EWrapperImpl::position( const IBString& account, const Contract& contract,
+	int position, double avgCost)
+{
+	if(contract.secType == "STK"){
+		auto & acnt = stk_positions[account];
+		auto & stk = acnt[contract.symbol];
+		auto pre = stk.first;
+		stk.first += position;
+		stk.second = ( stk.second * static_cast<double>(pre)
+					+ avgCost * static_cast<double>(position) )/static_cast<double>(stk.first);
+	}else if(contract.secType == "OPT"){
+		auto & acnt = opt_positions[account];
+		auto & opt = acnt[contract.conId];
+		opt.conId = contract.conId;
+		opt.position = position;
+		opt.avgCost = avgCost;
+		opt.contract = contract;
+	}
+}
+
+void EWrapperImpl::positionEnd(){
+	position_flag.store(true, std::memory_order_relaxed);
+}
+
 void EWrapperImpl::updatePortfolio(const Contract& contract, int position,
 		double marketPrice, double marketValue, double averageCost,
-		double unrealizedPNL, double realizedPNL, const IBString& accountName){}
-void EWrapperImpl::updateAccountTime(const IBString& timeStamp) {}
-void EWrapperImpl::accountDownloadEnd(const IBString& accountName) {}
+		double unrealizedPNL, double realizedPNL, const IBString& accountName)
+{
+	LOG(info)<<"calling EWrapperImpl::updatePortfolio, accountName = "<<accountName;
+	auto & acnt = portfolio[accountName];
+	auto & asset = acnt[contract.conId];
+	asset.contract = contract;
+	asset.position = position;
+	asset.marketPrice = marketPrice;
+	asset.marketValue = marketValue;
+	asset.averageCost = averageCost;
+	asset.unrealizedPNL = unrealizedPNL;
+	asset.realizedPNL = realizedPNL;
+}
 
-void EWrapperImpl::bondContractDetails( int reqId, const ContractDetails& contractDetails) {}
+void EWrapperImpl::updateAccountTime(const IBString& timeStamp){
+	LOG(info)<<"calling EWrapperImpl::updateAccountTime, timeStamp = "<<timeStamp;
+	for(auto & e : accounts){
+		(e.second)["timeStamp"] = timeStamp;
+	}
+}
 
-void EWrapperImpl::execDetails( int reqId, const Contract& contract, const Execution& execution) {}
-void EWrapperImpl::execDetailsEnd( int reqId) {}
+void EWrapperImpl::accountDownloadEnd(const IBString& accountName){
+	LOG(info)<<"calling EWrapperImpl::accountDownloadEnd, accountName = "<<accountName;
+	account_flag.store(true, std::memory_order_relaxed);
+}
 
+int EWrapperImpl::reqExecutions(const ExecutionFilter & ef){
+	auto id = req_id.getNewId();
+	auto & re = requested_execs[id];
+	re.first.store(false, std::memory_order_relaxed);
+	re.second.clear();
+	m_pClient->reqExecutions(id, ef);
+	return id;
+}
+
+void EWrapperImpl::execDetails( int reqId, const Contract& contract, const Execution& execution){
+	auto it = requested_execs.find(reqId);
+	if(it != requested_execs.end()){
+		auto & s = (it->second).second;
+		s.insert(execution.execId);
+	}
+	auto & e = received_execs[execution.execId];
+	e.contract = contract;
+	e.execution = execution;
+	LOG(info)<<received_execs.size()<<": "<<contract.secType<<" "<<contract.symbol
+			 <<", "<<execution.shares<<"shares, avgPrice = "<<execution.avgPrice
+			 <<", orderId = "<<execution.orderId<<" just executed";
+}
+
+void EWrapperImpl::execDetailsEnd( int reqId){
+	requested_execs[reqId].first.store(true, std::memory_order_relaxed);
+}
+
+void EWrapperImpl::commissionReport( const CommissionReport& commissionReport){
+	received_execs[commissionReport.execId].report = commissionReport;
+}
+
+void EWrapperImpl::bondContractDetails( int reqId, const ContractDetails& contractDetails){}
 void EWrapperImpl::updateMktDepth(TickerId id, int position, int operation, int side,
-									  double price, int size) {}
+									  double price, int size){}
 void EWrapperImpl::updateMktDepthL2(TickerId id, int position, IBString marketMaker, int operation,
-										int side, double price, int size) {}
-void EWrapperImpl::updateNewsBulletin(int msgId, int msgType, const IBString& newsMessage, const IBString& originExch) {}
-void EWrapperImpl::managedAccounts( const IBString& accountsList) {}
-void EWrapperImpl::receiveFA(faDataType pFaDataType, const IBString& cxml) {}
-
-void EWrapperImpl::fundamentalData(TickerId reqId, const IBString& data) {}
-void EWrapperImpl::deltaNeutralValidation(int reqId, const UnderComp& underComp) {}
-
-void EWrapperImpl::marketDataType(TickerId reqId, int marketDataType) {}
-void EWrapperImpl::commissionReport( const CommissionReport& commissionReport) {}
-void EWrapperImpl::position( const IBString& account, const Contract& contract, int position, double avgCost) {}
-void EWrapperImpl::positionEnd() {}
-void EWrapperImpl::accountSummary( int reqId, const IBString& account, const IBString& tag, const IBString& value, const IBString& curency) {}
-void EWrapperImpl::accountSummaryEnd( int reqId) {}
-void EWrapperImpl::verifyMessageAPI( const IBString& apiData) {}
-void EWrapperImpl::verifyCompleted( bool isSuccessful, const IBString& errorText) {}
-void EWrapperImpl::displayGroupList( int reqId, const IBString& groups) {}
-void EWrapperImpl::displayGroupUpdated( int reqId, const IBString& contractInfo) {}
+										int side, double price, int size){}
+void EWrapperImpl::updateNewsBulletin(int msgId, int msgType, const IBString& newsMessage, const IBString& originExch){}
+void EWrapperImpl::managedAccounts( const IBString& accountsList){}
+void EWrapperImpl::receiveFA(faDataType pFaDataType, const IBString& cxml){}
+void EWrapperImpl::fundamentalData(TickerId reqId, const IBString& data){}
+void EWrapperImpl::deltaNeutralValidation(int reqId, const UnderComp& underComp){}
+void EWrapperImpl::marketDataType(TickerId reqId, int marketDataType){}
+void EWrapperImpl::accountSummary( int reqId, const IBString& account, const IBString& tag, const IBString& value, const IBString& curency){}
+void EWrapperImpl::accountSummaryEnd( int reqId){}
+void EWrapperImpl::verifyMessageAPI( const IBString& apiData){}
+void EWrapperImpl::verifyCompleted( bool isSuccessful, const IBString& errorText){}
+void EWrapperImpl::displayGroupList( int reqId, const IBString& groups){}
+void EWrapperImpl::displayGroupUpdated( int reqId, const IBString& contractInfo){}
 
 bool EWrapperImpl::checkValidId( OrderId orderId){
 	int count = std::count(used_order_ids.begin(), used_order_ids.end(), orderId);
@@ -543,7 +667,7 @@ bool EWrapperImpl::removeZombieSymbols(const std::vector<std::string> & wl){
 }
 
 // this function is rarely used
-bool EWrapperImpl::requestRealTimeBars(){
+bool EWrapperImpl::reqRealTimeBars(){
 	Contract contract;
 	contract.secType = "STK";
 	contract.exchange = "SMART";

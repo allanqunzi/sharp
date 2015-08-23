@@ -6,7 +6,7 @@ CXXFLAGS=-DIB_USE_STD_STRING -Wall -Wno-switch -g -std=c++0x -O3
 BASE_SRC_DIR=../PosixClient/src
 THRIFT_DIR = ./thrift
 INCLUDES=-I../PosixClient/Shared/ -I${BASE_SRC_DIR} -Ithrift
-LDLIBS += $(PROTOCOL_LIBS) -lboost_thread -lboost_system -lboost_log -lboost_log_setup -lpthread -ldl
+LDLIBS += $(PROTOCOL_LIBS) -lboost_log -lboost_log_setup -lboost_thread -lboost_filesystem -lboost_system -lpthread -lrt -ldl
 
 TARGET=server
 

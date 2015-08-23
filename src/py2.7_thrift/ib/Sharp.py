@@ -59,7 +59,14 @@ class Iface:
   def reqGlobalCancel(self):
     pass
 
-  def requestRealTimeBars(self):
+  def reqExecutions(self, ef):
+    """
+    Parameters:
+     - ef
+    """
+    pass
+
+  def reqRealTimeBars(self):
     pass
 
   def addToWatchList(self, wl):
@@ -87,6 +94,36 @@ class Iface:
     """
     Parameters:
      - symbol
+    """
+    pass
+
+  def reqStkPositions(self, refresh):
+    """
+    Parameters:
+     - refresh
+    """
+    pass
+
+  def reqOptPositions(self, refresh):
+    """
+    Parameters:
+     - refresh
+    """
+    pass
+
+  def reqAccountValue(self, acctCode, refresh):
+    """
+    Parameters:
+     - acctCode
+     - refresh
+    """
+    pass
+
+  def reqPortfolio(self, acctCode, refresh):
+    """
+    Parameters:
+     - acctCode
+     - refresh
     """
     pass
 
@@ -338,18 +375,23 @@ class Client(Iface):
       raise result.e
     return
 
-  def requestRealTimeBars(self):
-    self.send_requestRealTimeBars()
-    self.recv_requestRealTimeBars()
+  def reqExecutions(self, ef):
+    """
+    Parameters:
+     - ef
+    """
+    self.send_reqExecutions(ef)
+    return self.recv_reqExecutions()
 
-  def send_requestRealTimeBars(self):
-    self._oprot.writeMessageBegin('requestRealTimeBars', TMessageType.CALL, self._seqid)
-    args = requestRealTimeBars_args()
+  def send_reqExecutions(self, ef):
+    self._oprot.writeMessageBegin('reqExecutions', TMessageType.CALL, self._seqid)
+    args = reqExecutions_args()
+    args.ef = ef
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
 
-  def recv_requestRealTimeBars(self):
+  def recv_reqExecutions(self):
     iprot = self._iprot
     (fname, mtype, rseqid) = iprot.readMessageBegin()
     if mtype == TMessageType.EXCEPTION:
@@ -357,7 +399,35 @@ class Client(Iface):
       x.read(iprot)
       iprot.readMessageEnd()
       raise x
-    result = requestRealTimeBars_result()
+    result = reqExecutions_result()
+    result.read(iprot)
+    iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    if result.e is not None:
+      raise result.e
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "reqExecutions failed: unknown result");
+
+  def reqRealTimeBars(self):
+    self.send_reqRealTimeBars()
+    self.recv_reqRealTimeBars()
+
+  def send_reqRealTimeBars(self):
+    self._oprot.writeMessageBegin('reqRealTimeBars', TMessageType.CALL, self._seqid)
+    args = reqRealTimeBars_args()
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_reqRealTimeBars(self):
+    iprot = self._iprot
+    (fname, mtype, rseqid) = iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(iprot)
+      iprot.readMessageEnd()
+      raise x
+    result = reqRealTimeBars_result()
     result.read(iprot)
     iprot.readMessageEnd()
     if result.e is not None:
@@ -490,6 +560,142 @@ class Client(Iface):
       raise result.e
     raise TApplicationException(TApplicationException.MISSING_RESULT, "getNextBar failed: unknown result");
 
+  def reqStkPositions(self, refresh):
+    """
+    Parameters:
+     - refresh
+    """
+    self.send_reqStkPositions(refresh)
+    return self.recv_reqStkPositions()
+
+  def send_reqStkPositions(self, refresh):
+    self._oprot.writeMessageBegin('reqStkPositions', TMessageType.CALL, self._seqid)
+    args = reqStkPositions_args()
+    args.refresh = refresh
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_reqStkPositions(self):
+    iprot = self._iprot
+    (fname, mtype, rseqid) = iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(iprot)
+      iprot.readMessageEnd()
+      raise x
+    result = reqStkPositions_result()
+    result.read(iprot)
+    iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    if result.e is not None:
+      raise result.e
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "reqStkPositions failed: unknown result");
+
+  def reqOptPositions(self, refresh):
+    """
+    Parameters:
+     - refresh
+    """
+    self.send_reqOptPositions(refresh)
+    return self.recv_reqOptPositions()
+
+  def send_reqOptPositions(self, refresh):
+    self._oprot.writeMessageBegin('reqOptPositions', TMessageType.CALL, self._seqid)
+    args = reqOptPositions_args()
+    args.refresh = refresh
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_reqOptPositions(self):
+    iprot = self._iprot
+    (fname, mtype, rseqid) = iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(iprot)
+      iprot.readMessageEnd()
+      raise x
+    result = reqOptPositions_result()
+    result.read(iprot)
+    iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    if result.e is not None:
+      raise result.e
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "reqOptPositions failed: unknown result");
+
+  def reqAccountValue(self, acctCode, refresh):
+    """
+    Parameters:
+     - acctCode
+     - refresh
+    """
+    self.send_reqAccountValue(acctCode, refresh)
+    return self.recv_reqAccountValue()
+
+  def send_reqAccountValue(self, acctCode, refresh):
+    self._oprot.writeMessageBegin('reqAccountValue', TMessageType.CALL, self._seqid)
+    args = reqAccountValue_args()
+    args.acctCode = acctCode
+    args.refresh = refresh
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_reqAccountValue(self):
+    iprot = self._iprot
+    (fname, mtype, rseqid) = iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(iprot)
+      iprot.readMessageEnd()
+      raise x
+    result = reqAccountValue_result()
+    result.read(iprot)
+    iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    if result.e is not None:
+      raise result.e
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "reqAccountValue failed: unknown result");
+
+  def reqPortfolio(self, acctCode, refresh):
+    """
+    Parameters:
+     - acctCode
+     - refresh
+    """
+    self.send_reqPortfolio(acctCode, refresh)
+    return self.recv_reqPortfolio()
+
+  def send_reqPortfolio(self, acctCode, refresh):
+    self._oprot.writeMessageBegin('reqPortfolio', TMessageType.CALL, self._seqid)
+    args = reqPortfolio_args()
+    args.acctCode = acctCode
+    args.refresh = refresh
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_reqPortfolio(self):
+    iprot = self._iprot
+    (fname, mtype, rseqid) = iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(iprot)
+      iprot.readMessageEnd()
+      raise x
+    result = reqPortfolio_result()
+    result.read(iprot)
+    iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    if result.e is not None:
+      raise result.e
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "reqPortfolio failed: unknown result");
+
 
 class Processor(Iface, TProcessor):
   def __init__(self, handler):
@@ -503,11 +709,16 @@ class Processor(Iface, TProcessor):
     self._processMap["reqOpenOrders"] = Processor.process_reqOpenOrders
     self._processMap["reqAllOpenOrders"] = Processor.process_reqAllOpenOrders
     self._processMap["reqGlobalCancel"] = Processor.process_reqGlobalCancel
-    self._processMap["requestRealTimeBars"] = Processor.process_requestRealTimeBars
+    self._processMap["reqExecutions"] = Processor.process_reqExecutions
+    self._processMap["reqRealTimeBars"] = Processor.process_reqRealTimeBars
     self._processMap["addToWatchList"] = Processor.process_addToWatchList
     self._processMap["removeFromWatchList"] = Processor.process_removeFromWatchList
     self._processMap["removeZombieSymbols"] = Processor.process_removeZombieSymbols
     self._processMap["getNextBar"] = Processor.process_getNextBar
+    self._processMap["reqStkPositions"] = Processor.process_reqStkPositions
+    self._processMap["reqOptPositions"] = Processor.process_reqOptPositions
+    self._processMap["reqAccountValue"] = Processor.process_reqAccountValue
+    self._processMap["reqPortfolio"] = Processor.process_reqPortfolio
 
   def process(self, iprot, oprot):
     (name, type, seqid) = iprot.readMessageBegin()
@@ -630,16 +841,30 @@ class Processor(Iface, TProcessor):
     oprot.writeMessageEnd()
     oprot.trans.flush()
 
-  def process_requestRealTimeBars(self, seqid, iprot, oprot):
-    args = requestRealTimeBars_args()
+  def process_reqExecutions(self, seqid, iprot, oprot):
+    args = reqExecutions_args()
     args.read(iprot)
     iprot.readMessageEnd()
-    result = requestRealTimeBars_result()
+    result = reqExecutions_result()
     try:
-      self._handler.requestRealTimeBars()
+      result.success = self._handler.reqExecutions(args.ef)
     except Exception, e:
       result.e = e
-    oprot.writeMessageBegin("requestRealTimeBars", TMessageType.REPLY, seqid)
+    oprot.writeMessageBegin("reqExecutions", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_reqRealTimeBars(self, seqid, iprot, oprot):
+    args = reqRealTimeBars_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = reqRealTimeBars_result()
+    try:
+      self._handler.reqRealTimeBars()
+    except Exception, e:
+      result.e = e
+    oprot.writeMessageBegin("reqRealTimeBars", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
     oprot.trans.flush()
@@ -696,6 +921,62 @@ class Processor(Iface, TProcessor):
     except Exception, e:
       result.e = e
     oprot.writeMessageBegin("getNextBar", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_reqStkPositions(self, seqid, iprot, oprot):
+    args = reqStkPositions_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = reqStkPositions_result()
+    try:
+      result.success = self._handler.reqStkPositions(args.refresh)
+    except Exception, e:
+      result.e = e
+    oprot.writeMessageBegin("reqStkPositions", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_reqOptPositions(self, seqid, iprot, oprot):
+    args = reqOptPositions_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = reqOptPositions_result()
+    try:
+      result.success = self._handler.reqOptPositions(args.refresh)
+    except Exception, e:
+      result.e = e
+    oprot.writeMessageBegin("reqOptPositions", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_reqAccountValue(self, seqid, iprot, oprot):
+    args = reqAccountValue_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = reqAccountValue_result()
+    try:
+      result.success = self._handler.reqAccountValue(args.acctCode, args.refresh)
+    except Exception, e:
+      result.e = e
+    oprot.writeMessageBegin("reqAccountValue", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_reqPortfolio(self, seqid, iprot, oprot):
+    args = reqPortfolio_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = reqPortfolio_result()
+    try:
+      result.success = self._handler.reqPortfolio(args.acctCode, args.refresh)
+    except Exception, e:
+      result.e = e
+    oprot.writeMessageBegin("reqPortfolio", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
     oprot.trans.flush()
@@ -1779,7 +2060,162 @@ class reqGlobalCancel_result:
   def __ne__(self, other):
     return not (self == other)
 
-class requestRealTimeBars_args:
+class reqExecutions_args:
+  """
+  Attributes:
+   - ef
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRUCT, 'ef', (ExecutionFilter, ExecutionFilter.thrift_spec), None, ), # 1
+  )
+
+  def __init__(self, ef=None,):
+    self.ef = ef
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.ef = ExecutionFilter()
+          self.ef.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('reqExecutions_args')
+    if self.ef is not None:
+      oprot.writeFieldBegin('ef', TType.STRUCT, 1)
+      self.ef.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    if self.ef is None:
+      raise TProtocol.TProtocolException(message='Required field ef is unset!')
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.ef)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class reqExecutions_result:
+  """
+  Attributes:
+   - success
+   - e
+  """
+
+  thrift_spec = (
+    (0, TType.LIST, 'success', (TType.STRUCT,(ExecutedContract, ExecutedContract.thrift_spec)), None, ), # 0
+    (1, TType.STRUCT, 'e', (Exception, Exception.thrift_spec), None, ), # 1
+  )
+
+  def __init__(self, success=None, e=None,):
+    self.success = success
+    self.e = e
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.LIST:
+          self.success = []
+          (_etype17, _size14) = iprot.readListBegin()
+          for _i18 in xrange(_size14):
+            _elem19 = ExecutedContract()
+            _elem19.read(iprot)
+            self.success.append(_elem19)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 1:
+        if ftype == TType.STRUCT:
+          self.e = Exception()
+          self.e.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('reqExecutions_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.LIST, 0)
+      oprot.writeListBegin(TType.STRUCT, len(self.success))
+      for iter20 in self.success:
+        iter20.write(oprot)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    if self.e is not None:
+      oprot.writeFieldBegin('e', TType.STRUCT, 1)
+      self.e.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.success)
+    value = (value * 31) ^ hash(self.e)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class reqRealTimeBars_args:
 
   thrift_spec = (
   )
@@ -1802,7 +2238,7 @@ class requestRealTimeBars_args:
     if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
-    oprot.writeStructBegin('requestRealTimeBars_args')
+    oprot.writeStructBegin('reqRealTimeBars_args')
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -1825,7 +2261,7 @@ class requestRealTimeBars_args:
   def __ne__(self, other):
     return not (self == other)
 
-class requestRealTimeBars_result:
+class reqRealTimeBars_result:
   """
   Attributes:
    - e
@@ -1863,7 +2299,7 @@ class requestRealTimeBars_result:
     if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
-    oprot.writeStructBegin('requestRealTimeBars_result')
+    oprot.writeStructBegin('reqRealTimeBars_result')
     if self.e is not None:
       oprot.writeFieldBegin('e', TType.STRUCT, 1)
       self.e.write(oprot)
@@ -1917,10 +2353,10 @@ class addToWatchList_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.wl = []
-          (_etype17, _size14) = iprot.readListBegin()
-          for _i18 in xrange(_size14):
-            _elem19 = iprot.readString();
-            self.wl.append(_elem19)
+          (_etype24, _size21) = iprot.readListBegin()
+          for _i25 in xrange(_size21):
+            _elem26 = iprot.readString();
+            self.wl.append(_elem26)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1937,8 +2373,8 @@ class addToWatchList_args:
     if self.wl is not None:
       oprot.writeFieldBegin('wl', TType.LIST, 1)
       oprot.writeListBegin(TType.STRING, len(self.wl))
-      for iter20 in self.wl:
-        oprot.writeString(iter20)
+      for iter27 in self.wl:
+        oprot.writeString(iter27)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -2058,10 +2494,10 @@ class removeFromWatchList_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.rm = []
-          (_etype24, _size21) = iprot.readListBegin()
-          for _i25 in xrange(_size21):
-            _elem26 = iprot.readString();
-            self.rm.append(_elem26)
+          (_etype31, _size28) = iprot.readListBegin()
+          for _i32 in xrange(_size28):
+            _elem33 = iprot.readString();
+            self.rm.append(_elem33)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -2078,8 +2514,8 @@ class removeFromWatchList_args:
     if self.rm is not None:
       oprot.writeFieldBegin('rm', TType.LIST, 1)
       oprot.writeListBegin(TType.STRING, len(self.rm))
-      for iter27 in self.rm:
-        oprot.writeString(iter27)
+      for iter34 in self.rm:
+        oprot.writeString(iter34)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -2199,10 +2635,10 @@ class removeZombieSymbols_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.rm = []
-          (_etype31, _size28) = iprot.readListBegin()
-          for _i32 in xrange(_size28):
-            _elem33 = iprot.readString();
-            self.rm.append(_elem33)
+          (_etype38, _size35) = iprot.readListBegin()
+          for _i39 in xrange(_size35):
+            _elem40 = iprot.readString();
+            self.rm.append(_elem40)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -2219,8 +2655,8 @@ class removeZombieSymbols_args:
     if self.rm is not None:
       oprot.writeFieldBegin('rm', TType.LIST, 1)
       oprot.writeListBegin(TType.STRING, len(self.rm))
-      for iter34 in self.rm:
-        oprot.writeString(iter34)
+      for iter41 in self.rm:
+        oprot.writeString(iter41)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -2431,6 +2867,659 @@ class getNextBar_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.STRUCT, 0)
       self.success.write(oprot)
+      oprot.writeFieldEnd()
+    if self.e is not None:
+      oprot.writeFieldBegin('e', TType.STRUCT, 1)
+      self.e.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.success)
+    value = (value * 31) ^ hash(self.e)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class reqStkPositions_args:
+  """
+  Attributes:
+   - refresh
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.BOOL, 'refresh', None, None, ), # 1
+  )
+
+  def __init__(self, refresh=None,):
+    self.refresh = refresh
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.BOOL:
+          self.refresh = iprot.readBool();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('reqStkPositions_args')
+    if self.refresh is not None:
+      oprot.writeFieldBegin('refresh', TType.BOOL, 1)
+      oprot.writeBool(self.refresh)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    if self.refresh is None:
+      raise TProtocol.TProtocolException(message='Required field refresh is unset!')
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.refresh)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class reqStkPositions_result:
+  """
+  Attributes:
+   - success
+   - e
+  """
+
+  thrift_spec = (
+    (0, TType.MAP, 'success', (TType.STRING,None,TType.STRUCT,(StkPosition, StkPosition.thrift_spec)), None, ), # 0
+    (1, TType.STRUCT, 'e', (Exception, Exception.thrift_spec), None, ), # 1
+  )
+
+  def __init__(self, success=None, e=None,):
+    self.success = success
+    self.e = e
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.MAP:
+          self.success = {}
+          (_ktype43, _vtype44, _size42 ) = iprot.readMapBegin()
+          for _i46 in xrange(_size42):
+            _key47 = iprot.readString();
+            _val48 = StkPosition()
+            _val48.read(iprot)
+            self.success[_key47] = _val48
+          iprot.readMapEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 1:
+        if ftype == TType.STRUCT:
+          self.e = Exception()
+          self.e.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('reqStkPositions_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.MAP, 0)
+      oprot.writeMapBegin(TType.STRING, TType.STRUCT, len(self.success))
+      for kiter49,viter50 in self.success.items():
+        oprot.writeString(kiter49)
+        viter50.write(oprot)
+      oprot.writeMapEnd()
+      oprot.writeFieldEnd()
+    if self.e is not None:
+      oprot.writeFieldBegin('e', TType.STRUCT, 1)
+      self.e.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.success)
+    value = (value * 31) ^ hash(self.e)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class reqOptPositions_args:
+  """
+  Attributes:
+   - refresh
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.BOOL, 'refresh', None, None, ), # 1
+  )
+
+  def __init__(self, refresh=None,):
+    self.refresh = refresh
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.BOOL:
+          self.refresh = iprot.readBool();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('reqOptPositions_args')
+    if self.refresh is not None:
+      oprot.writeFieldBegin('refresh', TType.BOOL, 1)
+      oprot.writeBool(self.refresh)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    if self.refresh is None:
+      raise TProtocol.TProtocolException(message='Required field refresh is unset!')
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.refresh)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class reqOptPositions_result:
+  """
+  Attributes:
+   - success
+   - e
+  """
+
+  thrift_spec = (
+    (0, TType.MAP, 'success', (TType.I64,None,TType.STRUCT,(OptPosition, OptPosition.thrift_spec)), None, ), # 0
+    (1, TType.STRUCT, 'e', (Exception, Exception.thrift_spec), None, ), # 1
+  )
+
+  def __init__(self, success=None, e=None,):
+    self.success = success
+    self.e = e
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.MAP:
+          self.success = {}
+          (_ktype52, _vtype53, _size51 ) = iprot.readMapBegin()
+          for _i55 in xrange(_size51):
+            _key56 = iprot.readI64();
+            _val57 = OptPosition()
+            _val57.read(iprot)
+            self.success[_key56] = _val57
+          iprot.readMapEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 1:
+        if ftype == TType.STRUCT:
+          self.e = Exception()
+          self.e.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('reqOptPositions_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.MAP, 0)
+      oprot.writeMapBegin(TType.I64, TType.STRUCT, len(self.success))
+      for kiter58,viter59 in self.success.items():
+        oprot.writeI64(kiter58)
+        viter59.write(oprot)
+      oprot.writeMapEnd()
+      oprot.writeFieldEnd()
+    if self.e is not None:
+      oprot.writeFieldBegin('e', TType.STRUCT, 1)
+      self.e.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.success)
+    value = (value * 31) ^ hash(self.e)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class reqAccountValue_args:
+  """
+  Attributes:
+   - acctCode
+   - refresh
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'acctCode', None, None, ), # 1
+    (2, TType.BOOL, 'refresh', None, None, ), # 2
+  )
+
+  def __init__(self, acctCode=None, refresh=None,):
+    self.acctCode = acctCode
+    self.refresh = refresh
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.acctCode = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.BOOL:
+          self.refresh = iprot.readBool();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('reqAccountValue_args')
+    if self.acctCode is not None:
+      oprot.writeFieldBegin('acctCode', TType.STRING, 1)
+      oprot.writeString(self.acctCode)
+      oprot.writeFieldEnd()
+    if self.refresh is not None:
+      oprot.writeFieldBegin('refresh', TType.BOOL, 2)
+      oprot.writeBool(self.refresh)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    if self.acctCode is None:
+      raise TProtocol.TProtocolException(message='Required field acctCode is unset!')
+    if self.refresh is None:
+      raise TProtocol.TProtocolException(message='Required field refresh is unset!')
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.acctCode)
+    value = (value * 31) ^ hash(self.refresh)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class reqAccountValue_result:
+  """
+  Attributes:
+   - success
+   - e
+  """
+
+  thrift_spec = (
+    (0, TType.MAP, 'success', (TType.STRING,None,TType.STRING,None), None, ), # 0
+    (1, TType.STRUCT, 'e', (Exception, Exception.thrift_spec), None, ), # 1
+  )
+
+  def __init__(self, success=None, e=None,):
+    self.success = success
+    self.e = e
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.MAP:
+          self.success = {}
+          (_ktype61, _vtype62, _size60 ) = iprot.readMapBegin()
+          for _i64 in xrange(_size60):
+            _key65 = iprot.readString();
+            _val66 = iprot.readString();
+            self.success[_key65] = _val66
+          iprot.readMapEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 1:
+        if ftype == TType.STRUCT:
+          self.e = Exception()
+          self.e.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('reqAccountValue_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.MAP, 0)
+      oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.success))
+      for kiter67,viter68 in self.success.items():
+        oprot.writeString(kiter67)
+        oprot.writeString(viter68)
+      oprot.writeMapEnd()
+      oprot.writeFieldEnd()
+    if self.e is not None:
+      oprot.writeFieldBegin('e', TType.STRUCT, 1)
+      self.e.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.success)
+    value = (value * 31) ^ hash(self.e)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class reqPortfolio_args:
+  """
+  Attributes:
+   - acctCode
+   - refresh
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'acctCode', None, None, ), # 1
+    (2, TType.BOOL, 'refresh', None, None, ), # 2
+  )
+
+  def __init__(self, acctCode=None, refresh=None,):
+    self.acctCode = acctCode
+    self.refresh = refresh
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.acctCode = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.BOOL:
+          self.refresh = iprot.readBool();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('reqPortfolio_args')
+    if self.acctCode is not None:
+      oprot.writeFieldBegin('acctCode', TType.STRING, 1)
+      oprot.writeString(self.acctCode)
+      oprot.writeFieldEnd()
+    if self.refresh is not None:
+      oprot.writeFieldBegin('refresh', TType.BOOL, 2)
+      oprot.writeBool(self.refresh)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    if self.acctCode is None:
+      raise TProtocol.TProtocolException(message='Required field acctCode is unset!')
+    if self.refresh is None:
+      raise TProtocol.TProtocolException(message='Required field refresh is unset!')
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.acctCode)
+    value = (value * 31) ^ hash(self.refresh)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class reqPortfolio_result:
+  """
+  Attributes:
+   - success
+   - e
+  """
+
+  thrift_spec = (
+    (0, TType.MAP, 'success', (TType.I64,None,TType.STRUCT,(Asset, Asset.thrift_spec)), None, ), # 0
+    (1, TType.STRUCT, 'e', (Exception, Exception.thrift_spec), None, ), # 1
+  )
+
+  def __init__(self, success=None, e=None,):
+    self.success = success
+    self.e = e
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.MAP:
+          self.success = {}
+          (_ktype70, _vtype71, _size69 ) = iprot.readMapBegin()
+          for _i73 in xrange(_size69):
+            _key74 = iprot.readI64();
+            _val75 = Asset()
+            _val75.read(iprot)
+            self.success[_key74] = _val75
+          iprot.readMapEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 1:
+        if ftype == TType.STRUCT:
+          self.e = Exception()
+          self.e.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('reqPortfolio_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.MAP, 0)
+      oprot.writeMapBegin(TType.I64, TType.STRUCT, len(self.success))
+      for kiter76,viter77 in self.success.items():
+        oprot.writeI64(kiter76)
+        viter77.write(oprot)
+      oprot.writeMapEnd()
       oprot.writeFieldEnd()
     if self.e is not None:
       oprot.writeFieldBegin('e', TType.STRUCT, 1)

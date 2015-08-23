@@ -32,11 +32,16 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
   print('   reqOpenOrders()')
   print('   reqAllOpenOrders()')
   print('  void reqGlobalCancel()')
-  print('  void requestRealTimeBars()')
+  print('   reqExecutions(ExecutionFilter ef)')
+  print('  void reqRealTimeBars()')
   print('  void addToWatchList( wl)')
   print('  void removeFromWatchList( rm)')
   print('  void removeZombieSymbols( rm)')
   print('  RealTimeBar getNextBar(string symbol)')
+  print('   reqStkPositions(bool refresh)')
+  print('   reqOptPositions(bool refresh)')
+  print('   reqAccountValue(string acctCode, bool refresh)')
+  print('   reqPortfolio(string acctCode, bool refresh)')
   print('')
   sys.exit(0)
 
@@ -141,11 +146,17 @@ elif cmd == 'reqGlobalCancel':
     sys.exit(1)
   pp.pprint(client.reqGlobalCancel())
 
-elif cmd == 'requestRealTimeBars':
-  if len(args) != 0:
-    print('requestRealTimeBars requires 0 args')
+elif cmd == 'reqExecutions':
+  if len(args) != 1:
+    print('reqExecutions requires 1 args')
     sys.exit(1)
-  pp.pprint(client.requestRealTimeBars())
+  pp.pprint(client.reqExecutions(eval(args[0]),))
+
+elif cmd == 'reqRealTimeBars':
+  if len(args) != 0:
+    print('reqRealTimeBars requires 0 args')
+    sys.exit(1)
+  pp.pprint(client.reqRealTimeBars())
 
 elif cmd == 'addToWatchList':
   if len(args) != 1:
@@ -170,6 +181,30 @@ elif cmd == 'getNextBar':
     print('getNextBar requires 1 args')
     sys.exit(1)
   pp.pprint(client.getNextBar(args[0],))
+
+elif cmd == 'reqStkPositions':
+  if len(args) != 1:
+    print('reqStkPositions requires 1 args')
+    sys.exit(1)
+  pp.pprint(client.reqStkPositions(eval(args[0]),))
+
+elif cmd == 'reqOptPositions':
+  if len(args) != 1:
+    print('reqOptPositions requires 1 args')
+    sys.exit(1)
+  pp.pprint(client.reqOptPositions(eval(args[0]),))
+
+elif cmd == 'reqAccountValue':
+  if len(args) != 2:
+    print('reqAccountValue requires 2 args')
+    sys.exit(1)
+  pp.pprint(client.reqAccountValue(args[0],eval(args[1]),))
+
+elif cmd == 'reqPortfolio':
+  if len(args) != 2:
+    print('reqPortfolio requires 2 args')
+    sys.exit(1)
+  pp.pprint(client.reqPortfolio(args[0],eval(args[1]),))
 
 else:
   print('Unrecognized method %s' % cmd)
