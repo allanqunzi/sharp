@@ -2,14 +2,10 @@
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
 #include "sharp.h"
-#define DEBUG 1
 
 namespace sharp{
 
 void init_logging(){
-
-	//boost::log::register_simple_formatter_factory< boost::log::trivial::severity_level, char >("Severity");
-
     boost::log::add_file_log(
         boost::log::keywords::file_name = "./logs/thriftServer_%Y%m%d.log",
         boost::log::keywords::open_mode = (std::ios::out | std::ios::app),
@@ -56,8 +52,7 @@ EWrapperImpl::EWrapperImpl( const std::vector<std::string> wl )
 	}
 }
 
-EWrapperImpl::~EWrapperImpl()
-{
+EWrapperImpl::~EWrapperImpl(){
 }
 
 bool EWrapperImpl::connect(const char *host, unsigned int port, int clientId)
@@ -76,15 +71,13 @@ bool EWrapperImpl::connect(const char *host, unsigned int port, int clientId)
 	return bRes;
 }
 
-void EWrapperImpl::disconnect() const
-{
+void EWrapperImpl::disconnect() const{
 	m_pClient->eDisconnect();
 
 	LOG(info)<<"Disconnected";
 }
 
-bool EWrapperImpl::isConnected() const
-{
+bool EWrapperImpl::isConnected() const{
 	return m_pClient->isConnected();
 }
 
@@ -96,8 +89,7 @@ void EWrapperImpl::winError( const IBString &str, int lastError){
 	LOG(info)<<"calling EWrapperImpl::winError";
 }
 
-void EWrapperImpl::monitor()
-{
+void EWrapperImpl::monitor(){
 	fd_set readSet, writeSet, errorSet;
 
 	struct timeval tval;
@@ -169,16 +161,14 @@ void EWrapperImpl::monitor()
 	}
 }
 
-void EWrapperImpl::reqCurrentTime()
-{
+void EWrapperImpl::reqCurrentTime(){
 	LOG(info)<<"Requesting Current Time";
 	// set ping deadline to "now + n seconds"
 	m_sleepDeadline = time( NULL) + PING_DEADLINE;
 	m_pClient->reqCurrentTime();
 }
 
-void EWrapperImpl::placeOrder()
-{
+void EWrapperImpl::placeOrder(){
 	auto & req = contract_order_request;
 	req.orderId = order_id.getNewId();
 	used_order_ids.push_back(req.orderId);
@@ -194,8 +184,7 @@ void EWrapperImpl::placeOrder()
 	placed_contract_orders.insert(req.orderId, req);
 }
 
-bool EWrapperImpl::cancelOrder(OrderId orderId)
-{
+bool EWrapperImpl::cancelOrder(OrderId orderId){
 	LOG(info)<<"Cancelling Order "<<orderId;
 
 	auto & m = placed_contract_orders.orderId_index_map;
@@ -217,7 +206,6 @@ bool EWrapperImpl::cancelOrder(OrderId orderId)
 void EWrapperImpl::orderStatus( OrderId orderId, const IBString &status, int filled,
 	   int remaining, double avgFillPrice, int permId, int parentId,
 	   double lastFillPrice, int clientId, const IBString& whyHeld)
-
 {
 	std::lock_guard<std::mutex> lk(mutex);
 	auto & m = placed_contract_orders.orderId_index_map;
@@ -256,6 +244,7 @@ void EWrapperImpl::reqAllOpenOrders(){
 	open_order_flag.store(false, std::memory_order_relaxed);
 	m_pClient->reqAllOpenOrders();
 }
+
 bool EWrapperImpl::reqGlobalCancel(){
 	try{
 		m_pClient->reqGlobalCancel();
@@ -283,20 +272,18 @@ void EWrapperImpl::openOrder( OrderId orderId, const Contract& c, const Order& o
 }
 
 // event called by m_pClient->onReceive();
-void EWrapperImpl::openOrderEnd() {
+void EWrapperImpl::openOrderEnd(){
 	open_order_flag.store(true, std::memory_order_relaxed);
 }
 
 // event called by m_pClient->onReceive();
-void EWrapperImpl::nextValidId( OrderId orderId)
-{
+void EWrapperImpl::nextValidId( OrderId orderId){
 	m_orderId = orderId;
 	order_id.setInitial(orderId - 1L);
 	LOG(info)<<"m_orderId updated, order_id.id is initialized to "<<(orderId - 1);
 }
 
-void EWrapperImpl::currentTime( long time)
-{
+void EWrapperImpl::currentTime( long time){
 	time_t t = ( time_t)time;
 	struct tm * timeinfo = localtime ( &t);
 	printf( "The current date/time is: %s", asctime( timeinfo));
@@ -305,15 +292,13 @@ void EWrapperImpl::currentTime( long time)
 	m_sleepDeadline = now + SLEEP_BETWEEN_PINGS;
 }
 
-void EWrapperImpl::error(const int id, const int errorCode, const IBString errorString)
-{
+void EWrapperImpl::error(const int id, const int errorCode, const IBString errorString){
 	// LOG(error)<<"Error id = "<<id<<", errorCode = "<<errorCode<<", msg = "<<errorString;
 	if( id == -1 && errorCode == 1100) // if "Connectivity between IB and TWS has been lost"
 		disconnect();
 }
 
-void EWrapperImpl::reqMarketSnapshot()
-{
+void EWrapperImpl::reqMarketSnapshot(){
 	Contract contract;
 	contract.symbol = "AMZN";
 	contract.secType = "STK";
