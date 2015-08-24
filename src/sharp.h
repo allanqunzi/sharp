@@ -259,11 +259,9 @@ public:
 	bool reqRealTimeBars();
 	// getNextBar is done at thrift level
 
-
     // account, portfolio, position related
     void reqAccountUpdates(bool subscribe, const std::string & acctCode);
     void reqPositions();
-
 
     bool checkValidId( OrderId orderId);
 	std::string getField(TickType tickType);
@@ -345,12 +343,11 @@ public:
 	std::string host;
 	unsigned int port;
 	int clientId;
-	std::mutex mutex; // mutex for order statuses
+    std::mutex mutex; // mutex for order statuses
 
     IdType<TickerId> ticker_id{-1L};
     IdType<OrderId> order_id{-1L};
     IdType<int> req_id{1};
-
 
 	std::atomic<bool> open_order_flag;
 	std::set<OrderId> open_order_set;
