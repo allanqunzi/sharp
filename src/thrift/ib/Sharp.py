@@ -111,17 +111,22 @@ class Iface:
     """
     pass
 
-  def reqAccountValue(self, acctCode, refresh):
+  def cancelPositions(self):
+    pass
+
+  def reqAccountUpdates(self, subscribe, acctCode, refresh):
     """
     Parameters:
+     - subscribe
      - acctCode
      - refresh
     """
     pass
 
-  def reqPortfolio(self, acctCode, refresh):
+  def reqPortfolio(self, subscribe, acctCode, refresh):
     """
     Parameters:
+     - subscribe
      - acctCode
      - refresh
     """
@@ -626,25 +631,18 @@ class Client(Iface):
       raise result.e
     raise TApplicationException(TApplicationException.MISSING_RESULT, "reqOptPositions failed: unknown result");
 
-  def reqAccountValue(self, acctCode, refresh):
-    """
-    Parameters:
-     - acctCode
-     - refresh
-    """
-    self.send_reqAccountValue(acctCode, refresh)
-    return self.recv_reqAccountValue()
+  def cancelPositions(self):
+    self.send_cancelPositions()
+    self.recv_cancelPositions()
 
-  def send_reqAccountValue(self, acctCode, refresh):
-    self._oprot.writeMessageBegin('reqAccountValue', TMessageType.CALL, self._seqid)
-    args = reqAccountValue_args()
-    args.acctCode = acctCode
-    args.refresh = refresh
+  def send_cancelPositions(self):
+    self._oprot.writeMessageBegin('cancelPositions', TMessageType.CALL, self._seqid)
+    args = cancelPositions_args()
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
 
-  def recv_reqAccountValue(self):
+  def recv_cancelPositions(self):
     iprot = self._iprot
     (fname, mtype, rseqid) = iprot.readMessageBegin()
     if mtype == TMessageType.EXCEPTION:
@@ -652,27 +650,64 @@ class Client(Iface):
       x.read(iprot)
       iprot.readMessageEnd()
       raise x
-    result = reqAccountValue_result()
+    result = cancelPositions_result()
+    result.read(iprot)
+    iprot.readMessageEnd()
+    if result.e is not None:
+      raise result.e
+    return
+
+  def reqAccountUpdates(self, subscribe, acctCode, refresh):
+    """
+    Parameters:
+     - subscribe
+     - acctCode
+     - refresh
+    """
+    self.send_reqAccountUpdates(subscribe, acctCode, refresh)
+    return self.recv_reqAccountUpdates()
+
+  def send_reqAccountUpdates(self, subscribe, acctCode, refresh):
+    self._oprot.writeMessageBegin('reqAccountUpdates', TMessageType.CALL, self._seqid)
+    args = reqAccountUpdates_args()
+    args.subscribe = subscribe
+    args.acctCode = acctCode
+    args.refresh = refresh
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_reqAccountUpdates(self):
+    iprot = self._iprot
+    (fname, mtype, rseqid) = iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(iprot)
+      iprot.readMessageEnd()
+      raise x
+    result = reqAccountUpdates_result()
     result.read(iprot)
     iprot.readMessageEnd()
     if result.success is not None:
       return result.success
     if result.e is not None:
       raise result.e
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "reqAccountValue failed: unknown result");
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "reqAccountUpdates failed: unknown result");
 
-  def reqPortfolio(self, acctCode, refresh):
+  def reqPortfolio(self, subscribe, acctCode, refresh):
     """
     Parameters:
+     - subscribe
      - acctCode
      - refresh
     """
-    self.send_reqPortfolio(acctCode, refresh)
+    self.send_reqPortfolio(subscribe, acctCode, refresh)
     return self.recv_reqPortfolio()
 
-  def send_reqPortfolio(self, acctCode, refresh):
+  def send_reqPortfolio(self, subscribe, acctCode, refresh):
     self._oprot.writeMessageBegin('reqPortfolio', TMessageType.CALL, self._seqid)
     args = reqPortfolio_args()
+    args.subscribe = subscribe
     args.acctCode = acctCode
     args.refresh = refresh
     args.write(self._oprot)
@@ -717,7 +752,8 @@ class Processor(Iface, TProcessor):
     self._processMap["getNextBar"] = Processor.process_getNextBar
     self._processMap["reqStkPositions"] = Processor.process_reqStkPositions
     self._processMap["reqOptPositions"] = Processor.process_reqOptPositions
-    self._processMap["reqAccountValue"] = Processor.process_reqAccountValue
+    self._processMap["cancelPositions"] = Processor.process_cancelPositions
+    self._processMap["reqAccountUpdates"] = Processor.process_reqAccountUpdates
     self._processMap["reqPortfolio"] = Processor.process_reqPortfolio
 
   def process(self, iprot, oprot):
@@ -953,16 +989,30 @@ class Processor(Iface, TProcessor):
     oprot.writeMessageEnd()
     oprot.trans.flush()
 
-  def process_reqAccountValue(self, seqid, iprot, oprot):
-    args = reqAccountValue_args()
+  def process_cancelPositions(self, seqid, iprot, oprot):
+    args = cancelPositions_args()
     args.read(iprot)
     iprot.readMessageEnd()
-    result = reqAccountValue_result()
+    result = cancelPositions_result()
     try:
-      result.success = self._handler.reqAccountValue(args.acctCode, args.refresh)
+      self._handler.cancelPositions()
     except Exception, e:
       result.e = e
-    oprot.writeMessageBegin("reqAccountValue", TMessageType.REPLY, seqid)
+    oprot.writeMessageBegin("cancelPositions", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_reqAccountUpdates(self, seqid, iprot, oprot):
+    args = reqAccountUpdates_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = reqAccountUpdates_result()
+    try:
+      result.success = self._handler.reqAccountUpdates(args.subscribe, args.acctCode, args.refresh)
+    except Exception, e:
+      result.e = e
+    oprot.writeMessageBegin("reqAccountUpdates", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
     oprot.trans.flush()
@@ -973,7 +1023,7 @@ class Processor(Iface, TProcessor):
     iprot.readMessageEnd()
     result = reqPortfolio_result()
     try:
-      result.success = self._handler.reqPortfolio(args.acctCode, args.refresh)
+      result.success = self._handler.reqPortfolio(args.subscribe, args.acctCode, args.refresh)
     except Exception, e:
       result.e = e
     oprot.writeMessageBegin("reqPortfolio", TMessageType.REPLY, seqid)
@@ -3208,20 +3258,135 @@ class reqOptPositions_result:
   def __ne__(self, other):
     return not (self == other)
 
-class reqAccountValue_args:
+class cancelPositions_args:
+
+  thrift_spec = (
+  )
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('cancelPositions_args')
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __hash__(self):
+    value = 17
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class cancelPositions_result:
   """
   Attributes:
+   - e
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRUCT, 'e', (Exception, Exception.thrift_spec), None, ), # 1
+  )
+
+  def __init__(self, e=None,):
+    self.e = e
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.e = Exception()
+          self.e.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('cancelPositions_result')
+    if self.e is not None:
+      oprot.writeFieldBegin('e', TType.STRUCT, 1)
+      self.e.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.e)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class reqAccountUpdates_args:
+  """
+  Attributes:
+   - subscribe
    - acctCode
    - refresh
   """
 
   thrift_spec = (
     None, # 0
-    (1, TType.STRING, 'acctCode', None, None, ), # 1
-    (2, TType.BOOL, 'refresh', None, None, ), # 2
+    (1, TType.BOOL, 'subscribe', None, None, ), # 1
+    (2, TType.STRING, 'acctCode', None, None, ), # 2
+    (3, TType.BOOL, 'refresh', None, None, ), # 3
   )
 
-  def __init__(self, acctCode=None, refresh=None,):
+  def __init__(self, subscribe=None, acctCode=None, refresh=None,):
+    self.subscribe = subscribe
     self.acctCode = acctCode
     self.refresh = refresh
 
@@ -3235,11 +3400,16 @@ class reqAccountValue_args:
       if ftype == TType.STOP:
         break
       if fid == 1:
+        if ftype == TType.BOOL:
+          self.subscribe = iprot.readBool();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
         if ftype == TType.STRING:
           self.acctCode = iprot.readString();
         else:
           iprot.skip(ftype)
-      elif fid == 2:
+      elif fid == 3:
         if ftype == TType.BOOL:
           self.refresh = iprot.readBool();
         else:
@@ -3253,19 +3423,25 @@ class reqAccountValue_args:
     if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
-    oprot.writeStructBegin('reqAccountValue_args')
+    oprot.writeStructBegin('reqAccountUpdates_args')
+    if self.subscribe is not None:
+      oprot.writeFieldBegin('subscribe', TType.BOOL, 1)
+      oprot.writeBool(self.subscribe)
+      oprot.writeFieldEnd()
     if self.acctCode is not None:
-      oprot.writeFieldBegin('acctCode', TType.STRING, 1)
+      oprot.writeFieldBegin('acctCode', TType.STRING, 2)
       oprot.writeString(self.acctCode)
       oprot.writeFieldEnd()
     if self.refresh is not None:
-      oprot.writeFieldBegin('refresh', TType.BOOL, 2)
+      oprot.writeFieldBegin('refresh', TType.BOOL, 3)
       oprot.writeBool(self.refresh)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
   def validate(self):
+    if self.subscribe is None:
+      raise TProtocol.TProtocolException(message='Required field subscribe is unset!')
     if self.acctCode is None:
       raise TProtocol.TProtocolException(message='Required field acctCode is unset!')
     if self.refresh is None:
@@ -3275,6 +3451,7 @@ class reqAccountValue_args:
 
   def __hash__(self):
     value = 17
+    value = (value * 31) ^ hash(self.subscribe)
     value = (value * 31) ^ hash(self.acctCode)
     value = (value * 31) ^ hash(self.refresh)
     return value
@@ -3290,7 +3467,7 @@ class reqAccountValue_args:
   def __ne__(self, other):
     return not (self == other)
 
-class reqAccountValue_result:
+class reqAccountUpdates_result:
   """
   Attributes:
    - success
@@ -3341,7 +3518,7 @@ class reqAccountValue_result:
     if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
-    oprot.writeStructBegin('reqAccountValue_result')
+    oprot.writeStructBegin('reqAccountUpdates_result')
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.MAP, 0)
       oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.success))
@@ -3381,17 +3558,20 @@ class reqAccountValue_result:
 class reqPortfolio_args:
   """
   Attributes:
+   - subscribe
    - acctCode
    - refresh
   """
 
   thrift_spec = (
     None, # 0
-    (1, TType.STRING, 'acctCode', None, None, ), # 1
-    (2, TType.BOOL, 'refresh', None, None, ), # 2
+    (1, TType.BOOL, 'subscribe', None, None, ), # 1
+    (2, TType.STRING, 'acctCode', None, None, ), # 2
+    (3, TType.BOOL, 'refresh', None, None, ), # 3
   )
 
-  def __init__(self, acctCode=None, refresh=None,):
+  def __init__(self, subscribe=None, acctCode=None, refresh=None,):
+    self.subscribe = subscribe
     self.acctCode = acctCode
     self.refresh = refresh
 
@@ -3405,11 +3585,16 @@ class reqPortfolio_args:
       if ftype == TType.STOP:
         break
       if fid == 1:
+        if ftype == TType.BOOL:
+          self.subscribe = iprot.readBool();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
         if ftype == TType.STRING:
           self.acctCode = iprot.readString();
         else:
           iprot.skip(ftype)
-      elif fid == 2:
+      elif fid == 3:
         if ftype == TType.BOOL:
           self.refresh = iprot.readBool();
         else:
@@ -3424,18 +3609,24 @@ class reqPortfolio_args:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
     oprot.writeStructBegin('reqPortfolio_args')
+    if self.subscribe is not None:
+      oprot.writeFieldBegin('subscribe', TType.BOOL, 1)
+      oprot.writeBool(self.subscribe)
+      oprot.writeFieldEnd()
     if self.acctCode is not None:
-      oprot.writeFieldBegin('acctCode', TType.STRING, 1)
+      oprot.writeFieldBegin('acctCode', TType.STRING, 2)
       oprot.writeString(self.acctCode)
       oprot.writeFieldEnd()
     if self.refresh is not None:
-      oprot.writeFieldBegin('refresh', TType.BOOL, 2)
+      oprot.writeFieldBegin('refresh', TType.BOOL, 3)
       oprot.writeBool(self.refresh)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
   def validate(self):
+    if self.subscribe is None:
+      raise TProtocol.TProtocolException(message='Required field subscribe is unset!')
     if self.acctCode is None:
       raise TProtocol.TProtocolException(message='Required field acctCode is unset!')
     if self.refresh is None:
@@ -3445,6 +3636,7 @@ class reqPortfolio_args:
 
   def __hash__(self):
     value = 17
+    value = (value * 31) ^ hash(self.subscribe)
     value = (value * 31) ^ hash(self.acctCode)
     value = (value * 31) ^ hash(self.refresh)
     return value

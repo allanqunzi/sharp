@@ -170,6 +170,7 @@ public:
             for(const auto & e : s){
                 ecs.push_back(translate_executedcon(recv[e]));
             }
+            trader.requested_execs.clear();
         } );
     }
 
@@ -370,16 +371,29 @@ public:
         } );
     }
 
-    void reqAccountValue(std::map<std::string, std::string> & values,
+    void cancelPositions(){
+        protect( [this](){
+            trader.cancelPositions();
+        } );
+    }
+
+    void reqAccountUpdates(std::map<std::string, std::string> & values,
+                            const bool subscribe,
                             const std::string& acctCode, const bool refresh)
     {
-        protect( [this, &values, &acctCode, refresh](){
+        protect( [this, &values, subscribe, &acctCode, refresh](){
+            if(!subscribe){
+                trader.reqAccountUpdates(false, acctCode);
+                return;
+            }
             if(refresh){
+                std::cout<<"============"<<acctCode<<std::endl;
                 trader.reqAccountUpdates(true, acctCode);
                 auto & atomic_flag = trader.account_flag;
                 while(!atomic_flag.load(std::memory_order_relaxed)){
                     std::this_thread::sleep_for(OPENORDER_WAITING_TIME);
                 }
+                std::cout<<"============"<<std::endl;
             }
             auto & acnts = trader.accounts;
             if(acnts.size() == 1){ // only one account, OK.
@@ -401,9 +415,14 @@ public:
     }
 
     void reqPortfolio(std::map<int64_t, api::Asset> & pto,
+        const bool subscribe,
         const std::string& acctCode, const bool refresh)
     {
-        protect( [this, &pto, &acctCode, refresh](){
+        protect( [this, &pto, subscribe, &acctCode, refresh](){
+            if(!subscribe){
+                trader.reqAccountUpdates(false, acctCode);
+                return;
+            }
             if(refresh){
                 trader.reqAccountUpdates(true, acctCode);
                 auto & atomic_flag = trader.account_flag;
@@ -460,12 +479,12 @@ void run_server (EWrapperImpl & ibtrader) {
         ++attempt;
         ibtrader.connect( ibtrader.host.c_str(), ibtrader.port, ibtrader.clientId);
 
-        ibtrader.reqAccountUpdates(true, "DU224610");
+        //ibtrader.reqAccountUpdates(true, "DU224610");
 
-        while( ibtrader.isConnected() ) {
+        while( ibtrader.isConnected() ){
             ibtrader.monitor();
         }
-        if( attempt >= MAX_ATTEMPTS) {
+        if( attempt >= MAX_ATTEMPTS){
             break;
         }
         std::this_thread::sleep_for(ATTEMPT_WAITING_TIME);

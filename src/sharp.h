@@ -262,6 +262,7 @@ public:
 	// account, portfolio, position related
 	void reqAccountUpdates(bool subscribe, const std::string & acctCode);
 	void reqPositions();
+	void cancelPositions();
 
 	bool checkValidId( OrderId orderId);
 	std::string getField(TickType tickType);

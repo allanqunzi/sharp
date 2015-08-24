@@ -31,8 +31,9 @@ class SharpIf {
   virtual void getNextBar(RealTimeBar& _return, const std::string& symbol) = 0;
   virtual void reqStkPositions(std::map<std::string, StkPosition> & _return, const bool refresh) = 0;
   virtual void reqOptPositions(std::map<int64_t, OptPosition> & _return, const bool refresh) = 0;
-  virtual void reqAccountValue(std::map<std::string, std::string> & _return, const std::string& acctCode, const bool refresh) = 0;
-  virtual void reqPortfolio(std::map<int64_t, Asset> & _return, const std::string& acctCode, const bool refresh) = 0;
+  virtual void cancelPositions() = 0;
+  virtual void reqAccountUpdates(std::map<std::string, std::string> & _return, const bool subscribe, const std::string& acctCode, const bool refresh) = 0;
+  virtual void reqPortfolio(std::map<int64_t, Asset> & _return, const bool subscribe, const std::string& acctCode, const bool refresh) = 0;
 };
 
 class SharpIfFactory {
@@ -111,10 +112,13 @@ class SharpNull : virtual public SharpIf {
   void reqOptPositions(std::map<int64_t, OptPosition> & /* _return */, const bool /* refresh */) {
     return;
   }
-  void reqAccountValue(std::map<std::string, std::string> & /* _return */, const std::string& /* acctCode */, const bool /* refresh */) {
+  void cancelPositions() {
     return;
   }
-  void reqPortfolio(std::map<int64_t, Asset> & /* _return */, const std::string& /* acctCode */, const bool /* refresh */) {
+  void reqAccountUpdates(std::map<std::string, std::string> & /* _return */, const bool /* subscribe */, const std::string& /* acctCode */, const bool /* refresh */) {
+    return;
+  }
+  void reqPortfolio(std::map<int64_t, Asset> & /* _return */, const bool /* subscribe */, const std::string& /* acctCode */, const bool /* refresh */) {
     return;
   }
 };
@@ -1992,90 +1996,204 @@ class Sharp_reqOptPositions_presult {
 };
 
 
-class Sharp_reqAccountValue_args {
+class Sharp_cancelPositions_args {
  public:
 
-  static const char* ascii_fingerprint; // = "7D61C9AA00102AB4D8F72A1DA58297DC";
-  static const uint8_t binary_fingerprint[16]; // = {0x7D,0x61,0xC9,0xAA,0x00,0x10,0x2A,0xB4,0xD8,0xF7,0x2A,0x1D,0xA5,0x82,0x97,0xDC};
+  static const char* ascii_fingerprint; // = "99914B932BD37A50B983C5E7C90AE93B";
+  static const uint8_t binary_fingerprint[16]; // = {0x99,0x91,0x4B,0x93,0x2B,0xD3,0x7A,0x50,0xB9,0x83,0xC5,0xE7,0xC9,0x0A,0xE9,0x3B};
 
-  Sharp_reqAccountValue_args(const Sharp_reqAccountValue_args&);
-  Sharp_reqAccountValue_args& operator=(const Sharp_reqAccountValue_args&);
-  Sharp_reqAccountValue_args() : acctCode(), refresh(0) {
+  Sharp_cancelPositions_args(const Sharp_cancelPositions_args&);
+  Sharp_cancelPositions_args& operator=(const Sharp_cancelPositions_args&);
+  Sharp_cancelPositions_args() {
   }
 
-  virtual ~Sharp_reqAccountValue_args() throw();
+  virtual ~Sharp_cancelPositions_args() throw();
+
+  bool operator == (const Sharp_cancelPositions_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const Sharp_cancelPositions_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Sharp_cancelPositions_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_cancelPositions_args& obj);
+};
+
+
+class Sharp_cancelPositions_pargs {
+ public:
+
+  static const char* ascii_fingerprint; // = "99914B932BD37A50B983C5E7C90AE93B";
+  static const uint8_t binary_fingerprint[16]; // = {0x99,0x91,0x4B,0x93,0x2B,0xD3,0x7A,0x50,0xB9,0x83,0xC5,0xE7,0xC9,0x0A,0xE9,0x3B};
+
+
+  virtual ~Sharp_cancelPositions_pargs() throw();
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_cancelPositions_pargs& obj);
+};
+
+typedef struct _Sharp_cancelPositions_result__isset {
+  _Sharp_cancelPositions_result__isset() : e(false) {}
+  bool e :1;
+} _Sharp_cancelPositions_result__isset;
+
+class Sharp_cancelPositions_result {
+ public:
+
+  static const char* ascii_fingerprint; // = "0A23AF95FD017F7C6C78570E7E17112A";
+  static const uint8_t binary_fingerprint[16]; // = {0x0A,0x23,0xAF,0x95,0xFD,0x01,0x7F,0x7C,0x6C,0x78,0x57,0x0E,0x7E,0x17,0x11,0x2A};
+
+  Sharp_cancelPositions_result(const Sharp_cancelPositions_result&);
+  Sharp_cancelPositions_result& operator=(const Sharp_cancelPositions_result&);
+  Sharp_cancelPositions_result() {
+  }
+
+  virtual ~Sharp_cancelPositions_result() throw();
+  Exception e;
+
+  _Sharp_cancelPositions_result__isset __isset;
+
+  void __set_e(const Exception& val);
+
+  bool operator == (const Sharp_cancelPositions_result & rhs) const
+  {
+    if (!(e == rhs.e))
+      return false;
+    return true;
+  }
+  bool operator != (const Sharp_cancelPositions_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Sharp_cancelPositions_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_cancelPositions_result& obj);
+};
+
+typedef struct _Sharp_cancelPositions_presult__isset {
+  _Sharp_cancelPositions_presult__isset() : e(false) {}
+  bool e :1;
+} _Sharp_cancelPositions_presult__isset;
+
+class Sharp_cancelPositions_presult {
+ public:
+
+  static const char* ascii_fingerprint; // = "0A23AF95FD017F7C6C78570E7E17112A";
+  static const uint8_t binary_fingerprint[16]; // = {0x0A,0x23,0xAF,0x95,0xFD,0x01,0x7F,0x7C,0x6C,0x78,0x57,0x0E,0x7E,0x17,0x11,0x2A};
+
+
+  virtual ~Sharp_cancelPositions_presult() throw();
+  Exception e;
+
+  _Sharp_cancelPositions_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_cancelPositions_presult& obj);
+};
+
+
+class Sharp_reqAccountUpdates_args {
+ public:
+
+  static const char* ascii_fingerprint; // = "1626D04F8939E5D2DA388AC6D1CCCAF2";
+  static const uint8_t binary_fingerprint[16]; // = {0x16,0x26,0xD0,0x4F,0x89,0x39,0xE5,0xD2,0xDA,0x38,0x8A,0xC6,0xD1,0xCC,0xCA,0xF2};
+
+  Sharp_reqAccountUpdates_args(const Sharp_reqAccountUpdates_args&);
+  Sharp_reqAccountUpdates_args& operator=(const Sharp_reqAccountUpdates_args&);
+  Sharp_reqAccountUpdates_args() : subscribe(0), acctCode(), refresh(0) {
+  }
+
+  virtual ~Sharp_reqAccountUpdates_args() throw();
+  bool subscribe;
   std::string acctCode;
   bool refresh;
+
+  void __set_subscribe(const bool val);
 
   void __set_acctCode(const std::string& val);
 
   void __set_refresh(const bool val);
 
-  bool operator == (const Sharp_reqAccountValue_args & rhs) const
+  bool operator == (const Sharp_reqAccountUpdates_args & rhs) const
   {
+    if (!(subscribe == rhs.subscribe))
+      return false;
     if (!(acctCode == rhs.acctCode))
       return false;
     if (!(refresh == rhs.refresh))
       return false;
     return true;
   }
-  bool operator != (const Sharp_reqAccountValue_args &rhs) const {
+  bool operator != (const Sharp_reqAccountUpdates_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const Sharp_reqAccountValue_args & ) const;
+  bool operator < (const Sharp_reqAccountUpdates_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
-  friend std::ostream& operator<<(std::ostream& out, const Sharp_reqAccountValue_args& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_reqAccountUpdates_args& obj);
 };
 
 
-class Sharp_reqAccountValue_pargs {
+class Sharp_reqAccountUpdates_pargs {
  public:
 
-  static const char* ascii_fingerprint; // = "7D61C9AA00102AB4D8F72A1DA58297DC";
-  static const uint8_t binary_fingerprint[16]; // = {0x7D,0x61,0xC9,0xAA,0x00,0x10,0x2A,0xB4,0xD8,0xF7,0x2A,0x1D,0xA5,0x82,0x97,0xDC};
+  static const char* ascii_fingerprint; // = "1626D04F8939E5D2DA388AC6D1CCCAF2";
+  static const uint8_t binary_fingerprint[16]; // = {0x16,0x26,0xD0,0x4F,0x89,0x39,0xE5,0xD2,0xDA,0x38,0x8A,0xC6,0xD1,0xCC,0xCA,0xF2};
 
 
-  virtual ~Sharp_reqAccountValue_pargs() throw();
+  virtual ~Sharp_reqAccountUpdates_pargs() throw();
+  const bool* subscribe;
   const std::string* acctCode;
   const bool* refresh;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
-  friend std::ostream& operator<<(std::ostream& out, const Sharp_reqAccountValue_pargs& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_reqAccountUpdates_pargs& obj);
 };
 
-typedef struct _Sharp_reqAccountValue_result__isset {
-  _Sharp_reqAccountValue_result__isset() : success(false), e(false) {}
+typedef struct _Sharp_reqAccountUpdates_result__isset {
+  _Sharp_reqAccountUpdates_result__isset() : success(false), e(false) {}
   bool success :1;
   bool e :1;
-} _Sharp_reqAccountValue_result__isset;
+} _Sharp_reqAccountUpdates_result__isset;
 
-class Sharp_reqAccountValue_result {
+class Sharp_reqAccountUpdates_result {
  public:
 
   static const char* ascii_fingerprint; // = "9DBC3979CFCEE37574785B82EE6B1FB3";
   static const uint8_t binary_fingerprint[16]; // = {0x9D,0xBC,0x39,0x79,0xCF,0xCE,0xE3,0x75,0x74,0x78,0x5B,0x82,0xEE,0x6B,0x1F,0xB3};
 
-  Sharp_reqAccountValue_result(const Sharp_reqAccountValue_result&);
-  Sharp_reqAccountValue_result& operator=(const Sharp_reqAccountValue_result&);
-  Sharp_reqAccountValue_result() {
+  Sharp_reqAccountUpdates_result(const Sharp_reqAccountUpdates_result&);
+  Sharp_reqAccountUpdates_result& operator=(const Sharp_reqAccountUpdates_result&);
+  Sharp_reqAccountUpdates_result() {
   }
 
-  virtual ~Sharp_reqAccountValue_result() throw();
+  virtual ~Sharp_reqAccountUpdates_result() throw();
   std::map<std::string, std::string>  success;
   Exception e;
 
-  _Sharp_reqAccountValue_result__isset __isset;
+  _Sharp_reqAccountUpdates_result__isset __isset;
 
   void __set_success(const std::map<std::string, std::string> & val);
 
   void __set_e(const Exception& val);
 
-  bool operator == (const Sharp_reqAccountValue_result & rhs) const
+  bool operator == (const Sharp_reqAccountUpdates_result & rhs) const
   {
     if (!(success == rhs.success))
       return false;
@@ -2083,57 +2201,60 @@ class Sharp_reqAccountValue_result {
       return false;
     return true;
   }
-  bool operator != (const Sharp_reqAccountValue_result &rhs) const {
+  bool operator != (const Sharp_reqAccountUpdates_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const Sharp_reqAccountValue_result & ) const;
+  bool operator < (const Sharp_reqAccountUpdates_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
-  friend std::ostream& operator<<(std::ostream& out, const Sharp_reqAccountValue_result& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_reqAccountUpdates_result& obj);
 };
 
-typedef struct _Sharp_reqAccountValue_presult__isset {
-  _Sharp_reqAccountValue_presult__isset() : success(false), e(false) {}
+typedef struct _Sharp_reqAccountUpdates_presult__isset {
+  _Sharp_reqAccountUpdates_presult__isset() : success(false), e(false) {}
   bool success :1;
   bool e :1;
-} _Sharp_reqAccountValue_presult__isset;
+} _Sharp_reqAccountUpdates_presult__isset;
 
-class Sharp_reqAccountValue_presult {
+class Sharp_reqAccountUpdates_presult {
  public:
 
   static const char* ascii_fingerprint; // = "9DBC3979CFCEE37574785B82EE6B1FB3";
   static const uint8_t binary_fingerprint[16]; // = {0x9D,0xBC,0x39,0x79,0xCF,0xCE,0xE3,0x75,0x74,0x78,0x5B,0x82,0xEE,0x6B,0x1F,0xB3};
 
 
-  virtual ~Sharp_reqAccountValue_presult() throw();
+  virtual ~Sharp_reqAccountUpdates_presult() throw();
   std::map<std::string, std::string> * success;
   Exception e;
 
-  _Sharp_reqAccountValue_presult__isset __isset;
+  _Sharp_reqAccountUpdates_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
-  friend std::ostream& operator<<(std::ostream& out, const Sharp_reqAccountValue_presult& obj);
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_reqAccountUpdates_presult& obj);
 };
 
 
 class Sharp_reqPortfolio_args {
  public:
 
-  static const char* ascii_fingerprint; // = "7D61C9AA00102AB4D8F72A1DA58297DC";
-  static const uint8_t binary_fingerprint[16]; // = {0x7D,0x61,0xC9,0xAA,0x00,0x10,0x2A,0xB4,0xD8,0xF7,0x2A,0x1D,0xA5,0x82,0x97,0xDC};
+  static const char* ascii_fingerprint; // = "1626D04F8939E5D2DA388AC6D1CCCAF2";
+  static const uint8_t binary_fingerprint[16]; // = {0x16,0x26,0xD0,0x4F,0x89,0x39,0xE5,0xD2,0xDA,0x38,0x8A,0xC6,0xD1,0xCC,0xCA,0xF2};
 
   Sharp_reqPortfolio_args(const Sharp_reqPortfolio_args&);
   Sharp_reqPortfolio_args& operator=(const Sharp_reqPortfolio_args&);
-  Sharp_reqPortfolio_args() : acctCode(), refresh(0) {
+  Sharp_reqPortfolio_args() : subscribe(0), acctCode(), refresh(0) {
   }
 
   virtual ~Sharp_reqPortfolio_args() throw();
+  bool subscribe;
   std::string acctCode;
   bool refresh;
+
+  void __set_subscribe(const bool val);
 
   void __set_acctCode(const std::string& val);
 
@@ -2141,6 +2262,8 @@ class Sharp_reqPortfolio_args {
 
   bool operator == (const Sharp_reqPortfolio_args & rhs) const
   {
+    if (!(subscribe == rhs.subscribe))
+      return false;
     if (!(acctCode == rhs.acctCode))
       return false;
     if (!(refresh == rhs.refresh))
@@ -2163,11 +2286,12 @@ class Sharp_reqPortfolio_args {
 class Sharp_reqPortfolio_pargs {
  public:
 
-  static const char* ascii_fingerprint; // = "7D61C9AA00102AB4D8F72A1DA58297DC";
-  static const uint8_t binary_fingerprint[16]; // = {0x7D,0x61,0xC9,0xAA,0x00,0x10,0x2A,0xB4,0xD8,0xF7,0x2A,0x1D,0xA5,0x82,0x97,0xDC};
+  static const char* ascii_fingerprint; // = "1626D04F8939E5D2DA388AC6D1CCCAF2";
+  static const uint8_t binary_fingerprint[16]; // = {0x16,0x26,0xD0,0x4F,0x89,0x39,0xE5,0xD2,0xDA,0x38,0x8A,0xC6,0xD1,0xCC,0xCA,0xF2};
 
 
   virtual ~Sharp_reqPortfolio_pargs() throw();
+  const bool* subscribe;
   const std::string* acctCode;
   const bool* refresh;
 
@@ -2320,11 +2444,14 @@ class SharpClient : virtual public SharpIf {
   void reqOptPositions(std::map<int64_t, OptPosition> & _return, const bool refresh);
   void send_reqOptPositions(const bool refresh);
   void recv_reqOptPositions(std::map<int64_t, OptPosition> & _return);
-  void reqAccountValue(std::map<std::string, std::string> & _return, const std::string& acctCode, const bool refresh);
-  void send_reqAccountValue(const std::string& acctCode, const bool refresh);
-  void recv_reqAccountValue(std::map<std::string, std::string> & _return);
-  void reqPortfolio(std::map<int64_t, Asset> & _return, const std::string& acctCode, const bool refresh);
-  void send_reqPortfolio(const std::string& acctCode, const bool refresh);
+  void cancelPositions();
+  void send_cancelPositions();
+  void recv_cancelPositions();
+  void reqAccountUpdates(std::map<std::string, std::string> & _return, const bool subscribe, const std::string& acctCode, const bool refresh);
+  void send_reqAccountUpdates(const bool subscribe, const std::string& acctCode, const bool refresh);
+  void recv_reqAccountUpdates(std::map<std::string, std::string> & _return);
+  void reqPortfolio(std::map<int64_t, Asset> & _return, const bool subscribe, const std::string& acctCode, const bool refresh);
+  void send_reqPortfolio(const bool subscribe, const std::string& acctCode, const bool refresh);
   void recv_reqPortfolio(std::map<int64_t, Asset> & _return);
  protected:
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
@@ -2357,7 +2484,8 @@ class SharpProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_getNextBar(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_reqStkPositions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_reqOptPositions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_reqAccountValue(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_cancelPositions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_reqAccountUpdates(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_reqPortfolio(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   SharpProcessor(boost::shared_ptr<SharpIf> iface) :
@@ -2378,7 +2506,8 @@ class SharpProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["getNextBar"] = &SharpProcessor::process_getNextBar;
     processMap_["reqStkPositions"] = &SharpProcessor::process_reqStkPositions;
     processMap_["reqOptPositions"] = &SharpProcessor::process_reqOptPositions;
-    processMap_["reqAccountValue"] = &SharpProcessor::process_reqAccountValue;
+    processMap_["cancelPositions"] = &SharpProcessor::process_cancelPositions;
+    processMap_["reqAccountUpdates"] = &SharpProcessor::process_reqAccountUpdates;
     processMap_["reqPortfolio"] = &SharpProcessor::process_reqPortfolio;
   }
 
@@ -2562,23 +2691,32 @@ class SharpMultiface : virtual public SharpIf {
     return;
   }
 
-  void reqAccountValue(std::map<std::string, std::string> & _return, const std::string& acctCode, const bool refresh) {
+  void cancelPositions() {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->reqAccountValue(_return, acctCode, refresh);
+      ifaces_[i]->cancelPositions();
     }
-    ifaces_[i]->reqAccountValue(_return, acctCode, refresh);
+    ifaces_[i]->cancelPositions();
+  }
+
+  void reqAccountUpdates(std::map<std::string, std::string> & _return, const bool subscribe, const std::string& acctCode, const bool refresh) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->reqAccountUpdates(_return, subscribe, acctCode, refresh);
+    }
+    ifaces_[i]->reqAccountUpdates(_return, subscribe, acctCode, refresh);
     return;
   }
 
-  void reqPortfolio(std::map<int64_t, Asset> & _return, const std::string& acctCode, const bool refresh) {
+  void reqPortfolio(std::map<int64_t, Asset> & _return, const bool subscribe, const std::string& acctCode, const bool refresh) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->reqPortfolio(_return, acctCode, refresh);
+      ifaces_[i]->reqPortfolio(_return, subscribe, acctCode, refresh);
     }
-    ifaces_[i]->reqPortfolio(_return, acctCode, refresh);
+    ifaces_[i]->reqPortfolio(_return, subscribe, acctCode, refresh);
     return;
   }
 

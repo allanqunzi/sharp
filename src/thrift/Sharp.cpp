@@ -3370,11 +3370,11 @@ uint32_t Sharp_reqOptPositions_presult::read(::apache::thrift::protocol::TProtoc
 }
 
 
-Sharp_reqAccountValue_args::~Sharp_reqAccountValue_args() throw() {
+Sharp_cancelPositions_args::~Sharp_cancelPositions_args() throw() {
 }
 
 
-uint32_t Sharp_reqAccountValue_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Sharp_cancelPositions_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   uint32_t xfer = 0;
   std::string fname;
@@ -3385,6 +3385,172 @@ uint32_t Sharp_reqAccountValue_args::read(::apache::thrift::protocol::TProtocol*
 
   using ::apache::thrift::protocol::TProtocolException;
 
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    xfer += iprot->skip(ftype);
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Sharp_cancelPositions_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  oprot->incrementRecursionDepth();
+  xfer += oprot->writeStructBegin("Sharp_cancelPositions_args");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  oprot->decrementRecursionDepth();
+  return xfer;
+}
+
+
+Sharp_cancelPositions_pargs::~Sharp_cancelPositions_pargs() throw() {
+}
+
+
+uint32_t Sharp_cancelPositions_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  oprot->incrementRecursionDepth();
+  xfer += oprot->writeStructBegin("Sharp_cancelPositions_pargs");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  oprot->decrementRecursionDepth();
+  return xfer;
+}
+
+
+Sharp_cancelPositions_result::~Sharp_cancelPositions_result() throw() {
+}
+
+
+uint32_t Sharp_cancelPositions_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->e.read(iprot);
+          this->__isset.e = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Sharp_cancelPositions_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("Sharp_cancelPositions_result");
+
+  if (this->__isset.e) {
+    xfer += oprot->writeFieldBegin("e", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->e.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Sharp_cancelPositions_presult::~Sharp_cancelPositions_presult() throw() {
+}
+
+
+uint32_t Sharp_cancelPositions_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->e.read(iprot);
+          this->__isset.e = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+Sharp_reqAccountUpdates_args::~Sharp_reqAccountUpdates_args() throw() {
+}
+
+
+uint32_t Sharp_reqAccountUpdates_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+  bool isset_subscribe = false;
   bool isset_acctCode = false;
   bool isset_refresh = false;
 
@@ -3397,6 +3563,14 @@ uint32_t Sharp_reqAccountValue_args::read(::apache::thrift::protocol::TProtocol*
     switch (fid)
     {
       case 1:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->subscribe);
+          isset_subscribe = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readString(this->acctCode);
           isset_acctCode = true;
@@ -3404,7 +3578,7 @@ uint32_t Sharp_reqAccountValue_args::read(::apache::thrift::protocol::TProtocol*
           xfer += iprot->skip(ftype);
         }
         break;
-      case 2:
+      case 3:
         if (ftype == ::apache::thrift::protocol::T_BOOL) {
           xfer += iprot->readBool(this->refresh);
           isset_refresh = true;
@@ -3421,6 +3595,8 @@ uint32_t Sharp_reqAccountValue_args::read(::apache::thrift::protocol::TProtocol*
 
   xfer += iprot->readStructEnd();
 
+  if (!isset_subscribe)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
   if (!isset_acctCode)
     throw TProtocolException(TProtocolException::INVALID_DATA);
   if (!isset_refresh)
@@ -3428,16 +3604,20 @@ uint32_t Sharp_reqAccountValue_args::read(::apache::thrift::protocol::TProtocol*
   return xfer;
 }
 
-uint32_t Sharp_reqAccountValue_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Sharp_reqAccountUpdates_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   oprot->incrementRecursionDepth();
-  xfer += oprot->writeStructBegin("Sharp_reqAccountValue_args");
+  xfer += oprot->writeStructBegin("Sharp_reqAccountUpdates_args");
 
-  xfer += oprot->writeFieldBegin("acctCode", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeFieldBegin("subscribe", ::apache::thrift::protocol::T_BOOL, 1);
+  xfer += oprot->writeBool(this->subscribe);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("acctCode", ::apache::thrift::protocol::T_STRING, 2);
   xfer += oprot->writeString(this->acctCode);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("refresh", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeFieldBegin("refresh", ::apache::thrift::protocol::T_BOOL, 3);
   xfer += oprot->writeBool(this->refresh);
   xfer += oprot->writeFieldEnd();
 
@@ -3448,20 +3628,24 @@ uint32_t Sharp_reqAccountValue_args::write(::apache::thrift::protocol::TProtocol
 }
 
 
-Sharp_reqAccountValue_pargs::~Sharp_reqAccountValue_pargs() throw() {
+Sharp_reqAccountUpdates_pargs::~Sharp_reqAccountUpdates_pargs() throw() {
 }
 
 
-uint32_t Sharp_reqAccountValue_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Sharp_reqAccountUpdates_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   oprot->incrementRecursionDepth();
-  xfer += oprot->writeStructBegin("Sharp_reqAccountValue_pargs");
+  xfer += oprot->writeStructBegin("Sharp_reqAccountUpdates_pargs");
 
-  xfer += oprot->writeFieldBegin("acctCode", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeFieldBegin("subscribe", ::apache::thrift::protocol::T_BOOL, 1);
+  xfer += oprot->writeBool((*(this->subscribe)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("acctCode", ::apache::thrift::protocol::T_STRING, 2);
   xfer += oprot->writeString((*(this->acctCode)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("refresh", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeFieldBegin("refresh", ::apache::thrift::protocol::T_BOOL, 3);
   xfer += oprot->writeBool((*(this->refresh)));
   xfer += oprot->writeFieldEnd();
 
@@ -3472,11 +3656,11 @@ uint32_t Sharp_reqAccountValue_pargs::write(::apache::thrift::protocol::TProtoco
 }
 
 
-Sharp_reqAccountValue_result::~Sharp_reqAccountValue_result() throw() {
+Sharp_reqAccountUpdates_result::~Sharp_reqAccountUpdates_result() throw() {
 }
 
 
-uint32_t Sharp_reqAccountValue_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Sharp_reqAccountUpdates_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   uint32_t xfer = 0;
   std::string fname;
@@ -3539,11 +3723,11 @@ uint32_t Sharp_reqAccountValue_result::read(::apache::thrift::protocol::TProtoco
   return xfer;
 }
 
-uint32_t Sharp_reqAccountValue_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Sharp_reqAccountUpdates_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("Sharp_reqAccountValue_result");
+  xfer += oprot->writeStructBegin("Sharp_reqAccountUpdates_result");
 
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
@@ -3569,11 +3753,11 @@ uint32_t Sharp_reqAccountValue_result::write(::apache::thrift::protocol::TProtoc
 }
 
 
-Sharp_reqAccountValue_presult::~Sharp_reqAccountValue_presult() throw() {
+Sharp_reqAccountUpdates_presult::~Sharp_reqAccountUpdates_presult() throw() {
 }
 
 
-uint32_t Sharp_reqAccountValue_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Sharp_reqAccountUpdates_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   uint32_t xfer = 0;
   std::string fname;
@@ -3652,6 +3836,7 @@ uint32_t Sharp_reqPortfolio_args::read(::apache::thrift::protocol::TProtocol* ip
 
   using ::apache::thrift::protocol::TProtocolException;
 
+  bool isset_subscribe = false;
   bool isset_acctCode = false;
   bool isset_refresh = false;
 
@@ -3664,6 +3849,14 @@ uint32_t Sharp_reqPortfolio_args::read(::apache::thrift::protocol::TProtocol* ip
     switch (fid)
     {
       case 1:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->subscribe);
+          isset_subscribe = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readString(this->acctCode);
           isset_acctCode = true;
@@ -3671,7 +3864,7 @@ uint32_t Sharp_reqPortfolio_args::read(::apache::thrift::protocol::TProtocol* ip
           xfer += iprot->skip(ftype);
         }
         break;
-      case 2:
+      case 3:
         if (ftype == ::apache::thrift::protocol::T_BOOL) {
           xfer += iprot->readBool(this->refresh);
           isset_refresh = true;
@@ -3688,6 +3881,8 @@ uint32_t Sharp_reqPortfolio_args::read(::apache::thrift::protocol::TProtocol* ip
 
   xfer += iprot->readStructEnd();
 
+  if (!isset_subscribe)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
   if (!isset_acctCode)
     throw TProtocolException(TProtocolException::INVALID_DATA);
   if (!isset_refresh)
@@ -3700,11 +3895,15 @@ uint32_t Sharp_reqPortfolio_args::write(::apache::thrift::protocol::TProtocol* o
   oprot->incrementRecursionDepth();
   xfer += oprot->writeStructBegin("Sharp_reqPortfolio_args");
 
-  xfer += oprot->writeFieldBegin("acctCode", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeFieldBegin("subscribe", ::apache::thrift::protocol::T_BOOL, 1);
+  xfer += oprot->writeBool(this->subscribe);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("acctCode", ::apache::thrift::protocol::T_STRING, 2);
   xfer += oprot->writeString(this->acctCode);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("refresh", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeFieldBegin("refresh", ::apache::thrift::protocol::T_BOOL, 3);
   xfer += oprot->writeBool(this->refresh);
   xfer += oprot->writeFieldEnd();
 
@@ -3724,11 +3923,15 @@ uint32_t Sharp_reqPortfolio_pargs::write(::apache::thrift::protocol::TProtocol* 
   oprot->incrementRecursionDepth();
   xfer += oprot->writeStructBegin("Sharp_reqPortfolio_pargs");
 
-  xfer += oprot->writeFieldBegin("acctCode", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeFieldBegin("subscribe", ::apache::thrift::protocol::T_BOOL, 1);
+  xfer += oprot->writeBool((*(this->subscribe)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("acctCode", ::apache::thrift::protocol::T_STRING, 2);
   xfer += oprot->writeString((*(this->acctCode)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("refresh", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeFieldBegin("refresh", ::apache::thrift::protocol::T_BOOL, 3);
   xfer += oprot->writeBool((*(this->refresh)));
   xfer += oprot->writeFieldEnd();
 
@@ -4844,20 +5047,18 @@ void SharpClient::recv_reqOptPositions(std::map<int64_t, OptPosition> & _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "reqOptPositions failed: unknown result");
 }
 
-void SharpClient::reqAccountValue(std::map<std::string, std::string> & _return, const std::string& acctCode, const bool refresh)
+void SharpClient::cancelPositions()
 {
-  send_reqAccountValue(acctCode, refresh);
-  recv_reqAccountValue(_return);
+  send_cancelPositions();
+  recv_cancelPositions();
 }
 
-void SharpClient::send_reqAccountValue(const std::string& acctCode, const bool refresh)
+void SharpClient::send_cancelPositions()
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("reqAccountValue", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("cancelPositions", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  Sharp_reqAccountValue_pargs args;
-  args.acctCode = &acctCode;
-  args.refresh = &refresh;
+  Sharp_cancelPositions_pargs args;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -4865,7 +5066,7 @@ void SharpClient::send_reqAccountValue(const std::string& acctCode, const bool r
   oprot_->getTransport()->flush();
 }
 
-void SharpClient::recv_reqAccountValue(std::map<std::string, std::string> & _return)
+void SharpClient::recv_cancelPositions()
 {
 
   int32_t rseqid = 0;
@@ -4885,12 +5086,70 @@ void SharpClient::recv_reqAccountValue(std::map<std::string, std::string> & _ret
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("reqAccountValue") != 0) {
+  if (fname.compare("cancelPositions") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  Sharp_reqAccountValue_presult result;
+  Sharp_cancelPositions_presult result;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.e) {
+    throw result.e;
+  }
+  return;
+}
+
+void SharpClient::reqAccountUpdates(std::map<std::string, std::string> & _return, const bool subscribe, const std::string& acctCode, const bool refresh)
+{
+  send_reqAccountUpdates(subscribe, acctCode, refresh);
+  recv_reqAccountUpdates(_return);
+}
+
+void SharpClient::send_reqAccountUpdates(const bool subscribe, const std::string& acctCode, const bool refresh)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("reqAccountUpdates", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Sharp_reqAccountUpdates_pargs args;
+  args.subscribe = &subscribe;
+  args.acctCode = &acctCode;
+  args.refresh = &refresh;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void SharpClient::recv_reqAccountUpdates(std::map<std::string, std::string> & _return)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("reqAccountUpdates") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  Sharp_reqAccountUpdates_presult result;
   result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
@@ -4903,21 +5162,22 @@ void SharpClient::recv_reqAccountValue(std::map<std::string, std::string> & _ret
   if (result.__isset.e) {
     throw result.e;
   }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "reqAccountValue failed: unknown result");
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "reqAccountUpdates failed: unknown result");
 }
 
-void SharpClient::reqPortfolio(std::map<int64_t, Asset> & _return, const std::string& acctCode, const bool refresh)
+void SharpClient::reqPortfolio(std::map<int64_t, Asset> & _return, const bool subscribe, const std::string& acctCode, const bool refresh)
 {
-  send_reqPortfolio(acctCode, refresh);
+  send_reqPortfolio(subscribe, acctCode, refresh);
   recv_reqPortfolio(_return);
 }
 
-void SharpClient::send_reqPortfolio(const std::string& acctCode, const bool refresh)
+void SharpClient::send_reqPortfolio(const bool subscribe, const std::string& acctCode, const bool refresh)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("reqPortfolio", ::apache::thrift::protocol::T_CALL, cseqid);
 
   Sharp_reqPortfolio_pargs args;
+  args.subscribe = &subscribe;
   args.acctCode = &acctCode;
   args.refresh = &refresh;
   args.write(oprot_);
@@ -5888,41 +6148,40 @@ void SharpProcessor::process_reqOptPositions(int32_t seqid, ::apache::thrift::pr
   }
 }
 
-void SharpProcessor::process_reqAccountValue(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void SharpProcessor::process_cancelPositions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("Sharp.reqAccountValue", callContext);
+    ctx = this->eventHandler_->getContext("Sharp.cancelPositions", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Sharp.reqAccountValue");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Sharp.cancelPositions");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "Sharp.reqAccountValue");
+    this->eventHandler_->preRead(ctx, "Sharp.cancelPositions");
   }
 
-  Sharp_reqAccountValue_args args;
+  Sharp_cancelPositions_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "Sharp.reqAccountValue", bytes);
+    this->eventHandler_->postRead(ctx, "Sharp.cancelPositions", bytes);
   }
 
-  Sharp_reqAccountValue_result result;
+  Sharp_cancelPositions_result result;
   try {
-    iface_->reqAccountValue(result.success, args.acctCode, args.refresh);
-    result.__isset.success = true;
+    iface_->cancelPositions();
   } catch (Exception &e) {
     result.e = e;
     result.__isset.e = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "Sharp.reqAccountValue");
+      this->eventHandler_->handlerError(ctx, "Sharp.cancelPositions");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("reqAccountValue", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("cancelPositions", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -5931,17 +6190,74 @@ void SharpProcessor::process_reqAccountValue(int32_t seqid, ::apache::thrift::pr
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "Sharp.reqAccountValue");
+    this->eventHandler_->preWrite(ctx, "Sharp.cancelPositions");
   }
 
-  oprot->writeMessageBegin("reqAccountValue", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("cancelPositions", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "Sharp.reqAccountValue", bytes);
+    this->eventHandler_->postWrite(ctx, "Sharp.cancelPositions", bytes);
+  }
+}
+
+void SharpProcessor::process_reqAccountUpdates(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("Sharp.reqAccountUpdates", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Sharp.reqAccountUpdates");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "Sharp.reqAccountUpdates");
+  }
+
+  Sharp_reqAccountUpdates_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "Sharp.reqAccountUpdates", bytes);
+  }
+
+  Sharp_reqAccountUpdates_result result;
+  try {
+    iface_->reqAccountUpdates(result.success, args.subscribe, args.acctCode, args.refresh);
+    result.__isset.success = true;
+  } catch (Exception &e) {
+    result.e = e;
+    result.__isset.e = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "Sharp.reqAccountUpdates");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("reqAccountUpdates", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "Sharp.reqAccountUpdates");
+  }
+
+  oprot->writeMessageBegin("reqAccountUpdates", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "Sharp.reqAccountUpdates", bytes);
   }
 }
 
@@ -5968,7 +6284,7 @@ void SharpProcessor::process_reqPortfolio(int32_t seqid, ::apache::thrift::proto
 
   Sharp_reqPortfolio_result result;
   try {
-    iface_->reqPortfolio(result.success, args.acctCode, args.refresh);
+    iface_->reqPortfolio(result.success, args.subscribe, args.acctCode, args.refresh);
     result.__isset.success = true;
   } catch (Exception &e) {
     result.e = e;

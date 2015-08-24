@@ -112,8 +112,13 @@ qdict = {}
 wlist = ["AAPL", "GOOG"]
 ts = []
 client.removeZombieSymbols([])
-time.sleep(30)
 
+acnt = client.reqAccountUpdates(False, "DU224610", True)
+
+for (k, v) in acnt.iteritems():
+  print(k, "---", v)
+
+time.sleep(90)
 
 client.addToWatchList(wlist)
 

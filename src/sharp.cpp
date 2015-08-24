@@ -494,6 +494,12 @@ void EWrapperImpl::reqPositions(){
 	m_pClient->reqPositions();
 }
 
+void EWrapperImpl::cancelPositions(){
+	stk_positions.clear();
+	opt_positions.clear();
+	m_pClient->cancelPositions();
+}
+
 void EWrapperImpl::position( const IBString& account, const Contract& contract,
 	int position, double avgCost)
 {

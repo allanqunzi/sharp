@@ -102,12 +102,17 @@ class SharpHandler : virtual public SharpIf {
     printf("reqOptPositions\n");
   }
 
-  void reqAccountValue(std::map<std::string, std::string> & _return, const std::string& acctCode, const bool refresh) {
+  void cancelPositions() {
     // Your implementation goes here
-    printf("reqAccountValue\n");
+    printf("cancelPositions\n");
   }
 
-  void reqPortfolio(std::map<int64_t, Asset> & _return, const std::string& acctCode, const bool refresh) {
+  void reqAccountUpdates(std::map<std::string, std::string> & _return, const bool subscribe, const std::string& acctCode, const bool refresh) {
+    // Your implementation goes here
+    printf("reqAccountUpdates\n");
+  }
+
+  void reqPortfolio(std::map<int64_t, Asset> & _return, const bool subscribe, const std::string& acctCode, const bool refresh) {
     // Your implementation goes here
     printf("reqPortfolio\n");
   }
