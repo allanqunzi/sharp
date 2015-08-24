@@ -387,13 +387,11 @@ public:
                 return;
             }
             if(refresh){
-                std::cout<<"============"<<acctCode<<std::endl;
                 trader.reqAccountUpdates(true, acctCode);
                 auto & atomic_flag = trader.account_flag;
                 while(!atomic_flag.load(std::memory_order_relaxed)){
                     std::this_thread::sleep_for(OPENORDER_WAITING_TIME);
                 }
-                std::cout<<"============"<<std::endl;
             }
             auto & acnts = trader.accounts;
             if(acnts.size() == 1){ // only one account, OK.

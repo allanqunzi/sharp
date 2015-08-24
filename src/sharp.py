@@ -113,7 +113,7 @@ wlist = ["AAPL", "GOOG"]
 ts = []
 client.removeZombieSymbols([])
 
-acnt = client.reqAccountUpdates(False, "DU224610", True)
+acnt = client.reqAccountUpdates(True, "DU224610", True)
 
 for (k, v) in acnt.iteritems():
   print(k, "---", v)
