@@ -348,25 +348,22 @@ public:
     IdType<TickerId> ticker_id{-1L};
     IdType<OrderId> order_id{-1L};
     IdType<int> req_id{1};
-
-	std::atomic<bool> open_order_flag;
+    std::atomic<bool> open_order_flag;
 	std::set<OrderId> open_order_set;
 
-	ContractOrder contract_order_request;
+    ContractOrder contract_order_request;
 	// placed_contract_orders is written and read by several EWrapperImpl member functions
 	// and thrift handler functions, these functions should be synchronized.
 	PlacedOrderContracts placed_contract_orders;
 	std::vector<OrderId> used_order_ids;
 
-    std::unordered_map<int, std::pair<std::atomic<bool>,
-                        std::set<std::string> > > requested_execs;
+    std::unordered_map<int, std::pair<std::atomic<bool>,std::set<std::string>>>requested_execs;
     std::unordered_map<std::string, ExecutedContract> received_execs; // key is execId
 
-
-	std::unordered_map<std::string, TickerId>watch_list;
+    std::unordered_map<std::string, TickerId>watch_list;
 	// non-const operation on std::deque is not thread-safe,
 	// so the following needs to be synchronized.
-	std::unordered_map<TickerId, std::unique_ptr< sharpdeque<RealTimeBar> > >watch_list_bars;
+	std::unordered_map<TickerId, std::unique_ptr< sharpdeque<RealTimeBar>>>watch_list_bars;
 
     // account, portfolio, position related
     std::unordered_map<std::string, std::unordered_map<std::string, std::string>> accounts;
