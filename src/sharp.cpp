@@ -380,9 +380,10 @@ void EWrapperImpl::tickSize( TickerId tickerId, TickType field, int size){
 	LOG(info)<<"calling EWrapperImpl::tickSize";
 }
 
-void EWrapperImpl::tickOptionComputation( TickerId tickerId, TickType tickType, double impliedVol, double delta,
-											double optPrice, double pvDividend,
-											double gamma, double vega, double theta, double undPrice)
+void EWrapperImpl::tickOptionComputation( TickerId tickerId, TickType tickType,
+                            double impliedVol, double delta,
+							double optPrice, double pvDividend,
+							double gamma, double vega, double theta, double undPrice)
 {
 	LOG(info)<<"calling EWrapperImpl::tickOptionComputation";
 }
@@ -396,9 +397,9 @@ void EWrapperImpl::tickString(TickerId tickerId, TickType tickType, const IBStri
 }
 
 void EWrapperImpl::tickEFP(TickerId tickerId, TickType tickType, double basisPoints,
-							const IBString& formattedBasisPoints,
-							double totalDividends, int holdDays, const IBString& futureExpiry,
-							double dividendImpact, double dividendsToExpiry)
+					const IBString& formattedBasisPoints,
+					double totalDividends, int holdDays, const IBString& futureExpiry,
+					double dividendImpact, double dividendsToExpiry)
 {
 	LOG(info)<<"calling EWrapperImpl::tickEFP";
 }
@@ -407,15 +408,15 @@ void EWrapperImpl::tickSnapshotEnd(int reqId){
 	LOG(info)<<"calling EWrapperImpl::tickSnapshotEnd";
 }
 
-void EWrapperImpl::historicalData(TickerId reqId, const IBString& date, double open, double high,
-									double low, double close, int volume, int barCount,
-									double WAP, int hasGaps)
+void EWrapperImpl::historicalData(TickerId reqId, const IBString& date, double open,
+                            double high, double low, double close, int volume, int barCount,
+							double WAP, int hasGaps)
 {
 	LOG(info)<<"calling EWrapperImpl::historicalData";
 }
 
-void EWrapperImpl::realtimeBar(TickerId reqId, long time, double open, double high, double low,
-								double close, long volume, double wap, int count)
+void EWrapperImpl::realtimeBar(TickerId reqId, long time, double open, double high,
+                        double low, double close, long volume, double wap, int count)
 {
 	LOG(info)<<"EWrapperImpl::realtimeBar";
 	try{
@@ -436,7 +437,8 @@ void EWrapperImpl::scannerParameters(const IBString &xml){
 
 void EWrapperImpl::scannerData(int reqId, int rank, const ContractDetails &contractDetails,
 	   const IBString &distance, const IBString &benchmark, const IBString &projection,
-	   const IBString &legsStr) {
+	   const IBString &legsStr)
+{
 	LOG(info)<<"calling EWrapperImpl::scannerData";
 }
 void EWrapperImpl::scannerDataEnd(int reqId){
@@ -478,7 +480,7 @@ void EWrapperImpl::reqAccountUpdates(bool subscribe, const std::string & acctCod
 }
 
 void EWrapperImpl::updateAccountValue(const IBString& key, const IBString& val,
-										  const IBString& currency, const IBString& accountName)
+						const IBString& currency, const IBString& accountName)
 {
 	LOG(info)<<"calling EWrapperImpl::updateAccountValue, accountName = "<<accountName<<" "<<key<<"  "<<val;
 	auto & account = accounts[accountName];
