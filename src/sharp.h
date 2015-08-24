@@ -68,28 +68,28 @@ template<typename T>
 class sharpdeque: public std::deque<T>
 {
 public:
-    static const std::size_t limit = 10;
-    // bool flag = false; // according to the new standard, this is a different memory location with
-    // respect to the other parts of this class, thus can be accessed and modified concurrently with
-    // respect to the rest.
-    std::mutex mx;
-    std::condition_variable cv;
-    void push(T&& e){  // this is not universal reference, there is no type deduction here, only binds to
-    	// rvalue
-        if(this->size() >= limit){
-        	this->pop_front();
-        	LOG(warning)<<"deque limit is reached";
-        }
-        this->push_back(std::move(e));
-    }
+	static const std::size_t limit = 10;
+	// bool flag = false; // according to the new standard, this is a different memory location with
+	// respect to the other parts of this class, thus can be accessed and modified concurrently with
+	// respect to the rest.
+	std::mutex mx;
+	std::condition_variable cv;
+	void push(T&& e){  // this is not universal reference, there is no type deduction here, only binds to
+		// rvalue
+		if(this->size() >= limit){
+			this->pop_front();
+			LOG(warning)<<"deque limit is reached";
+		}
+		this->push_back(std::move(e));
+	}
 
-    void push(const T & e){
-	    if(this->size() >= limit){
-	    	this->pop_front();
-	    	LOG(warning)<<"deque limit is reached";
-	    }
-	    this->push_back(e);
-    }
+	void push(const T & e){
+		if(this->size() >= limit){
+			this->pop_front();
+			LOG(warning)<<"deque limit is reached";
+		}
+		this->push_back(e);
+	}
 };
 
 enum State {
@@ -171,12 +171,12 @@ struct PlacedOrderContracts
 
 struct ExecutedContract
 {
-    Contract contract;
-    Execution execution;
-    CommissionReport report;
-    ExecutedContract() = default;
-    ExecutedContract(const Contract & c, const Execution & e)
-    :contract(c), execution(e){}
+	Contract contract;
+	Execution execution;
+	CommissionReport report;
+	ExecutedContract() = default;
+	ExecutedContract(const Contract & c, const Execution & e)
+	:contract(c), execution(e){}
 };
 
 template <typename T>
@@ -201,7 +201,7 @@ struct RealTimeBar
 	long volume; // The volume during the time covered by the bar
 	double wap;  // The weighted average price during the time covered by the bar.
 	int count;   // When TRADES historical data is returned, represents the number of
-	             // trades that occurred during the time period the bar covers.
+				 // trades that occurred during the time period the bar covers.
 	RealTimeBar(TickerId r, long t, double o, double l, double h,
 		double c, long v, double w, int ct): reqId(r), time(t), open(o),
 		low(l), high(h), close(c), volume(v), wap(w), count(ct){}
@@ -209,22 +209,22 @@ struct RealTimeBar
 
 struct OptionPosition
  {
-    long conId = -1L;
-    int32_t position = 0;
-    double avgCost = 0.0;
-    Contract contract;
+	long conId = -1L;
+	int32_t position = 0;
+	double avgCost = 0.0;
+	Contract contract;
  };
 
 struct Asset
 {
-    Contract contract;
-    int32_t position;
-    double marketPrice;
-    double marketValue;
-    double averageCost;
-    double unrealizedPNL;
-    double realizedPNL;
-    double accountName;
+	Contract contract;
+	int32_t position;
+	double marketPrice;
+	double marketValue;
+	double averageCost;
+	double unrealizedPNL;
+	double realizedPNL;
+	double accountName;
 };
 
 class EWrapperImpl : public EWrapper
@@ -241,13 +241,13 @@ public:
 public:
 	void monitor();
 
-    // order related
+	// order related
 	void placeOrder();
 	bool cancelOrder(OrderId orderId);
 	void reqOpenOrders();    // orders placed by api
 	void reqAllOpenOrders(); // orders placed by both api and tws
 	bool reqGlobalCancel();  // cancel orders placed by both api and tws
-    int reqExecutions(const ExecutionFilter & ef);
+	int reqExecutions(const ExecutionFilter & ef);
 
 	// watchlist, market data related
 	void reqMarketSnapshot(); // TODO
@@ -259,11 +259,11 @@ public:
 	bool reqRealTimeBars();
 	// getNextBar is done at thrift level
 
-    // account, portfolio, position related
-    void reqAccountUpdates(bool subscribe, const std::string & acctCode);
-    void reqPositions();
+	// account, portfolio, position related
+	void reqAccountUpdates(bool subscribe, const std::string & acctCode);
+	void reqPositions();
 
-    bool checkValidId( OrderId orderId);
+	bool checkValidId( OrderId orderId);
 	std::string getField(TickType tickType);
 
 private:
@@ -343,38 +343,38 @@ public:
 	std::string host;
 	unsigned int port;
 	int clientId;
-    std::mutex mutex; // mutex for order statuses
+	std::mutex mutex; // mutex for order statuses
 
-    IdType<TickerId> ticker_id{-1L};
-    IdType<OrderId> order_id{-1L};
-    IdType<int> req_id{1};
-    std::atomic<bool> open_order_flag;
+	IdType<TickerId> ticker_id{-1L};
+	IdType<OrderId> order_id{-1L};
+	IdType<int> req_id{1};
+	std::atomic<bool> open_order_flag;
 	std::set<OrderId> open_order_set;
 
-    ContractOrder contract_order_request;
+	ContractOrder contract_order_request;
 	// placed_contract_orders is written and read by several EWrapperImpl member functions
 	// and thrift handler functions, these functions should be synchronized.
 	PlacedOrderContracts placed_contract_orders;
 	std::vector<OrderId> used_order_ids;
 
-    std::unordered_map<int, std::pair<std::atomic<bool>,std::set<std::string>>>requested_execs;
-    std::unordered_map<std::string, ExecutedContract> received_execs; // key is execId
+	std::unordered_map<int, std::pair<std::atomic<bool>,std::set<std::string>>>requested_execs;
+	std::unordered_map<std::string, ExecutedContract> received_execs; // key is execId
 
-    std::unordered_map<std::string, TickerId>watch_list;
+	std::unordered_map<std::string, TickerId>watch_list;
 	// non-const operation on std::deque is not thread-safe,
 	// so the following needs to be synchronized.
 	std::unordered_map<TickerId, std::unique_ptr< sharpdeque<RealTimeBar>>>watch_list_bars;
 
-    // account, portfolio, position related
-    std::unordered_map<std::string, std::unordered_map<std::string, std::string>> accounts;
-    // stk_positions are symbol based, opt_positions are conId based.
-    // portfolio is conId based. conId is long.
-    std::atomic<bool> position_flag;
-    std::atomic<bool> account_flag;
-    // std::pair<position, avgCost> for stk_positions
-    std::unordered_map<std::string, std::unordered_map<std::string, std::pair<int, double>>> stk_positions;
-    std::unordered_map<std::string, std::unordered_map<long, OptionPosition>> opt_positions;
-    std::unordered_map<std::string, std::unordered_map<long, Asset>> portfolio;
+	// account, portfolio, position related
+	std::unordered_map<std::string, std::unordered_map<std::string, std::string>> accounts;
+	// stk_positions are symbol based, opt_positions are conId based.
+	// portfolio is conId based. conId is long.
+	std::atomic<bool> position_flag;
+	std::atomic<bool> account_flag;
+	// std::pair<position, avgCost> for stk_positions
+	std::unordered_map<std::string, std::unordered_map<std::string, std::pair<int, double>>> stk_positions;
+	std::unordered_map<std::string, std::unordered_map<long, OptionPosition>> opt_positions;
+	std::unordered_map<std::string, std::unordered_map<long, Asset>> portfolio;
 
 };
 
