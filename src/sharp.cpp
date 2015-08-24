@@ -6,30 +6,30 @@
 namespace sharp{
 
 void init_logging(){
-    boost::log::add_file_log(
-        boost::log::keywords::file_name = "./logs/thriftServer_%Y%m%d.log",
-        boost::log::keywords::open_mode = (std::ios::out | std::ios::app),
-        boost::log::keywords::auto_flush = true,
-        boost::log::keywords::format =
-        (
-            boost::log::expressions::stream
-                << boost::log::expressions::format_date_time< boost::posix_time::ptime >("TimeStamp", "%H:%M:%S.%f")
-                << ": <" << boost::log::trivial::severity
-                << "> " << boost::log::expressions::smessage
-        )
-    );
-    boost::log::add_console_log(
-    	std::cout,
-    	boost::log::keywords::format =
-    	(
-            boost::log::expressions::stream
-                << boost::log::expressions::format_date_time< boost::posix_time::ptime >("TimeStamp", "%H:%M:%S.%f")
-                << ": <" << boost::log::trivial::severity
-                << "> " << boost::log::expressions::smessage
-        )
-    );
+	boost::log::add_file_log(
+		boost::log::keywords::file_name = "./logs/thriftServer_%Y%m%d.log",
+		boost::log::keywords::open_mode = (std::ios::out | std::ios::app),
+		boost::log::keywords::auto_flush = true,
+		boost::log::keywords::format =
+		(
+			boost::log::expressions::stream
+				<< boost::log::expressions::format_date_time< boost::posix_time::ptime >("TimeStamp", "%H:%M:%S.%f")
+				<< ": <" << boost::log::trivial::severity
+				<< "> " << boost::log::expressions::smessage
+		)
+	);
+	boost::log::add_console_log(
+		std::cout,
+		boost::log::keywords::format =
+		(
+			boost::log::expressions::stream
+				<< boost::log::expressions::format_date_time< boost::posix_time::ptime >("TimeStamp", "%H:%M:%S.%f")
+				<< ": <" << boost::log::trivial::severity
+				<< "> " << boost::log::expressions::smessage
+		)
+	);
 
-    boost::log::add_common_attributes();
+	boost::log::add_common_attributes();
 }
 
 EWrapperImpl::EWrapperImpl( const std::vector<std::string> wl )
@@ -62,7 +62,7 @@ bool EWrapperImpl::connect(const char *host, unsigned int port, int clientId)
 
 	bool bRes = m_pClient->eConnect( host, port, clientId, /* extraAuth */ false);
 
-	if (bRes) {
+	if (bRes){
 		printf( "Connected to %s:%d clientId:%d\n", !( host && *host) ? "127.0.0.1" : host, port, clientId);
 	}
 	else
@@ -98,12 +98,12 @@ void EWrapperImpl::monitor(){
 
 	time_t now = time(NULL);
 
-	if( m_sleepDeadline > 0) {
+	if( m_sleepDeadline > 0){
 		// initialize timeout with m_sleepDeadline - now
 		tval.tv_sec = m_sleepDeadline - now;
 	}
 
-	if( m_pClient->fd() >= 0 ) {
+	if( m_pClient->fd() >= 0 ){
 
 		FD_ZERO( &readSet);
 		errorSet = writeSet = readSet;
@@ -117,11 +117,11 @@ void EWrapperImpl::monitor(){
 
 		int ret = select( m_pClient->fd() + 1, &readSet, &writeSet, &errorSet, &tval);
 
-		if( ret == 0) { // timeout
+		if( ret == 0){ // timeout
 			return;
 		}
 
-		if( ret < 0) {	// error
+		if( ret < 0){	// error
 			disconnect();
 			return;
 		}
@@ -129,7 +129,7 @@ void EWrapperImpl::monitor(){
 		if( m_pClient->fd() < 0)
 			return;
 
-		if( FD_ISSET( m_pClient->fd(), &errorSet)) {
+		if( FD_ISSET( m_pClient->fd(), &errorSet)){
 			// error on socket
 			m_pClient->onError();
 		}
@@ -137,7 +137,7 @@ void EWrapperImpl::monitor(){
 		if( m_pClient->fd() < 0)
 			return;
 
-		if( FD_ISSET( m_pClient->fd(), &writeSet)) {
+		if( FD_ISSET( m_pClient->fd(), &writeSet)){
 			// socket is ready for writing
 			// onSend() checks error by calling handleSocketError(), then calls
 			// sendBufferedData(), sendBufferedData() calls EPosixClientSocket::send
@@ -149,7 +149,7 @@ void EWrapperImpl::monitor(){
 		if( m_pClient->fd() < 0)
 			return;
 
-		if( FD_ISSET( m_pClient->fd(), &readSet)) {
+		if( FD_ISSET( m_pClient->fd(), &readSet)){
 			// socket is ready for reading
 			// onReceive() checks error by calling handleSocketError(), then calls
 			// checkMessages(), checkMessages() first calls bufferedRead(), bufferedRead()
@@ -256,7 +256,7 @@ bool EWrapperImpl::reqGlobalCancel(){
 
 // event called by m_pClient->onReceive();
 // this function and orderStatus are never called at the same time, a lock is unnecessary.
-void EWrapperImpl::openOrder( OrderId orderId, const Contract& c, const Order& o, const OrderState& ostate) {
+void EWrapperImpl::openOrder( OrderId orderId, const Contract& c, const Order& o, const OrderState& ostate){
 	open_order_set.insert(orderId);
 	auto & m = placed_contract_orders.orderId_index_map;
 	if(m.count(orderId) == 0){
@@ -317,59 +317,59 @@ void EWrapperImpl::reqMarketSnapshot(){
 	// int useRTH = 0;
 	// int formatDate = 1;
 /*
-    m_pClient->reqHistoricalData( 0, contract, endDateTime, durationStr, barSizeSetting, whatToShow,
-    	useRTH, formatDate, chartOptions);
+	m_pClient->reqHistoricalData( 0, contract, endDateTime, durationStr, barSizeSetting, whatToShow,
+		useRTH, formatDate, chartOptions);
 
-    m_pClient->reqMarketDataType(2);
-    // calling reqMktData returns noisy ticks
-    m_pClient->reqMktData(0, contract, genericTicks, true, mktDataOptions);
+	m_pClient->reqMarketDataType(2);
+	// calling reqMktData returns noisy ticks
+	m_pClient->reqMktData(0, contract, genericTicks, true, mktDataOptions);
 
-    m_pClient->reqRealTimeBars(0, contract, 5, whatToShow, false, realTimeBarsOptions);
-    contract.symbol = "AAPL";
-    m_pClient->reqRealTimeBars(1, contract, 5, whatToShow, false, realTimeBarsOptions);
-    contract.symbol = "BABA";
-    m_pClient->reqRealTimeBars(2, contract, 5, whatToShow, false, realTimeBarsOptions);
-    contract.symbol = "NFLX";
-    m_pClient->reqRealTimeBars(3, contract, 5, whatToShow, false, realTimeBarsOptions);
-    contract.symbol = "GOOG";
-    m_pClient->reqRealTimeBars(4, contract, 5, whatToShow, false, realTimeBarsOptions);
-    contract.symbol = "BIDU";
-    m_pClient->reqRealTimeBars(5, contract, 5, whatToShow, false, realTimeBarsOptions);
-    contract.symbol = "GS";
-    m_pClient->reqRealTimeBars(6, contract, 5, whatToShow, false, realTimeBarsOptions);
-    contract.symbol = "JPM";
-    m_pClient->reqRealTimeBars(7, contract, 5, whatToShow, false, realTimeBarsOptions);
-    contract.symbol = "MS";
-    m_pClient->reqRealTimeBars(8, contract, 5, whatToShow, false, realTimeBarsOptions);
-    contract.symbol = "NDRO";
-    m_pClient->reqRealTimeBars(9, contract, 5, whatToShow, false, realTimeBarsOptions);
-    contract.symbol = "DOM";
-    m_pClient->reqRealTimeBars(10, contract, 5, whatToShow, false, realTimeBarsOptions);
+	m_pClient->reqRealTimeBars(0, contract, 5, whatToShow, false, realTimeBarsOptions);
+	contract.symbol = "AAPL";
+	m_pClient->reqRealTimeBars(1, contract, 5, whatToShow, false, realTimeBarsOptions);
+	contract.symbol = "BABA";
+	m_pClient->reqRealTimeBars(2, contract, 5, whatToShow, false, realTimeBarsOptions);
+	contract.symbol = "NFLX";
+	m_pClient->reqRealTimeBars(3, contract, 5, whatToShow, false, realTimeBarsOptions);
+	contract.symbol = "GOOG";
+	m_pClient->reqRealTimeBars(4, contract, 5, whatToShow, false, realTimeBarsOptions);
+	contract.symbol = "BIDU";
+	m_pClient->reqRealTimeBars(5, contract, 5, whatToShow, false, realTimeBarsOptions);
+	contract.symbol = "GS";
+	m_pClient->reqRealTimeBars(6, contract, 5, whatToShow, false, realTimeBarsOptions);
+	contract.symbol = "JPM";
+	m_pClient->reqRealTimeBars(7, contract, 5, whatToShow, false, realTimeBarsOptions);
+	contract.symbol = "MS";
+	m_pClient->reqRealTimeBars(8, contract, 5, whatToShow, false, realTimeBarsOptions);
+	contract.symbol = "NDRO";
+	m_pClient->reqRealTimeBars(9, contract, 5, whatToShow, false, realTimeBarsOptions);
+	contract.symbol = "DOM";
+	m_pClient->reqRealTimeBars(10, contract, 5, whatToShow, false, realTimeBarsOptions);
 */
-    // m_pClient->reqScannerParameters();
+	// m_pClient->reqScannerParameters();
 
-    ScannerSubscription scanner;
-    scanner.instrument = "STK";
-    scanner.locationCode = "STK.US.MAJOR";
-    scanner.abovePrice = 10.00;
-    scanner.scanCode = "TOP_PERC_GAIN";
-    // m_pClient->reqScannerSubscription(0, scanner, scannerSubscriptionOptions);
+	ScannerSubscription scanner;
+	scanner.instrument = "STK";
+	scanner.locationCode = "STK.US.MAJOR";
+	scanner.abovePrice = 10.00;
+	scanner.scanCode = "TOP_PERC_GAIN";
+	// m_pClient->reqScannerSubscription(0, scanner, scannerSubscriptionOptions);
 
 /*
-    contract.symbol = "AMZN";
-    contract.secType = "OPT";
-    contract.strike = 540.00;
-    contract.right = "CALL";
-    contract.expiry = "201509";
-    contract.currency = "USD";
+	contract.symbol = "AMZN";
+	contract.secType = "OPT";
+	contract.strike = 540.00;
+	contract.right = "CALL";
+	contract.expiry = "201509";
+	contract.currency = "USD";
 */
-    contract.conId = 202465243;
-    contract.exchange = "SMART";
-    // calling reqContractDetails can get all the info for an option chain
-    // m_pClient->reqContractDetails(0, contract);
-    // still need to check and make sure with IB on if they provide market data for options
-    // m_pClient->reqMktData(0, contract, genericTicks, true, mktDataOptions);
-    // m_pClient->reqRealTimeBars(10, contract, 5, whatToShow, false, realTimeBarsOptions);
+	contract.conId = 202465243;
+	contract.exchange = "SMART";
+	// calling reqContractDetails can get all the info for an option chain
+	// m_pClient->reqContractDetails(0, contract);
+	// still need to check and make sure with IB on if they provide market data for options
+	// m_pClient->reqMktData(0, contract, genericTicks, true, mktDataOptions);
+	// m_pClient->reqRealTimeBars(10, contract, 5, whatToShow, false, realTimeBarsOptions);
 }
 
 void EWrapperImpl::tickPrice( TickerId tickerId, TickType field, double price, int canAutoExecute){
@@ -381,9 +381,9 @@ void EWrapperImpl::tickSize( TickerId tickerId, TickType field, int size){
 }
 
 void EWrapperImpl::tickOptionComputation( TickerId tickerId, TickType tickType,
-                            double impliedVol, double delta,
-							double optPrice, double pvDividend,
-							double gamma, double vega, double theta, double undPrice)
+					double impliedVol, double delta,
+					double optPrice, double pvDividend,
+					double gamma, double vega, double theta, double undPrice)
 {
 	LOG(info)<<"calling EWrapperImpl::tickOptionComputation";
 }
@@ -397,9 +397,9 @@ void EWrapperImpl::tickString(TickerId tickerId, TickType tickType, const IBStri
 }
 
 void EWrapperImpl::tickEFP(TickerId tickerId, TickType tickType, double basisPoints,
-					const IBString& formattedBasisPoints,
-					double totalDividends, int holdDays, const IBString& futureExpiry,
-					double dividendImpact, double dividendsToExpiry)
+				const IBString& formattedBasisPoints,
+				double totalDividends, int holdDays, const IBString& futureExpiry,
+				double dividendImpact, double dividendsToExpiry)
 {
 	LOG(info)<<"calling EWrapperImpl::tickEFP";
 }
@@ -409,14 +409,14 @@ void EWrapperImpl::tickSnapshotEnd(int reqId){
 }
 
 void EWrapperImpl::historicalData(TickerId reqId, const IBString& date, double open,
-                            double high, double low, double close, int volume, int barCount,
-							double WAP, int hasGaps)
+					double high, double low, double close, int volume, int barCount,
+					double WAP, int hasGaps)
 {
 	LOG(info)<<"calling EWrapperImpl::historicalData";
 }
 
 void EWrapperImpl::realtimeBar(TickerId reqId, long time, double open, double high,
-                        double low, double close, long volume, double wap, int count)
+						double low, double close, long volume, double wap, int count)
 {
 	LOG(info)<<"EWrapperImpl::realtimeBar";
 	try{
@@ -480,7 +480,7 @@ void EWrapperImpl::reqAccountUpdates(bool subscribe, const std::string & acctCod
 }
 
 void EWrapperImpl::updateAccountValue(const IBString& key, const IBString& val,
-						const IBString& currency, const IBString& accountName)
+				const IBString& currency, const IBString& accountName)
 {
 	LOG(info)<<"calling EWrapperImpl::updateAccountValue, accountName = "<<accountName<<" "<<key<<"  "<<val;
 	auto & account = accounts[accountName];
