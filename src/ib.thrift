@@ -222,7 +222,7 @@ service Sharp{
     RealTimeBar getNextBar(1:required string symbol) throws (1:Exception e);
     // reqHistoricalData returns the reqId and the name of the file where the data is saved.
     map<i64, string> reqHistoricalData(1:required HistoryRequest request) throws (1:Exception e);
-    void cancelHistoricalData (1:required i64 tickerId) throws (1:Exception e);
+    void cancelHistoricalData(1:required i64 tickerId) throws (1:Exception e);
 
     map<string,StkPosition> reqStkPositions(1:required bool refresh) throws (1:Exception e);
     map<i64,OptPosition> reqOptPositions(1:required bool refresh) throws (1:Exception e);

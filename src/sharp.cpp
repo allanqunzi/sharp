@@ -709,7 +709,7 @@ void EWrapperImpl::reqHistoricalData(const Contract &contract,
 	of.open(file_name.c_str());
 	LOG(info)<<"requesting historical data for "<<contract.symbol<<", reqId = "<<id;
 	m_pClient->reqHistoricalData(id, contract, endDateTime, durationStr,
-		barSizeSetting, whatToShow,	useRTH, formatDate, chartOptions);
+		barSizeSetting, whatToShow, useRTH, formatDate, chartOptions);
 }
 
 void EWrapperImpl::cancelHistoricalData(TickerId tickerId){

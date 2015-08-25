@@ -40,7 +40,6 @@
 #include <boost/log/utility/setup/common_attributes.hpp>
 #include <boost/log/utility/setup/console.hpp>
 #include <boost/log/support/date_time.hpp>
-
 #include <boost/shared_ptr.hpp>
 
 class EPosixClientSocket;
