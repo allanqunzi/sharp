@@ -37,6 +37,8 @@ class ExecutedContract;
 
 class RealTimeBar;
 
+class HistoryRequest;
+
 class Asset;
 
 class StkPosition;
@@ -836,6 +838,93 @@ class RealTimeBar {
 };
 
 void swap(RealTimeBar &a, RealTimeBar &b);
+
+
+class HistoryRequest {
+ public:
+
+  static const char* ascii_fingerprint; // = "E024B330CCC3A1E76954383045971A83";
+  static const uint8_t binary_fingerprint[16]; // = {0xE0,0x24,0xB3,0x30,0xCC,0xC3,0xA1,0xE7,0x69,0x54,0x38,0x30,0x45,0x97,0x1A,0x83};
+
+  HistoryRequest(const HistoryRequest&);
+  HistoryRequest& operator=(const HistoryRequest&);
+  HistoryRequest() : symbol(""), secType("STK"), exchange("SMART"), currency("USD"), primaryExchange("NASDAQ"), endDateTime("20150824 17:00:00"), durationStr("24 W"), barSizeSetting("5 secs"), whatToShow("TRADES"), useRTH(1), formatDate(1) {
+  }
+
+  virtual ~HistoryRequest() throw();
+  std::string symbol;
+  std::string secType;
+  std::string exchange;
+  std::string currency;
+  std::string primaryExchange;
+  std::string endDateTime;
+  std::string durationStr;
+  std::string barSizeSetting;
+  std::string whatToShow;
+  int32_t useRTH;
+  int32_t formatDate;
+
+  void __set_symbol(const std::string& val);
+
+  void __set_secType(const std::string& val);
+
+  void __set_exchange(const std::string& val);
+
+  void __set_currency(const std::string& val);
+
+  void __set_primaryExchange(const std::string& val);
+
+  void __set_endDateTime(const std::string& val);
+
+  void __set_durationStr(const std::string& val);
+
+  void __set_barSizeSetting(const std::string& val);
+
+  void __set_whatToShow(const std::string& val);
+
+  void __set_useRTH(const int32_t val);
+
+  void __set_formatDate(const int32_t val);
+
+  bool operator == (const HistoryRequest & rhs) const
+  {
+    if (!(symbol == rhs.symbol))
+      return false;
+    if (!(secType == rhs.secType))
+      return false;
+    if (!(exchange == rhs.exchange))
+      return false;
+    if (!(currency == rhs.currency))
+      return false;
+    if (!(primaryExchange == rhs.primaryExchange))
+      return false;
+    if (!(endDateTime == rhs.endDateTime))
+      return false;
+    if (!(durationStr == rhs.durationStr))
+      return false;
+    if (!(barSizeSetting == rhs.barSizeSetting))
+      return false;
+    if (!(whatToShow == rhs.whatToShow))
+      return false;
+    if (!(useRTH == rhs.useRTH))
+      return false;
+    if (!(formatDate == rhs.formatDate))
+      return false;
+    return true;
+  }
+  bool operator != (const HistoryRequest &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const HistoryRequest & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const HistoryRequest& obj);
+};
+
+void swap(HistoryRequest &a, HistoryRequest &b);
 
 
 class Asset {

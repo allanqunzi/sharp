@@ -256,7 +256,9 @@ bool EWrapperImpl::reqGlobalCancel(){
 
 // event called by m_pClient->onReceive();
 // this function and orderStatus are never called at the same time, a lock is unnecessary.
-void EWrapperImpl::openOrder( OrderId orderId, const Contract& c, const Order& o, const OrderState& ostate){
+void EWrapperImpl::openOrder( OrderId orderId, const Contract& c, const Order& o,
+	const OrderState& ostate)
+{
 	open_order_set.insert(orderId);
 	auto & m = placed_contract_orders.orderId_index_map;
 	if(m.count(orderId) == 0){
@@ -413,6 +415,19 @@ void EWrapperImpl::historicalData(TickerId reqId, const IBString& date, double o
 					double WAP, int hasGaps)
 {
 	LOG(info)<<"calling EWrapperImpl::historicalData";
+	auto id = std::get<0>(hist_data_tuple);
+	auto & of = *(std::get<1>(hist_data_tuple));
+	if(!of){
+		auto & file_name = std::get<2>(hist_data_tuple);
+		LOG(error)<<file_name<<" can not be opened";
+		return;
+	}
+	if(id != reqId){ return; }
+	of
+	<<std::setw(26)<<date<<" "<<std::setw(10)<<open<<" "<<std::setw(10)<<low<<" "
+	<<std::setw(10)<<high<<" "<<std::setw(10)<<close<<" "<<std::setw(10)<<volume
+	<<" "<<std::setw(10)<<barCount<<" "<<std::setw(10)<<WAP<<" "<<std::setw(10)<<hasGaps
+	<<std::endl;
 }
 
 void EWrapperImpl::realtimeBar(TickerId reqId, long time, double open, double high,
@@ -675,6 +690,30 @@ bool EWrapperImpl::reqRealTimeBars(){
 	}
 
 	return true;
+}
+
+void EWrapperImpl::reqHistoricalData(const Contract &contract,
+			const IBString &endDateTime, const IBString &durationStr,
+			const IBString & barSizeSetting, const IBString &whatToShow,
+			int useRTH, int formatDate)
+{
+	auto & id = std::get<0>(hist_data_tuple) = ticker_id.getNewId();
+	std::get<1>(hist_data_tuple) = std::unique_ptr<std::ofstream>(new std::ofstream());
+	auto & of = *(std::get<1>(hist_data_tuple));
+	std::string file_name = contract.symbol + "_duration" + durationStr +
+					"_endtime" + endDateTime + "_barsize" + barSizeSetting;
+	file_name.erase(std::remove(file_name.begin(), file_name.end(), ' '), file_name.end());
+	std::get<2>(hist_data_tuple) = file_name;
+	TagValueListSPtr chartOptions;
+
+	of.open(file_name.c_str());
+	LOG(info)<<"requesting historical data for "<<contract.symbol<<", reqId = "<<id;
+	m_pClient->reqHistoricalData(id, contract, endDateTime, durationStr,
+		barSizeSetting, whatToShow,	useRTH, formatDate, chartOptions);
+}
+
+void EWrapperImpl::cancelHistoricalData(TickerId tickerId){
+	m_pClient->cancelHistoricalData(tickerId);
 }
 
 std::string EWrapperImpl::getField(TickType tickType){

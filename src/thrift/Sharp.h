@@ -29,6 +29,8 @@ class SharpIf {
   virtual void removeFromWatchList(const std::vector<std::string> & rm) = 0;
   virtual void removeZombieSymbols(const std::vector<std::string> & rm) = 0;
   virtual void getNextBar(RealTimeBar& _return, const std::string& symbol) = 0;
+  virtual void reqHistoricalData(std::map<int64_t, std::string> & _return, const HistoryRequest& request) = 0;
+  virtual void cancelHistoricalData(const int64_t tickerId) = 0;
   virtual void reqStkPositions(std::map<std::string, StkPosition> & _return, const bool refresh) = 0;
   virtual void reqOptPositions(std::map<int64_t, OptPosition> & _return, const bool refresh) = 0;
   virtual void cancelPositions() = 0;
@@ -104,6 +106,12 @@ class SharpNull : virtual public SharpIf {
     return;
   }
   void getNextBar(RealTimeBar& /* _return */, const std::string& /* symbol */) {
+    return;
+  }
+  void reqHistoricalData(std::map<int64_t, std::string> & /* _return */, const HistoryRequest& /* request */) {
+    return;
+  }
+  void cancelHistoricalData(const int64_t /* tickerId */) {
     return;
   }
   void reqStkPositions(std::map<std::string, StkPosition> & /* _return */, const bool /* refresh */) {
@@ -1752,6 +1760,242 @@ class Sharp_getNextBar_presult {
 };
 
 
+class Sharp_reqHistoricalData_args {
+ public:
+
+  static const char* ascii_fingerprint; // = "391DC7877B7C46193D2FBC8DAA05CA26";
+  static const uint8_t binary_fingerprint[16]; // = {0x39,0x1D,0xC7,0x87,0x7B,0x7C,0x46,0x19,0x3D,0x2F,0xBC,0x8D,0xAA,0x05,0xCA,0x26};
+
+  Sharp_reqHistoricalData_args(const Sharp_reqHistoricalData_args&);
+  Sharp_reqHistoricalData_args& operator=(const Sharp_reqHistoricalData_args&);
+  Sharp_reqHistoricalData_args() {
+  }
+
+  virtual ~Sharp_reqHistoricalData_args() throw();
+  HistoryRequest request;
+
+  void __set_request(const HistoryRequest& val);
+
+  bool operator == (const Sharp_reqHistoricalData_args & rhs) const
+  {
+    if (!(request == rhs.request))
+      return false;
+    return true;
+  }
+  bool operator != (const Sharp_reqHistoricalData_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Sharp_reqHistoricalData_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_reqHistoricalData_args& obj);
+};
+
+
+class Sharp_reqHistoricalData_pargs {
+ public:
+
+  static const char* ascii_fingerprint; // = "391DC7877B7C46193D2FBC8DAA05CA26";
+  static const uint8_t binary_fingerprint[16]; // = {0x39,0x1D,0xC7,0x87,0x7B,0x7C,0x46,0x19,0x3D,0x2F,0xBC,0x8D,0xAA,0x05,0xCA,0x26};
+
+
+  virtual ~Sharp_reqHistoricalData_pargs() throw();
+  const HistoryRequest* request;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_reqHistoricalData_pargs& obj);
+};
+
+typedef struct _Sharp_reqHistoricalData_result__isset {
+  _Sharp_reqHistoricalData_result__isset() : success(false), e(false) {}
+  bool success :1;
+  bool e :1;
+} _Sharp_reqHistoricalData_result__isset;
+
+class Sharp_reqHistoricalData_result {
+ public:
+
+  static const char* ascii_fingerprint; // = "5A2CAD1A157E7837D0D3D23D68E0FD57";
+  static const uint8_t binary_fingerprint[16]; // = {0x5A,0x2C,0xAD,0x1A,0x15,0x7E,0x78,0x37,0xD0,0xD3,0xD2,0x3D,0x68,0xE0,0xFD,0x57};
+
+  Sharp_reqHistoricalData_result(const Sharp_reqHistoricalData_result&);
+  Sharp_reqHistoricalData_result& operator=(const Sharp_reqHistoricalData_result&);
+  Sharp_reqHistoricalData_result() {
+  }
+
+  virtual ~Sharp_reqHistoricalData_result() throw();
+  std::map<int64_t, std::string>  success;
+  Exception e;
+
+  _Sharp_reqHistoricalData_result__isset __isset;
+
+  void __set_success(const std::map<int64_t, std::string> & val);
+
+  void __set_e(const Exception& val);
+
+  bool operator == (const Sharp_reqHistoricalData_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(e == rhs.e))
+      return false;
+    return true;
+  }
+  bool operator != (const Sharp_reqHistoricalData_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Sharp_reqHistoricalData_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_reqHistoricalData_result& obj);
+};
+
+typedef struct _Sharp_reqHistoricalData_presult__isset {
+  _Sharp_reqHistoricalData_presult__isset() : success(false), e(false) {}
+  bool success :1;
+  bool e :1;
+} _Sharp_reqHistoricalData_presult__isset;
+
+class Sharp_reqHistoricalData_presult {
+ public:
+
+  static const char* ascii_fingerprint; // = "5A2CAD1A157E7837D0D3D23D68E0FD57";
+  static const uint8_t binary_fingerprint[16]; // = {0x5A,0x2C,0xAD,0x1A,0x15,0x7E,0x78,0x37,0xD0,0xD3,0xD2,0x3D,0x68,0xE0,0xFD,0x57};
+
+
+  virtual ~Sharp_reqHistoricalData_presult() throw();
+  std::map<int64_t, std::string> * success;
+  Exception e;
+
+  _Sharp_reqHistoricalData_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_reqHistoricalData_presult& obj);
+};
+
+
+class Sharp_cancelHistoricalData_args {
+ public:
+
+  static const char* ascii_fingerprint; // = "56A59CE7FFAF82BCA8A19FAACDE4FB75";
+  static const uint8_t binary_fingerprint[16]; // = {0x56,0xA5,0x9C,0xE7,0xFF,0xAF,0x82,0xBC,0xA8,0xA1,0x9F,0xAA,0xCD,0xE4,0xFB,0x75};
+
+  Sharp_cancelHistoricalData_args(const Sharp_cancelHistoricalData_args&);
+  Sharp_cancelHistoricalData_args& operator=(const Sharp_cancelHistoricalData_args&);
+  Sharp_cancelHistoricalData_args() : tickerId(0) {
+  }
+
+  virtual ~Sharp_cancelHistoricalData_args() throw();
+  int64_t tickerId;
+
+  void __set_tickerId(const int64_t val);
+
+  bool operator == (const Sharp_cancelHistoricalData_args & rhs) const
+  {
+    if (!(tickerId == rhs.tickerId))
+      return false;
+    return true;
+  }
+  bool operator != (const Sharp_cancelHistoricalData_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Sharp_cancelHistoricalData_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_cancelHistoricalData_args& obj);
+};
+
+
+class Sharp_cancelHistoricalData_pargs {
+ public:
+
+  static const char* ascii_fingerprint; // = "56A59CE7FFAF82BCA8A19FAACDE4FB75";
+  static const uint8_t binary_fingerprint[16]; // = {0x56,0xA5,0x9C,0xE7,0xFF,0xAF,0x82,0xBC,0xA8,0xA1,0x9F,0xAA,0xCD,0xE4,0xFB,0x75};
+
+
+  virtual ~Sharp_cancelHistoricalData_pargs() throw();
+  const int64_t* tickerId;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_cancelHistoricalData_pargs& obj);
+};
+
+typedef struct _Sharp_cancelHistoricalData_result__isset {
+  _Sharp_cancelHistoricalData_result__isset() : e(false) {}
+  bool e :1;
+} _Sharp_cancelHistoricalData_result__isset;
+
+class Sharp_cancelHistoricalData_result {
+ public:
+
+  static const char* ascii_fingerprint; // = "0A23AF95FD017F7C6C78570E7E17112A";
+  static const uint8_t binary_fingerprint[16]; // = {0x0A,0x23,0xAF,0x95,0xFD,0x01,0x7F,0x7C,0x6C,0x78,0x57,0x0E,0x7E,0x17,0x11,0x2A};
+
+  Sharp_cancelHistoricalData_result(const Sharp_cancelHistoricalData_result&);
+  Sharp_cancelHistoricalData_result& operator=(const Sharp_cancelHistoricalData_result&);
+  Sharp_cancelHistoricalData_result() {
+  }
+
+  virtual ~Sharp_cancelHistoricalData_result() throw();
+  Exception e;
+
+  _Sharp_cancelHistoricalData_result__isset __isset;
+
+  void __set_e(const Exception& val);
+
+  bool operator == (const Sharp_cancelHistoricalData_result & rhs) const
+  {
+    if (!(e == rhs.e))
+      return false;
+    return true;
+  }
+  bool operator != (const Sharp_cancelHistoricalData_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Sharp_cancelHistoricalData_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_cancelHistoricalData_result& obj);
+};
+
+typedef struct _Sharp_cancelHistoricalData_presult__isset {
+  _Sharp_cancelHistoricalData_presult__isset() : e(false) {}
+  bool e :1;
+} _Sharp_cancelHistoricalData_presult__isset;
+
+class Sharp_cancelHistoricalData_presult {
+ public:
+
+  static const char* ascii_fingerprint; // = "0A23AF95FD017F7C6C78570E7E17112A";
+  static const uint8_t binary_fingerprint[16]; // = {0x0A,0x23,0xAF,0x95,0xFD,0x01,0x7F,0x7C,0x6C,0x78,0x57,0x0E,0x7E,0x17,0x11,0x2A};
+
+
+  virtual ~Sharp_cancelHistoricalData_presult() throw();
+  Exception e;
+
+  _Sharp_cancelHistoricalData_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+  friend std::ostream& operator<<(std::ostream& out, const Sharp_cancelHistoricalData_presult& obj);
+};
+
+
 class Sharp_reqStkPositions_args {
  public:
 
@@ -2438,6 +2682,12 @@ class SharpClient : virtual public SharpIf {
   void getNextBar(RealTimeBar& _return, const std::string& symbol);
   void send_getNextBar(const std::string& symbol);
   void recv_getNextBar(RealTimeBar& _return);
+  void reqHistoricalData(std::map<int64_t, std::string> & _return, const HistoryRequest& request);
+  void send_reqHistoricalData(const HistoryRequest& request);
+  void recv_reqHistoricalData(std::map<int64_t, std::string> & _return);
+  void cancelHistoricalData(const int64_t tickerId);
+  void send_cancelHistoricalData(const int64_t tickerId);
+  void recv_cancelHistoricalData();
   void reqStkPositions(std::map<std::string, StkPosition> & _return, const bool refresh);
   void send_reqStkPositions(const bool refresh);
   void recv_reqStkPositions(std::map<std::string, StkPosition> & _return);
@@ -2482,6 +2732,8 @@ class SharpProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_removeFromWatchList(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_removeZombieSymbols(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getNextBar(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_reqHistoricalData(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_cancelHistoricalData(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_reqStkPositions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_reqOptPositions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_cancelPositions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -2504,6 +2756,8 @@ class SharpProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["removeFromWatchList"] = &SharpProcessor::process_removeFromWatchList;
     processMap_["removeZombieSymbols"] = &SharpProcessor::process_removeZombieSymbols;
     processMap_["getNextBar"] = &SharpProcessor::process_getNextBar;
+    processMap_["reqHistoricalData"] = &SharpProcessor::process_reqHistoricalData;
+    processMap_["cancelHistoricalData"] = &SharpProcessor::process_cancelHistoricalData;
     processMap_["reqStkPositions"] = &SharpProcessor::process_reqStkPositions;
     processMap_["reqOptPositions"] = &SharpProcessor::process_reqOptPositions;
     processMap_["cancelPositions"] = &SharpProcessor::process_cancelPositions;
@@ -2669,6 +2923,25 @@ class SharpMultiface : virtual public SharpIf {
     }
     ifaces_[i]->getNextBar(_return, symbol);
     return;
+  }
+
+  void reqHistoricalData(std::map<int64_t, std::string> & _return, const HistoryRequest& request) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->reqHistoricalData(_return, request);
+    }
+    ifaces_[i]->reqHistoricalData(_return, request);
+    return;
+  }
+
+  void cancelHistoricalData(const int64_t tickerId) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->cancelHistoricalData(tickerId);
+    }
+    ifaces_[i]->cancelHistoricalData(tickerId);
   }
 
   void reqStkPositions(std::map<std::string, StkPosition> & _return, const bool refresh) {

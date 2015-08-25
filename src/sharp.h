@@ -15,10 +15,13 @@
 #include "EPosixClientSocketPlatform.h"
 #include "EWrapper.h"
 #include <iostream>
+#include <iomanip>
+#include <fstream>
 #include <algorithm>
 #include <stdio.h>
 #include <chrono>
 #include <memory>
+#include <tuple>
 #include <vector>
 #include <deque>
 #include <set>
@@ -258,6 +261,11 @@ public:
 	bool removeZombieSymbols(const std::vector<std::string> &);
 	bool reqRealTimeBars();
 	// getNextBar is done at thrift level
+	void reqHistoricalData(const Contract &contract,
+			const IBString &endDateTime, const IBString &durationStr,
+			const IBString & barSizeSetting, const IBString &whatToShow,
+			int useRTH, int formatDate);
+	void cancelHistoricalData(TickerId tickerId);
 
 	// account, portfolio, position related
 	void reqAccountUpdates(bool subscribe, const std::string & acctCode);
@@ -351,6 +359,7 @@ public:
 	IdType<int> req_id{1};
 	std::atomic<bool> open_order_flag;
 	std::set<OrderId> open_order_set;
+	std::tuple<TickerId, std::unique_ptr<std::ofstream>, std::string> hist_data_tuple;
 
 	ContractOrder contract_order_request;
 	// placed_contract_orders is written and read by several EWrapperImpl member functions

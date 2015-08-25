@@ -113,11 +113,21 @@ wlist = ["AAPL", "GOOG"]
 ts = []
 client.removeZombieSymbols([])
 
+hr = HistoryRequest();
+hr.symbol = "AAPL"
+
+m = client.reqHistoricalData(hr)
+
+for (k, v) in m.iteritems():
+  print(k, "---", v)
+
+
+'''
 acnt = client.reqAccountUpdates(True, "DU224610", True)
 
 for (k, v) in acnt.iteritems():
   print(k, "---", v)
-
+'''
 time.sleep(90)
 
 client.addToWatchList(wlist)

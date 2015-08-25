@@ -132,6 +132,20 @@ struct RealTimeBar{
     9:required i32 count = 1;
 }
 
+struct HistoryRequest{
+    1:required string symbol = "";
+    2:required string secType = "STK";
+    3:required string exchange = "SMART";
+    4:required string currency = "USD";
+    5:required string primaryExchange = "NASDAQ";
+    6:required string endDateTime = "20150824 17:00:00"
+    7:required string durationStr = "24 W"
+    8:required string barSizeSetting = "5 secs"
+    9:required string whatToShow = "TRADES"
+    10:required i32 useRTH = 1
+    11:required i32 formatDate = 1
+}
+
 struct Asset{
     1:required i64 conId;
     2:required double strike;
@@ -206,6 +220,9 @@ service Sharp{
     void removeFromWatchList(1:required list<string> rm) throws (1:Exception e);
     void removeZombieSymbols(1:required list<string> rm) throws (1:Exception e);
     RealTimeBar getNextBar(1:required string symbol) throws (1:Exception e);
+    // reqHistoricalData returns the reqId and the name of the file where the data is saved.
+    map<i64, string> reqHistoricalData(1:required HistoryRequest request) throws (1:Exception e);
+    void cancelHistoricalData (1:required i64 tickerId) throws (1:Exception e);
 
     map<string,StkPosition> reqStkPositions(1:required bool refresh) throws (1:Exception e);
     map<i64,OptPosition> reqOptPositions(1:required bool refresh) throws (1:Exception e);

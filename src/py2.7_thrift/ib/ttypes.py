@@ -1757,6 +1757,223 @@ class RealTimeBar:
   def __ne__(self, other):
     return not (self == other)
 
+class HistoryRequest:
+  """
+  Attributes:
+   - symbol
+   - secType
+   - exchange
+   - currency
+   - primaryExchange
+   - endDateTime
+   - durationStr
+   - barSizeSetting
+   - whatToShow
+   - useRTH
+   - formatDate
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'symbol', None, "", ), # 1
+    (2, TType.STRING, 'secType', None, "STK", ), # 2
+    (3, TType.STRING, 'exchange', None, "SMART", ), # 3
+    (4, TType.STRING, 'currency', None, "USD", ), # 4
+    (5, TType.STRING, 'primaryExchange', None, "NASDAQ", ), # 5
+    (6, TType.STRING, 'endDateTime', None, "20150824 17:00:00", ), # 6
+    (7, TType.STRING, 'durationStr', None, "24 W", ), # 7
+    (8, TType.STRING, 'barSizeSetting', None, "5 secs", ), # 8
+    (9, TType.STRING, 'whatToShow', None, "TRADES", ), # 9
+    (10, TType.I32, 'useRTH', None, 1, ), # 10
+    (11, TType.I32, 'formatDate', None, 1, ), # 11
+  )
+
+  def __init__(self, symbol=thrift_spec[1][4], secType=thrift_spec[2][4], exchange=thrift_spec[3][4], currency=thrift_spec[4][4], primaryExchange=thrift_spec[5][4], endDateTime=thrift_spec[6][4], durationStr=thrift_spec[7][4], barSizeSetting=thrift_spec[8][4], whatToShow=thrift_spec[9][4], useRTH=thrift_spec[10][4], formatDate=thrift_spec[11][4],):
+    self.symbol = symbol
+    self.secType = secType
+    self.exchange = exchange
+    self.currency = currency
+    self.primaryExchange = primaryExchange
+    self.endDateTime = endDateTime
+    self.durationStr = durationStr
+    self.barSizeSetting = barSizeSetting
+    self.whatToShow = whatToShow
+    self.useRTH = useRTH
+    self.formatDate = formatDate
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.symbol = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.secType = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.STRING:
+          self.exchange = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.STRING:
+          self.currency = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.STRING:
+          self.primaryExchange = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 6:
+        if ftype == TType.STRING:
+          self.endDateTime = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 7:
+        if ftype == TType.STRING:
+          self.durationStr = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 8:
+        if ftype == TType.STRING:
+          self.barSizeSetting = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 9:
+        if ftype == TType.STRING:
+          self.whatToShow = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 10:
+        if ftype == TType.I32:
+          self.useRTH = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      elif fid == 11:
+        if ftype == TType.I32:
+          self.formatDate = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('HistoryRequest')
+    if self.symbol is not None:
+      oprot.writeFieldBegin('symbol', TType.STRING, 1)
+      oprot.writeString(self.symbol)
+      oprot.writeFieldEnd()
+    if self.secType is not None:
+      oprot.writeFieldBegin('secType', TType.STRING, 2)
+      oprot.writeString(self.secType)
+      oprot.writeFieldEnd()
+    if self.exchange is not None:
+      oprot.writeFieldBegin('exchange', TType.STRING, 3)
+      oprot.writeString(self.exchange)
+      oprot.writeFieldEnd()
+    if self.currency is not None:
+      oprot.writeFieldBegin('currency', TType.STRING, 4)
+      oprot.writeString(self.currency)
+      oprot.writeFieldEnd()
+    if self.primaryExchange is not None:
+      oprot.writeFieldBegin('primaryExchange', TType.STRING, 5)
+      oprot.writeString(self.primaryExchange)
+      oprot.writeFieldEnd()
+    if self.endDateTime is not None:
+      oprot.writeFieldBegin('endDateTime', TType.STRING, 6)
+      oprot.writeString(self.endDateTime)
+      oprot.writeFieldEnd()
+    if self.durationStr is not None:
+      oprot.writeFieldBegin('durationStr', TType.STRING, 7)
+      oprot.writeString(self.durationStr)
+      oprot.writeFieldEnd()
+    if self.barSizeSetting is not None:
+      oprot.writeFieldBegin('barSizeSetting', TType.STRING, 8)
+      oprot.writeString(self.barSizeSetting)
+      oprot.writeFieldEnd()
+    if self.whatToShow is not None:
+      oprot.writeFieldBegin('whatToShow', TType.STRING, 9)
+      oprot.writeString(self.whatToShow)
+      oprot.writeFieldEnd()
+    if self.useRTH is not None:
+      oprot.writeFieldBegin('useRTH', TType.I32, 10)
+      oprot.writeI32(self.useRTH)
+      oprot.writeFieldEnd()
+    if self.formatDate is not None:
+      oprot.writeFieldBegin('formatDate', TType.I32, 11)
+      oprot.writeI32(self.formatDate)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    if self.symbol is None:
+      raise TProtocol.TProtocolException(message='Required field symbol is unset!')
+    if self.secType is None:
+      raise TProtocol.TProtocolException(message='Required field secType is unset!')
+    if self.exchange is None:
+      raise TProtocol.TProtocolException(message='Required field exchange is unset!')
+    if self.currency is None:
+      raise TProtocol.TProtocolException(message='Required field currency is unset!')
+    if self.primaryExchange is None:
+      raise TProtocol.TProtocolException(message='Required field primaryExchange is unset!')
+    if self.endDateTime is None:
+      raise TProtocol.TProtocolException(message='Required field endDateTime is unset!')
+    if self.durationStr is None:
+      raise TProtocol.TProtocolException(message='Required field durationStr is unset!')
+    if self.barSizeSetting is None:
+      raise TProtocol.TProtocolException(message='Required field barSizeSetting is unset!')
+    if self.whatToShow is None:
+      raise TProtocol.TProtocolException(message='Required field whatToShow is unset!')
+    if self.useRTH is None:
+      raise TProtocol.TProtocolException(message='Required field useRTH is unset!')
+    if self.formatDate is None:
+      raise TProtocol.TProtocolException(message='Required field formatDate is unset!')
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.symbol)
+    value = (value * 31) ^ hash(self.secType)
+    value = (value * 31) ^ hash(self.exchange)
+    value = (value * 31) ^ hash(self.currency)
+    value = (value * 31) ^ hash(self.primaryExchange)
+    value = (value * 31) ^ hash(self.endDateTime)
+    value = (value * 31) ^ hash(self.durationStr)
+    value = (value * 31) ^ hash(self.barSizeSetting)
+    value = (value * 31) ^ hash(self.whatToShow)
+    value = (value * 31) ^ hash(self.useRTH)
+    value = (value * 31) ^ hash(self.formatDate)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
 class Asset:
   """
   Attributes:

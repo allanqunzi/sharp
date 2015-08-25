@@ -2629,6 +2629,326 @@ std::ostream& operator<<(std::ostream& out, const RealTimeBar& obj) {
 }
 
 
+HistoryRequest::~HistoryRequest() throw() {
+}
+
+
+void HistoryRequest::__set_symbol(const std::string& val) {
+  this->symbol = val;
+}
+
+void HistoryRequest::__set_secType(const std::string& val) {
+  this->secType = val;
+}
+
+void HistoryRequest::__set_exchange(const std::string& val) {
+  this->exchange = val;
+}
+
+void HistoryRequest::__set_currency(const std::string& val) {
+  this->currency = val;
+}
+
+void HistoryRequest::__set_primaryExchange(const std::string& val) {
+  this->primaryExchange = val;
+}
+
+void HistoryRequest::__set_endDateTime(const std::string& val) {
+  this->endDateTime = val;
+}
+
+void HistoryRequest::__set_durationStr(const std::string& val) {
+  this->durationStr = val;
+}
+
+void HistoryRequest::__set_barSizeSetting(const std::string& val) {
+  this->barSizeSetting = val;
+}
+
+void HistoryRequest::__set_whatToShow(const std::string& val) {
+  this->whatToShow = val;
+}
+
+void HistoryRequest::__set_useRTH(const int32_t val) {
+  this->useRTH = val;
+}
+
+void HistoryRequest::__set_formatDate(const int32_t val) {
+  this->formatDate = val;
+}
+
+const char* HistoryRequest::ascii_fingerprint = "E024B330CCC3A1E76954383045971A83";
+const uint8_t HistoryRequest::binary_fingerprint[16] = {0xE0,0x24,0xB3,0x30,0xCC,0xC3,0xA1,0xE7,0x69,0x54,0x38,0x30,0x45,0x97,0x1A,0x83};
+
+uint32_t HistoryRequest::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+  bool isset_symbol = false;
+  bool isset_secType = false;
+  bool isset_exchange = false;
+  bool isset_currency = false;
+  bool isset_primaryExchange = false;
+  bool isset_endDateTime = false;
+  bool isset_durationStr = false;
+  bool isset_barSizeSetting = false;
+  bool isset_whatToShow = false;
+  bool isset_useRTH = false;
+  bool isset_formatDate = false;
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->symbol);
+          isset_symbol = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->secType);
+          isset_secType = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->exchange);
+          isset_exchange = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->currency);
+          isset_currency = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 5:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->primaryExchange);
+          isset_primaryExchange = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 6:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->endDateTime);
+          isset_endDateTime = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 7:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->durationStr);
+          isset_durationStr = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 8:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->barSizeSetting);
+          isset_barSizeSetting = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 9:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->whatToShow);
+          isset_whatToShow = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 10:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->useRTH);
+          isset_useRTH = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 11:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->formatDate);
+          isset_formatDate = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  if (!isset_symbol)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_secType)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_exchange)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_currency)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_primaryExchange)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_endDateTime)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_durationStr)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_barSizeSetting)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_whatToShow)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_useRTH)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_formatDate)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  return xfer;
+}
+
+uint32_t HistoryRequest::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  oprot->incrementRecursionDepth();
+  xfer += oprot->writeStructBegin("HistoryRequest");
+
+  xfer += oprot->writeFieldBegin("symbol", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->symbol);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("secType", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->secType);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("exchange", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString(this->exchange);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("currency", ::apache::thrift::protocol::T_STRING, 4);
+  xfer += oprot->writeString(this->currency);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("primaryExchange", ::apache::thrift::protocol::T_STRING, 5);
+  xfer += oprot->writeString(this->primaryExchange);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("endDateTime", ::apache::thrift::protocol::T_STRING, 6);
+  xfer += oprot->writeString(this->endDateTime);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("durationStr", ::apache::thrift::protocol::T_STRING, 7);
+  xfer += oprot->writeString(this->durationStr);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("barSizeSetting", ::apache::thrift::protocol::T_STRING, 8);
+  xfer += oprot->writeString(this->barSizeSetting);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("whatToShow", ::apache::thrift::protocol::T_STRING, 9);
+  xfer += oprot->writeString(this->whatToShow);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("useRTH", ::apache::thrift::protocol::T_I32, 10);
+  xfer += oprot->writeI32(this->useRTH);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("formatDate", ::apache::thrift::protocol::T_I32, 11);
+  xfer += oprot->writeI32(this->formatDate);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  oprot->decrementRecursionDepth();
+  return xfer;
+}
+
+void swap(HistoryRequest &a, HistoryRequest &b) {
+  using ::std::swap;
+  swap(a.symbol, b.symbol);
+  swap(a.secType, b.secType);
+  swap(a.exchange, b.exchange);
+  swap(a.currency, b.currency);
+  swap(a.primaryExchange, b.primaryExchange);
+  swap(a.endDateTime, b.endDateTime);
+  swap(a.durationStr, b.durationStr);
+  swap(a.barSizeSetting, b.barSizeSetting);
+  swap(a.whatToShow, b.whatToShow);
+  swap(a.useRTH, b.useRTH);
+  swap(a.formatDate, b.formatDate);
+}
+
+HistoryRequest::HistoryRequest(const HistoryRequest& other18) {
+  symbol = other18.symbol;
+  secType = other18.secType;
+  exchange = other18.exchange;
+  currency = other18.currency;
+  primaryExchange = other18.primaryExchange;
+  endDateTime = other18.endDateTime;
+  durationStr = other18.durationStr;
+  barSizeSetting = other18.barSizeSetting;
+  whatToShow = other18.whatToShow;
+  useRTH = other18.useRTH;
+  formatDate = other18.formatDate;
+}
+HistoryRequest& HistoryRequest::operator=(const HistoryRequest& other19) {
+  symbol = other19.symbol;
+  secType = other19.secType;
+  exchange = other19.exchange;
+  currency = other19.currency;
+  primaryExchange = other19.primaryExchange;
+  endDateTime = other19.endDateTime;
+  durationStr = other19.durationStr;
+  barSizeSetting = other19.barSizeSetting;
+  whatToShow = other19.whatToShow;
+  useRTH = other19.useRTH;
+  formatDate = other19.formatDate;
+  return *this;
+}
+std::ostream& operator<<(std::ostream& out, const HistoryRequest& obj) {
+  using apache::thrift::to_string;
+  out << "HistoryRequest(";
+  out << "symbol=" << to_string(obj.symbol);
+  out << ", " << "secType=" << to_string(obj.secType);
+  out << ", " << "exchange=" << to_string(obj.exchange);
+  out << ", " << "currency=" << to_string(obj.currency);
+  out << ", " << "primaryExchange=" << to_string(obj.primaryExchange);
+  out << ", " << "endDateTime=" << to_string(obj.endDateTime);
+  out << ", " << "durationStr=" << to_string(obj.durationStr);
+  out << ", " << "barSizeSetting=" << to_string(obj.barSizeSetting);
+  out << ", " << "whatToShow=" << to_string(obj.whatToShow);
+  out << ", " << "useRTH=" << to_string(obj.useRTH);
+  out << ", " << "formatDate=" << to_string(obj.formatDate);
+  out << ")";
+  return out;
+}
+
+
 Asset::~Asset() throw() {
 }
 
@@ -3103,51 +3423,51 @@ void swap(Asset &a, Asset &b) {
   swap(a.secId, b.secId);
 }
 
-Asset::Asset(const Asset& other18) {
-  conId = other18.conId;
-  strike = other18.strike;
-  position = other18.position;
-  marketPrice = other18.marketPrice;
-  marketValue = other18.marketValue;
-  averageCost = other18.averageCost;
-  unrealizedPNL = other18.unrealizedPNL;
-  realizedPNL = other18.realizedPNL;
-  accountName = other18.accountName;
-  symbol = other18.symbol;
-  secType = other18.secType;
-  expiry = other18.expiry;
-  right = other18.right;
-  multiplier = other18.multiplier;
-  exchange = other18.exchange;
-  primaryExchange = other18.primaryExchange;
-  currency = other18.currency;
-  localSymbol = other18.localSymbol;
-  tradingClass = other18.tradingClass;
-  secIdType = other18.secIdType;
-  secId = other18.secId;
+Asset::Asset(const Asset& other20) {
+  conId = other20.conId;
+  strike = other20.strike;
+  position = other20.position;
+  marketPrice = other20.marketPrice;
+  marketValue = other20.marketValue;
+  averageCost = other20.averageCost;
+  unrealizedPNL = other20.unrealizedPNL;
+  realizedPNL = other20.realizedPNL;
+  accountName = other20.accountName;
+  symbol = other20.symbol;
+  secType = other20.secType;
+  expiry = other20.expiry;
+  right = other20.right;
+  multiplier = other20.multiplier;
+  exchange = other20.exchange;
+  primaryExchange = other20.primaryExchange;
+  currency = other20.currency;
+  localSymbol = other20.localSymbol;
+  tradingClass = other20.tradingClass;
+  secIdType = other20.secIdType;
+  secId = other20.secId;
 }
-Asset& Asset::operator=(const Asset& other19) {
-  conId = other19.conId;
-  strike = other19.strike;
-  position = other19.position;
-  marketPrice = other19.marketPrice;
-  marketValue = other19.marketValue;
-  averageCost = other19.averageCost;
-  unrealizedPNL = other19.unrealizedPNL;
-  realizedPNL = other19.realizedPNL;
-  accountName = other19.accountName;
-  symbol = other19.symbol;
-  secType = other19.secType;
-  expiry = other19.expiry;
-  right = other19.right;
-  multiplier = other19.multiplier;
-  exchange = other19.exchange;
-  primaryExchange = other19.primaryExchange;
-  currency = other19.currency;
-  localSymbol = other19.localSymbol;
-  tradingClass = other19.tradingClass;
-  secIdType = other19.secIdType;
-  secId = other19.secId;
+Asset& Asset::operator=(const Asset& other21) {
+  conId = other21.conId;
+  strike = other21.strike;
+  position = other21.position;
+  marketPrice = other21.marketPrice;
+  marketValue = other21.marketValue;
+  averageCost = other21.averageCost;
+  unrealizedPNL = other21.unrealizedPNL;
+  realizedPNL = other21.realizedPNL;
+  accountName = other21.accountName;
+  symbol = other21.symbol;
+  secType = other21.secType;
+  expiry = other21.expiry;
+  right = other21.right;
+  multiplier = other21.multiplier;
+  exchange = other21.exchange;
+  primaryExchange = other21.primaryExchange;
+  currency = other21.currency;
+  localSymbol = other21.localSymbol;
+  tradingClass = other21.tradingClass;
+  secIdType = other21.secIdType;
+  secId = other21.secId;
   return *this;
 }
 std::ostream& operator<<(std::ostream& out, const Asset& obj) {
@@ -3293,15 +3613,15 @@ void swap(StkPosition &a, StkPosition &b) {
   swap(a.avgCost, b.avgCost);
 }
 
-StkPosition::StkPosition(const StkPosition& other20) {
-  account = other20.account;
-  position = other20.position;
-  avgCost = other20.avgCost;
+StkPosition::StkPosition(const StkPosition& other22) {
+  account = other22.account;
+  position = other22.position;
+  avgCost = other22.avgCost;
 }
-StkPosition& StkPosition::operator=(const StkPosition& other21) {
-  account = other21.account;
-  position = other21.position;
-  avgCost = other21.avgCost;
+StkPosition& StkPosition::operator=(const StkPosition& other23) {
+  account = other23.account;
+  position = other23.position;
+  avgCost = other23.avgCost;
   return *this;
 }
 std::ostream& operator<<(std::ostream& out, const StkPosition& obj) {
@@ -3709,43 +4029,43 @@ void swap(OptPosition &a, OptPosition &b) {
   swap(a.secId, b.secId);
 }
 
-OptPosition::OptPosition(const OptPosition& other22) {
-  account = other22.account;
-  conId = other22.conId;
-  position = other22.position;
-  avgCost = other22.avgCost;
-  strike = other22.strike;
-  symbol = other22.symbol;
-  secType = other22.secType;
-  expiry = other22.expiry;
-  right = other22.right;
-  multiplier = other22.multiplier;
-  exchange = other22.exchange;
-  primaryExchange = other22.primaryExchange;
-  currency = other22.currency;
-  localSymbol = other22.localSymbol;
-  tradingClass = other22.tradingClass;
-  secIdType = other22.secIdType;
-  secId = other22.secId;
+OptPosition::OptPosition(const OptPosition& other24) {
+  account = other24.account;
+  conId = other24.conId;
+  position = other24.position;
+  avgCost = other24.avgCost;
+  strike = other24.strike;
+  symbol = other24.symbol;
+  secType = other24.secType;
+  expiry = other24.expiry;
+  right = other24.right;
+  multiplier = other24.multiplier;
+  exchange = other24.exchange;
+  primaryExchange = other24.primaryExchange;
+  currency = other24.currency;
+  localSymbol = other24.localSymbol;
+  tradingClass = other24.tradingClass;
+  secIdType = other24.secIdType;
+  secId = other24.secId;
 }
-OptPosition& OptPosition::operator=(const OptPosition& other23) {
-  account = other23.account;
-  conId = other23.conId;
-  position = other23.position;
-  avgCost = other23.avgCost;
-  strike = other23.strike;
-  symbol = other23.symbol;
-  secType = other23.secType;
-  expiry = other23.expiry;
-  right = other23.right;
-  multiplier = other23.multiplier;
-  exchange = other23.exchange;
-  primaryExchange = other23.primaryExchange;
-  currency = other23.currency;
-  localSymbol = other23.localSymbol;
-  tradingClass = other23.tradingClass;
-  secIdType = other23.secIdType;
-  secId = other23.secId;
+OptPosition& OptPosition::operator=(const OptPosition& other25) {
+  account = other25.account;
+  conId = other25.conId;
+  position = other25.position;
+  avgCost = other25.avgCost;
+  strike = other25.strike;
+  symbol = other25.symbol;
+  secType = other25.secType;
+  expiry = other25.expiry;
+  right = other25.right;
+  multiplier = other25.multiplier;
+  exchange = other25.exchange;
+  primaryExchange = other25.primaryExchange;
+  currency = other25.currency;
+  localSymbol = other25.localSymbol;
+  tradingClass = other25.tradingClass;
+  secIdType = other25.secIdType;
+  secId = other25.secId;
   return *this;
 }
 std::ostream& operator<<(std::ostream& out, const OptPosition& obj) {
@@ -3862,15 +4182,15 @@ void swap(Exception &a, Exception &b) {
   swap(a.__isset, b.__isset);
 }
 
-Exception::Exception(const Exception& other24) : TException() {
-  what = other24.what;
-  why = other24.why;
-  __isset = other24.__isset;
+Exception::Exception(const Exception& other26) : TException() {
+  what = other26.what;
+  why = other26.why;
+  __isset = other26.__isset;
 }
-Exception& Exception::operator=(const Exception& other25) {
-  what = other25.what;
-  why = other25.why;
-  __isset = other25.__isset;
+Exception& Exception::operator=(const Exception& other27) {
+  what = other27.what;
+  why = other27.why;
+  __isset = other27.__isset;
   return *this;
 }
 std::ostream& operator<<(std::ostream& out, const Exception& obj) {

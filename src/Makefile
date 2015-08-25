@@ -1,6 +1,6 @@
 include Makefile.thrift.inc
 
-CXX=g++
+CXX=icpc
 CXXFLAGS=-DIB_USE_STD_STRING -Wall -Wno-switch -g -std=c++0x -O3
 
 BASE_SRC_DIR=../PosixClient/src

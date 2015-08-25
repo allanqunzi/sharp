@@ -97,6 +97,20 @@ class Iface:
     """
     pass
 
+  def reqHistoricalData(self, request):
+    """
+    Parameters:
+     - request
+    """
+    pass
+
+  def cancelHistoricalData(self, tickerId):
+    """
+    Parameters:
+     - tickerId
+    """
+    pass
+
   def reqStkPositions(self, refresh):
     """
     Parameters:
@@ -565,6 +579,70 @@ class Client(Iface):
       raise result.e
     raise TApplicationException(TApplicationException.MISSING_RESULT, "getNextBar failed: unknown result");
 
+  def reqHistoricalData(self, request):
+    """
+    Parameters:
+     - request
+    """
+    self.send_reqHistoricalData(request)
+    return self.recv_reqHistoricalData()
+
+  def send_reqHistoricalData(self, request):
+    self._oprot.writeMessageBegin('reqHistoricalData', TMessageType.CALL, self._seqid)
+    args = reqHistoricalData_args()
+    args.request = request
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_reqHistoricalData(self):
+    iprot = self._iprot
+    (fname, mtype, rseqid) = iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(iprot)
+      iprot.readMessageEnd()
+      raise x
+    result = reqHistoricalData_result()
+    result.read(iprot)
+    iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    if result.e is not None:
+      raise result.e
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "reqHistoricalData failed: unknown result");
+
+  def cancelHistoricalData(self, tickerId):
+    """
+    Parameters:
+     - tickerId
+    """
+    self.send_cancelHistoricalData(tickerId)
+    self.recv_cancelHistoricalData()
+
+  def send_cancelHistoricalData(self, tickerId):
+    self._oprot.writeMessageBegin('cancelHistoricalData', TMessageType.CALL, self._seqid)
+    args = cancelHistoricalData_args()
+    args.tickerId = tickerId
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_cancelHistoricalData(self):
+    iprot = self._iprot
+    (fname, mtype, rseqid) = iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(iprot)
+      iprot.readMessageEnd()
+      raise x
+    result = cancelHistoricalData_result()
+    result.read(iprot)
+    iprot.readMessageEnd()
+    if result.e is not None:
+      raise result.e
+    return
+
   def reqStkPositions(self, refresh):
     """
     Parameters:
@@ -750,6 +828,8 @@ class Processor(Iface, TProcessor):
     self._processMap["removeFromWatchList"] = Processor.process_removeFromWatchList
     self._processMap["removeZombieSymbols"] = Processor.process_removeZombieSymbols
     self._processMap["getNextBar"] = Processor.process_getNextBar
+    self._processMap["reqHistoricalData"] = Processor.process_reqHistoricalData
+    self._processMap["cancelHistoricalData"] = Processor.process_cancelHistoricalData
     self._processMap["reqStkPositions"] = Processor.process_reqStkPositions
     self._processMap["reqOptPositions"] = Processor.process_reqOptPositions
     self._processMap["cancelPositions"] = Processor.process_cancelPositions
@@ -957,6 +1037,34 @@ class Processor(Iface, TProcessor):
     except Exception, e:
       result.e = e
     oprot.writeMessageBegin("getNextBar", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_reqHistoricalData(self, seqid, iprot, oprot):
+    args = reqHistoricalData_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = reqHistoricalData_result()
+    try:
+      result.success = self._handler.reqHistoricalData(args.request)
+    except Exception, e:
+      result.e = e
+    oprot.writeMessageBegin("reqHistoricalData", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_cancelHistoricalData(self, seqid, iprot, oprot):
+    args = cancelHistoricalData_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = cancelHistoricalData_result()
+    try:
+      self._handler.cancelHistoricalData(args.tickerId)
+    except Exception, e:
+      result.e = e
+    oprot.writeMessageBegin("cancelHistoricalData", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
     oprot.trans.flush()
@@ -2946,6 +3054,295 @@ class getNextBar_result:
   def __ne__(self, other):
     return not (self == other)
 
+class reqHistoricalData_args:
+  """
+  Attributes:
+   - request
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRUCT, 'request', (HistoryRequest, HistoryRequest.thrift_spec), None, ), # 1
+  )
+
+  def __init__(self, request=None,):
+    self.request = request
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.request = HistoryRequest()
+          self.request.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('reqHistoricalData_args')
+    if self.request is not None:
+      oprot.writeFieldBegin('request', TType.STRUCT, 1)
+      self.request.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    if self.request is None:
+      raise TProtocol.TProtocolException(message='Required field request is unset!')
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.request)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class reqHistoricalData_result:
+  """
+  Attributes:
+   - success
+   - e
+  """
+
+  thrift_spec = (
+    (0, TType.MAP, 'success', (TType.I64,None,TType.STRING,None), None, ), # 0
+    (1, TType.STRUCT, 'e', (Exception, Exception.thrift_spec), None, ), # 1
+  )
+
+  def __init__(self, success=None, e=None,):
+    self.success = success
+    self.e = e
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.MAP:
+          self.success = {}
+          (_ktype43, _vtype44, _size42 ) = iprot.readMapBegin()
+          for _i46 in xrange(_size42):
+            _key47 = iprot.readI64();
+            _val48 = iprot.readString();
+            self.success[_key47] = _val48
+          iprot.readMapEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 1:
+        if ftype == TType.STRUCT:
+          self.e = Exception()
+          self.e.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('reqHistoricalData_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.MAP, 0)
+      oprot.writeMapBegin(TType.I64, TType.STRING, len(self.success))
+      for kiter49,viter50 in self.success.items():
+        oprot.writeI64(kiter49)
+        oprot.writeString(viter50)
+      oprot.writeMapEnd()
+      oprot.writeFieldEnd()
+    if self.e is not None:
+      oprot.writeFieldBegin('e', TType.STRUCT, 1)
+      self.e.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.success)
+    value = (value * 31) ^ hash(self.e)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class cancelHistoricalData_args:
+  """
+  Attributes:
+   - tickerId
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.I64, 'tickerId', None, None, ), # 1
+  )
+
+  def __init__(self, tickerId=None,):
+    self.tickerId = tickerId
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I64:
+          self.tickerId = iprot.readI64();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('cancelHistoricalData_args')
+    if self.tickerId is not None:
+      oprot.writeFieldBegin('tickerId', TType.I64, 1)
+      oprot.writeI64(self.tickerId)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    if self.tickerId is None:
+      raise TProtocol.TProtocolException(message='Required field tickerId is unset!')
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.tickerId)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class cancelHistoricalData_result:
+  """
+  Attributes:
+   - e
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRUCT, 'e', (Exception, Exception.thrift_spec), None, ), # 1
+  )
+
+  def __init__(self, e=None,):
+    self.e = e
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.e = Exception()
+          self.e.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('cancelHistoricalData_result')
+    if self.e is not None:
+      oprot.writeFieldBegin('e', TType.STRUCT, 1)
+      self.e.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.e)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
 class reqStkPositions_args:
   """
   Attributes:
@@ -3041,12 +3438,12 @@ class reqStkPositions_result:
       if fid == 0:
         if ftype == TType.MAP:
           self.success = {}
-          (_ktype43, _vtype44, _size42 ) = iprot.readMapBegin()
-          for _i46 in xrange(_size42):
-            _key47 = iprot.readString();
-            _val48 = StkPosition()
-            _val48.read(iprot)
-            self.success[_key47] = _val48
+          (_ktype52, _vtype53, _size51 ) = iprot.readMapBegin()
+          for _i55 in xrange(_size51):
+            _key56 = iprot.readString();
+            _val57 = StkPosition()
+            _val57.read(iprot)
+            self.success[_key56] = _val57
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
@@ -3069,9 +3466,9 @@ class reqStkPositions_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.MAP, 0)
       oprot.writeMapBegin(TType.STRING, TType.STRUCT, len(self.success))
-      for kiter49,viter50 in self.success.items():
-        oprot.writeString(kiter49)
-        viter50.write(oprot)
+      for kiter58,viter59 in self.success.items():
+        oprot.writeString(kiter58)
+        viter59.write(oprot)
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
     if self.e is not None:
@@ -3197,12 +3594,12 @@ class reqOptPositions_result:
       if fid == 0:
         if ftype == TType.MAP:
           self.success = {}
-          (_ktype52, _vtype53, _size51 ) = iprot.readMapBegin()
-          for _i55 in xrange(_size51):
-            _key56 = iprot.readI64();
-            _val57 = OptPosition()
-            _val57.read(iprot)
-            self.success[_key56] = _val57
+          (_ktype61, _vtype62, _size60 ) = iprot.readMapBegin()
+          for _i64 in xrange(_size60):
+            _key65 = iprot.readI64();
+            _val66 = OptPosition()
+            _val66.read(iprot)
+            self.success[_key65] = _val66
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
@@ -3225,9 +3622,9 @@ class reqOptPositions_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.MAP, 0)
       oprot.writeMapBegin(TType.I64, TType.STRUCT, len(self.success))
-      for kiter58,viter59 in self.success.items():
-        oprot.writeI64(kiter58)
-        viter59.write(oprot)
+      for kiter67,viter68 in self.success.items():
+        oprot.writeI64(kiter67)
+        viter68.write(oprot)
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
     if self.e is not None:
@@ -3495,11 +3892,11 @@ class reqAccountUpdates_result:
       if fid == 0:
         if ftype == TType.MAP:
           self.success = {}
-          (_ktype61, _vtype62, _size60 ) = iprot.readMapBegin()
-          for _i64 in xrange(_size60):
-            _key65 = iprot.readString();
-            _val66 = iprot.readString();
-            self.success[_key65] = _val66
+          (_ktype70, _vtype71, _size69 ) = iprot.readMapBegin()
+          for _i73 in xrange(_size69):
+            _key74 = iprot.readString();
+            _val75 = iprot.readString();
+            self.success[_key74] = _val75
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
@@ -3522,9 +3919,9 @@ class reqAccountUpdates_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.MAP, 0)
       oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.success))
-      for kiter67,viter68 in self.success.items():
-        oprot.writeString(kiter67)
-        oprot.writeString(viter68)
+      for kiter76,viter77 in self.success.items():
+        oprot.writeString(kiter76)
+        oprot.writeString(viter77)
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
     if self.e is not None:
@@ -3680,12 +4077,12 @@ class reqPortfolio_result:
       if fid == 0:
         if ftype == TType.MAP:
           self.success = {}
-          (_ktype70, _vtype71, _size69 ) = iprot.readMapBegin()
-          for _i73 in xrange(_size69):
-            _key74 = iprot.readI64();
-            _val75 = Asset()
-            _val75.read(iprot)
-            self.success[_key74] = _val75
+          (_ktype79, _vtype80, _size78 ) = iprot.readMapBegin()
+          for _i82 in xrange(_size78):
+            _key83 = iprot.readI64();
+            _val84 = Asset()
+            _val84.read(iprot)
+            self.success[_key83] = _val84
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
@@ -3708,9 +4105,9 @@ class reqPortfolio_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.MAP, 0)
       oprot.writeMapBegin(TType.I64, TType.STRUCT, len(self.success))
-      for kiter76,viter77 in self.success.items():
-        oprot.writeI64(kiter76)
-        viter77.write(oprot)
+      for kiter85,viter86 in self.success.items():
+        oprot.writeI64(kiter85)
+        viter86.write(oprot)
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
     if self.e is not None:

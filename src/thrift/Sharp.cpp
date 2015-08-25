@@ -1096,14 +1096,14 @@ uint32_t Sharp_reqOpenOrders_result::read(::apache::thrift::protocol::TProtocol*
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size26;
-            ::apache::thrift::protocol::TType _etype29;
-            xfer += iprot->readListBegin(_etype29, _size26);
-            this->success.resize(_size26);
-            uint32_t _i30;
-            for (_i30 = 0; _i30 < _size26; ++_i30)
+            uint32_t _size28;
+            ::apache::thrift::protocol::TType _etype31;
+            xfer += iprot->readListBegin(_etype31, _size28);
+            this->success.resize(_size28);
+            uint32_t _i32;
+            for (_i32 = 0; _i32 < _size28; ++_i32)
             {
-              xfer += this->success[_i30].read(iprot);
+              xfer += this->success[_i32].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -1142,10 +1142,10 @@ uint32_t Sharp_reqOpenOrders_result::write(::apache::thrift::protocol::TProtocol
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::vector<OrderStatus> ::const_iterator _iter31;
-      for (_iter31 = this->success.begin(); _iter31 != this->success.end(); ++_iter31)
+      std::vector<OrderStatus> ::const_iterator _iter33;
+      for (_iter33 = this->success.begin(); _iter33 != this->success.end(); ++_iter33)
       {
-        xfer += (*_iter31).write(oprot);
+        xfer += (*_iter33).write(oprot);
       }
       xfer += oprot->writeListEnd();
     }
@@ -1189,14 +1189,14 @@ uint32_t Sharp_reqOpenOrders_presult::read(::apache::thrift::protocol::TProtocol
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size32;
-            ::apache::thrift::protocol::TType _etype35;
-            xfer += iprot->readListBegin(_etype35, _size32);
-            (*(this->success)).resize(_size32);
-            uint32_t _i36;
-            for (_i36 = 0; _i36 < _size32; ++_i36)
+            uint32_t _size34;
+            ::apache::thrift::protocol::TType _etype37;
+            xfer += iprot->readListBegin(_etype37, _size34);
+            (*(this->success)).resize(_size34);
+            uint32_t _i38;
+            for (_i38 = 0; _i38 < _size34; ++_i38)
             {
-              xfer += (*(this->success))[_i36].read(iprot);
+              xfer += (*(this->success))[_i38].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -1313,14 +1313,14 @@ uint32_t Sharp_reqAllOpenOrders_result::read(::apache::thrift::protocol::TProtoc
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size37;
-            ::apache::thrift::protocol::TType _etype40;
-            xfer += iprot->readListBegin(_etype40, _size37);
-            this->success.resize(_size37);
-            uint32_t _i41;
-            for (_i41 = 0; _i41 < _size37; ++_i41)
+            uint32_t _size39;
+            ::apache::thrift::protocol::TType _etype42;
+            xfer += iprot->readListBegin(_etype42, _size39);
+            this->success.resize(_size39);
+            uint32_t _i43;
+            for (_i43 = 0; _i43 < _size39; ++_i43)
             {
-              xfer += this->success[_i41].read(iprot);
+              xfer += this->success[_i43].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -1359,10 +1359,10 @@ uint32_t Sharp_reqAllOpenOrders_result::write(::apache::thrift::protocol::TProto
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::vector<OrderStatus> ::const_iterator _iter42;
-      for (_iter42 = this->success.begin(); _iter42 != this->success.end(); ++_iter42)
+      std::vector<OrderStatus> ::const_iterator _iter44;
+      for (_iter44 = this->success.begin(); _iter44 != this->success.end(); ++_iter44)
       {
-        xfer += (*_iter42).write(oprot);
+        xfer += (*_iter44).write(oprot);
       }
       xfer += oprot->writeListEnd();
     }
@@ -1406,14 +1406,14 @@ uint32_t Sharp_reqAllOpenOrders_presult::read(::apache::thrift::protocol::TProto
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size43;
-            ::apache::thrift::protocol::TType _etype46;
-            xfer += iprot->readListBegin(_etype46, _size43);
-            (*(this->success)).resize(_size43);
-            uint32_t _i47;
-            for (_i47 = 0; _i47 < _size43; ++_i47)
+            uint32_t _size45;
+            ::apache::thrift::protocol::TType _etype48;
+            xfer += iprot->readListBegin(_etype48, _size45);
+            (*(this->success)).resize(_size45);
+            uint32_t _i49;
+            for (_i49 = 0; _i49 < _size45; ++_i49)
             {
-              xfer += (*(this->success))[_i47].read(iprot);
+              xfer += (*(this->success))[_i49].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -1719,14 +1719,14 @@ uint32_t Sharp_reqExecutions_result::read(::apache::thrift::protocol::TProtocol*
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size48;
-            ::apache::thrift::protocol::TType _etype51;
-            xfer += iprot->readListBegin(_etype51, _size48);
-            this->success.resize(_size48);
-            uint32_t _i52;
-            for (_i52 = 0; _i52 < _size48; ++_i52)
+            uint32_t _size50;
+            ::apache::thrift::protocol::TType _etype53;
+            xfer += iprot->readListBegin(_etype53, _size50);
+            this->success.resize(_size50);
+            uint32_t _i54;
+            for (_i54 = 0; _i54 < _size50; ++_i54)
             {
-              xfer += this->success[_i52].read(iprot);
+              xfer += this->success[_i54].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -1765,10 +1765,10 @@ uint32_t Sharp_reqExecutions_result::write(::apache::thrift::protocol::TProtocol
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::vector<ExecutedContract> ::const_iterator _iter53;
-      for (_iter53 = this->success.begin(); _iter53 != this->success.end(); ++_iter53)
+      std::vector<ExecutedContract> ::const_iterator _iter55;
+      for (_iter55 = this->success.begin(); _iter55 != this->success.end(); ++_iter55)
       {
-        xfer += (*_iter53).write(oprot);
+        xfer += (*_iter55).write(oprot);
       }
       xfer += oprot->writeListEnd();
     }
@@ -1812,14 +1812,14 @@ uint32_t Sharp_reqExecutions_presult::read(::apache::thrift::protocol::TProtocol
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size54;
-            ::apache::thrift::protocol::TType _etype57;
-            xfer += iprot->readListBegin(_etype57, _size54);
-            (*(this->success)).resize(_size54);
-            uint32_t _i58;
-            for (_i58 = 0; _i58 < _size54; ++_i58)
+            uint32_t _size56;
+            ::apache::thrift::protocol::TType _etype59;
+            xfer += iprot->readListBegin(_etype59, _size56);
+            (*(this->success)).resize(_size56);
+            uint32_t _i60;
+            for (_i60 = 0; _i60 < _size56; ++_i60)
             {
-              xfer += (*(this->success))[_i58].read(iprot);
+              xfer += (*(this->success))[_i60].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -2043,14 +2043,14 @@ uint32_t Sharp_addToWatchList_args::read(::apache::thrift::protocol::TProtocol* 
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->wl.clear();
-            uint32_t _size59;
-            ::apache::thrift::protocol::TType _etype62;
-            xfer += iprot->readListBegin(_etype62, _size59);
-            this->wl.resize(_size59);
-            uint32_t _i63;
-            for (_i63 = 0; _i63 < _size59; ++_i63)
+            uint32_t _size61;
+            ::apache::thrift::protocol::TType _etype64;
+            xfer += iprot->readListBegin(_etype64, _size61);
+            this->wl.resize(_size61);
+            uint32_t _i65;
+            for (_i65 = 0; _i65 < _size61; ++_i65)
             {
-              xfer += iprot->readString(this->wl[_i63]);
+              xfer += iprot->readString(this->wl[_i65]);
             }
             xfer += iprot->readListEnd();
           }
@@ -2081,10 +2081,10 @@ uint32_t Sharp_addToWatchList_args::write(::apache::thrift::protocol::TProtocol*
   xfer += oprot->writeFieldBegin("wl", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->wl.size()));
-    std::vector<std::string> ::const_iterator _iter64;
-    for (_iter64 = this->wl.begin(); _iter64 != this->wl.end(); ++_iter64)
+    std::vector<std::string> ::const_iterator _iter66;
+    for (_iter66 = this->wl.begin(); _iter66 != this->wl.end(); ++_iter66)
     {
-      xfer += oprot->writeString((*_iter64));
+      xfer += oprot->writeString((*_iter66));
     }
     xfer += oprot->writeListEnd();
   }
@@ -2109,10 +2109,10 @@ uint32_t Sharp_addToWatchList_pargs::write(::apache::thrift::protocol::TProtocol
   xfer += oprot->writeFieldBegin("wl", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->wl)).size()));
-    std::vector<std::string> ::const_iterator _iter65;
-    for (_iter65 = (*(this->wl)).begin(); _iter65 != (*(this->wl)).end(); ++_iter65)
+    std::vector<std::string> ::const_iterator _iter67;
+    for (_iter67 = (*(this->wl)).begin(); _iter67 != (*(this->wl)).end(); ++_iter67)
     {
-      xfer += oprot->writeString((*_iter65));
+      xfer += oprot->writeString((*_iter67));
     }
     xfer += oprot->writeListEnd();
   }
@@ -2260,14 +2260,14 @@ uint32_t Sharp_removeFromWatchList_args::read(::apache::thrift::protocol::TProto
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->rm.clear();
-            uint32_t _size66;
-            ::apache::thrift::protocol::TType _etype69;
-            xfer += iprot->readListBegin(_etype69, _size66);
-            this->rm.resize(_size66);
-            uint32_t _i70;
-            for (_i70 = 0; _i70 < _size66; ++_i70)
+            uint32_t _size68;
+            ::apache::thrift::protocol::TType _etype71;
+            xfer += iprot->readListBegin(_etype71, _size68);
+            this->rm.resize(_size68);
+            uint32_t _i72;
+            for (_i72 = 0; _i72 < _size68; ++_i72)
             {
-              xfer += iprot->readString(this->rm[_i70]);
+              xfer += iprot->readString(this->rm[_i72]);
             }
             xfer += iprot->readListEnd();
           }
@@ -2298,10 +2298,10 @@ uint32_t Sharp_removeFromWatchList_args::write(::apache::thrift::protocol::TProt
   xfer += oprot->writeFieldBegin("rm", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->rm.size()));
-    std::vector<std::string> ::const_iterator _iter71;
-    for (_iter71 = this->rm.begin(); _iter71 != this->rm.end(); ++_iter71)
+    std::vector<std::string> ::const_iterator _iter73;
+    for (_iter73 = this->rm.begin(); _iter73 != this->rm.end(); ++_iter73)
     {
-      xfer += oprot->writeString((*_iter71));
+      xfer += oprot->writeString((*_iter73));
     }
     xfer += oprot->writeListEnd();
   }
@@ -2326,10 +2326,10 @@ uint32_t Sharp_removeFromWatchList_pargs::write(::apache::thrift::protocol::TPro
   xfer += oprot->writeFieldBegin("rm", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->rm)).size()));
-    std::vector<std::string> ::const_iterator _iter72;
-    for (_iter72 = (*(this->rm)).begin(); _iter72 != (*(this->rm)).end(); ++_iter72)
+    std::vector<std::string> ::const_iterator _iter74;
+    for (_iter74 = (*(this->rm)).begin(); _iter74 != (*(this->rm)).end(); ++_iter74)
     {
-      xfer += oprot->writeString((*_iter72));
+      xfer += oprot->writeString((*_iter74));
     }
     xfer += oprot->writeListEnd();
   }
@@ -2477,14 +2477,14 @@ uint32_t Sharp_removeZombieSymbols_args::read(::apache::thrift::protocol::TProto
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->rm.clear();
-            uint32_t _size73;
-            ::apache::thrift::protocol::TType _etype76;
-            xfer += iprot->readListBegin(_etype76, _size73);
-            this->rm.resize(_size73);
-            uint32_t _i77;
-            for (_i77 = 0; _i77 < _size73; ++_i77)
+            uint32_t _size75;
+            ::apache::thrift::protocol::TType _etype78;
+            xfer += iprot->readListBegin(_etype78, _size75);
+            this->rm.resize(_size75);
+            uint32_t _i79;
+            for (_i79 = 0; _i79 < _size75; ++_i79)
             {
-              xfer += iprot->readString(this->rm[_i77]);
+              xfer += iprot->readString(this->rm[_i79]);
             }
             xfer += iprot->readListEnd();
           }
@@ -2515,10 +2515,10 @@ uint32_t Sharp_removeZombieSymbols_args::write(::apache::thrift::protocol::TProt
   xfer += oprot->writeFieldBegin("rm", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->rm.size()));
-    std::vector<std::string> ::const_iterator _iter78;
-    for (_iter78 = this->rm.begin(); _iter78 != this->rm.end(); ++_iter78)
+    std::vector<std::string> ::const_iterator _iter80;
+    for (_iter80 = this->rm.begin(); _iter80 != this->rm.end(); ++_iter80)
     {
-      xfer += oprot->writeString((*_iter78));
+      xfer += oprot->writeString((*_iter80));
     }
     xfer += oprot->writeListEnd();
   }
@@ -2543,10 +2543,10 @@ uint32_t Sharp_removeZombieSymbols_pargs::write(::apache::thrift::protocol::TPro
   xfer += oprot->writeFieldBegin("rm", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->rm)).size()));
-    std::vector<std::string> ::const_iterator _iter79;
-    for (_iter79 = (*(this->rm)).begin(); _iter79 != (*(this->rm)).end(); ++_iter79)
+    std::vector<std::string> ::const_iterator _iter81;
+    for (_iter81 = (*(this->rm)).begin(); _iter81 != (*(this->rm)).end(); ++_iter81)
     {
-      xfer += oprot->writeString((*_iter79));
+      xfer += oprot->writeString((*_iter81));
     }
     xfer += oprot->writeListEnd();
   }
@@ -2874,6 +2874,443 @@ uint32_t Sharp_getNextBar_presult::read(::apache::thrift::protocol::TProtocol* i
 }
 
 
+Sharp_reqHistoricalData_args::~Sharp_reqHistoricalData_args() throw() {
+}
+
+
+uint32_t Sharp_reqHistoricalData_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+  bool isset_request = false;
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->request.read(iprot);
+          isset_request = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  if (!isset_request)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  return xfer;
+}
+
+uint32_t Sharp_reqHistoricalData_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  oprot->incrementRecursionDepth();
+  xfer += oprot->writeStructBegin("Sharp_reqHistoricalData_args");
+
+  xfer += oprot->writeFieldBegin("request", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += this->request.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  oprot->decrementRecursionDepth();
+  return xfer;
+}
+
+
+Sharp_reqHistoricalData_pargs::~Sharp_reqHistoricalData_pargs() throw() {
+}
+
+
+uint32_t Sharp_reqHistoricalData_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  oprot->incrementRecursionDepth();
+  xfer += oprot->writeStructBegin("Sharp_reqHistoricalData_pargs");
+
+  xfer += oprot->writeFieldBegin("request", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += (*(this->request)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  oprot->decrementRecursionDepth();
+  return xfer;
+}
+
+
+Sharp_reqHistoricalData_result::~Sharp_reqHistoricalData_result() throw() {
+}
+
+
+uint32_t Sharp_reqHistoricalData_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_MAP) {
+          {
+            this->success.clear();
+            uint32_t _size82;
+            ::apache::thrift::protocol::TType _ktype83;
+            ::apache::thrift::protocol::TType _vtype84;
+            xfer += iprot->readMapBegin(_ktype83, _vtype84, _size82);
+            uint32_t _i86;
+            for (_i86 = 0; _i86 < _size82; ++_i86)
+            {
+              int64_t _key87;
+              xfer += iprot->readI64(_key87);
+              std::string& _val88 = this->success[_key87];
+              xfer += iprot->readString(_val88);
+            }
+            xfer += iprot->readMapEnd();
+          }
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->e.read(iprot);
+          this->__isset.e = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Sharp_reqHistoricalData_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("Sharp_reqHistoricalData_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
+    {
+      xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_I64, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
+      std::map<int64_t, std::string> ::const_iterator _iter89;
+      for (_iter89 = this->success.begin(); _iter89 != this->success.end(); ++_iter89)
+      {
+        xfer += oprot->writeI64(_iter89->first);
+        xfer += oprot->writeString(_iter89->second);
+      }
+      xfer += oprot->writeMapEnd();
+    }
+    xfer += oprot->writeFieldEnd();
+  } else if (this->__isset.e) {
+    xfer += oprot->writeFieldBegin("e", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->e.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Sharp_reqHistoricalData_presult::~Sharp_reqHistoricalData_presult() throw() {
+}
+
+
+uint32_t Sharp_reqHistoricalData_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_MAP) {
+          {
+            (*(this->success)).clear();
+            uint32_t _size90;
+            ::apache::thrift::protocol::TType _ktype91;
+            ::apache::thrift::protocol::TType _vtype92;
+            xfer += iprot->readMapBegin(_ktype91, _vtype92, _size90);
+            uint32_t _i94;
+            for (_i94 = 0; _i94 < _size90; ++_i94)
+            {
+              int64_t _key95;
+              xfer += iprot->readI64(_key95);
+              std::string& _val96 = (*(this->success))[_key95];
+              xfer += iprot->readString(_val96);
+            }
+            xfer += iprot->readMapEnd();
+          }
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->e.read(iprot);
+          this->__isset.e = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+Sharp_cancelHistoricalData_args::~Sharp_cancelHistoricalData_args() throw() {
+}
+
+
+uint32_t Sharp_cancelHistoricalData_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+  bool isset_tickerId = false;
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->tickerId);
+          isset_tickerId = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  if (!isset_tickerId)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  return xfer;
+}
+
+uint32_t Sharp_cancelHistoricalData_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  oprot->incrementRecursionDepth();
+  xfer += oprot->writeStructBegin("Sharp_cancelHistoricalData_args");
+
+  xfer += oprot->writeFieldBegin("tickerId", ::apache::thrift::protocol::T_I64, 1);
+  xfer += oprot->writeI64(this->tickerId);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  oprot->decrementRecursionDepth();
+  return xfer;
+}
+
+
+Sharp_cancelHistoricalData_pargs::~Sharp_cancelHistoricalData_pargs() throw() {
+}
+
+
+uint32_t Sharp_cancelHistoricalData_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  oprot->incrementRecursionDepth();
+  xfer += oprot->writeStructBegin("Sharp_cancelHistoricalData_pargs");
+
+  xfer += oprot->writeFieldBegin("tickerId", ::apache::thrift::protocol::T_I64, 1);
+  xfer += oprot->writeI64((*(this->tickerId)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  oprot->decrementRecursionDepth();
+  return xfer;
+}
+
+
+Sharp_cancelHistoricalData_result::~Sharp_cancelHistoricalData_result() throw() {
+}
+
+
+uint32_t Sharp_cancelHistoricalData_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->e.read(iprot);
+          this->__isset.e = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Sharp_cancelHistoricalData_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("Sharp_cancelHistoricalData_result");
+
+  if (this->__isset.e) {
+    xfer += oprot->writeFieldBegin("e", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->e.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Sharp_cancelHistoricalData_presult::~Sharp_cancelHistoricalData_presult() throw() {
+}
+
+
+uint32_t Sharp_cancelHistoricalData_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->e.read(iprot);
+          this->__isset.e = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
 Sharp_reqStkPositions_args::~Sharp_reqStkPositions_args() throw() {
 }
 
@@ -2985,17 +3422,17 @@ uint32_t Sharp_reqStkPositions_result::read(::apache::thrift::protocol::TProtoco
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size80;
-            ::apache::thrift::protocol::TType _ktype81;
-            ::apache::thrift::protocol::TType _vtype82;
-            xfer += iprot->readMapBegin(_ktype81, _vtype82, _size80);
-            uint32_t _i84;
-            for (_i84 = 0; _i84 < _size80; ++_i84)
+            uint32_t _size97;
+            ::apache::thrift::protocol::TType _ktype98;
+            ::apache::thrift::protocol::TType _vtype99;
+            xfer += iprot->readMapBegin(_ktype98, _vtype99, _size97);
+            uint32_t _i101;
+            for (_i101 = 0; _i101 < _size97; ++_i101)
             {
-              std::string _key85;
-              xfer += iprot->readString(_key85);
-              StkPosition& _val86 = this->success[_key85];
-              xfer += _val86.read(iprot);
+              std::string _key102;
+              xfer += iprot->readString(_key102);
+              StkPosition& _val103 = this->success[_key102];
+              xfer += _val103.read(iprot);
             }
             xfer += iprot->readMapEnd();
           }
@@ -3034,11 +3471,11 @@ uint32_t Sharp_reqStkPositions_result::write(::apache::thrift::protocol::TProtoc
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, StkPosition> ::const_iterator _iter87;
-      for (_iter87 = this->success.begin(); _iter87 != this->success.end(); ++_iter87)
+      std::map<std::string, StkPosition> ::const_iterator _iter104;
+      for (_iter104 = this->success.begin(); _iter104 != this->success.end(); ++_iter104)
       {
-        xfer += oprot->writeString(_iter87->first);
-        xfer += _iter87->second.write(oprot);
+        xfer += oprot->writeString(_iter104->first);
+        xfer += _iter104->second.write(oprot);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -3082,17 +3519,17 @@ uint32_t Sharp_reqStkPositions_presult::read(::apache::thrift::protocol::TProtoc
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size88;
-            ::apache::thrift::protocol::TType _ktype89;
-            ::apache::thrift::protocol::TType _vtype90;
-            xfer += iprot->readMapBegin(_ktype89, _vtype90, _size88);
-            uint32_t _i92;
-            for (_i92 = 0; _i92 < _size88; ++_i92)
+            uint32_t _size105;
+            ::apache::thrift::protocol::TType _ktype106;
+            ::apache::thrift::protocol::TType _vtype107;
+            xfer += iprot->readMapBegin(_ktype106, _vtype107, _size105);
+            uint32_t _i109;
+            for (_i109 = 0; _i109 < _size105; ++_i109)
             {
-              std::string _key93;
-              xfer += iprot->readString(_key93);
-              StkPosition& _val94 = (*(this->success))[_key93];
-              xfer += _val94.read(iprot);
+              std::string _key110;
+              xfer += iprot->readString(_key110);
+              StkPosition& _val111 = (*(this->success))[_key110];
+              xfer += _val111.read(iprot);
             }
             xfer += iprot->readMapEnd();
           }
@@ -3233,17 +3670,17 @@ uint32_t Sharp_reqOptPositions_result::read(::apache::thrift::protocol::TProtoco
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size95;
-            ::apache::thrift::protocol::TType _ktype96;
-            ::apache::thrift::protocol::TType _vtype97;
-            xfer += iprot->readMapBegin(_ktype96, _vtype97, _size95);
-            uint32_t _i99;
-            for (_i99 = 0; _i99 < _size95; ++_i99)
+            uint32_t _size112;
+            ::apache::thrift::protocol::TType _ktype113;
+            ::apache::thrift::protocol::TType _vtype114;
+            xfer += iprot->readMapBegin(_ktype113, _vtype114, _size112);
+            uint32_t _i116;
+            for (_i116 = 0; _i116 < _size112; ++_i116)
             {
-              int64_t _key100;
-              xfer += iprot->readI64(_key100);
-              OptPosition& _val101 = this->success[_key100];
-              xfer += _val101.read(iprot);
+              int64_t _key117;
+              xfer += iprot->readI64(_key117);
+              OptPosition& _val118 = this->success[_key117];
+              xfer += _val118.read(iprot);
             }
             xfer += iprot->readMapEnd();
           }
@@ -3282,11 +3719,11 @@ uint32_t Sharp_reqOptPositions_result::write(::apache::thrift::protocol::TProtoc
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_I64, ::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::map<int64_t, OptPosition> ::const_iterator _iter102;
-      for (_iter102 = this->success.begin(); _iter102 != this->success.end(); ++_iter102)
+      std::map<int64_t, OptPosition> ::const_iterator _iter119;
+      for (_iter119 = this->success.begin(); _iter119 != this->success.end(); ++_iter119)
       {
-        xfer += oprot->writeI64(_iter102->first);
-        xfer += _iter102->second.write(oprot);
+        xfer += oprot->writeI64(_iter119->first);
+        xfer += _iter119->second.write(oprot);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -3330,17 +3767,17 @@ uint32_t Sharp_reqOptPositions_presult::read(::apache::thrift::protocol::TProtoc
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size103;
-            ::apache::thrift::protocol::TType _ktype104;
-            ::apache::thrift::protocol::TType _vtype105;
-            xfer += iprot->readMapBegin(_ktype104, _vtype105, _size103);
-            uint32_t _i107;
-            for (_i107 = 0; _i107 < _size103; ++_i107)
+            uint32_t _size120;
+            ::apache::thrift::protocol::TType _ktype121;
+            ::apache::thrift::protocol::TType _vtype122;
+            xfer += iprot->readMapBegin(_ktype121, _vtype122, _size120);
+            uint32_t _i124;
+            for (_i124 = 0; _i124 < _size120; ++_i124)
             {
-              int64_t _key108;
-              xfer += iprot->readI64(_key108);
-              OptPosition& _val109 = (*(this->success))[_key108];
-              xfer += _val109.read(iprot);
+              int64_t _key125;
+              xfer += iprot->readI64(_key125);
+              OptPosition& _val126 = (*(this->success))[_key125];
+              xfer += _val126.read(iprot);
             }
             xfer += iprot->readMapEnd();
           }
@@ -3684,17 +4121,17 @@ uint32_t Sharp_reqAccountUpdates_result::read(::apache::thrift::protocol::TProto
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size110;
-            ::apache::thrift::protocol::TType _ktype111;
-            ::apache::thrift::protocol::TType _vtype112;
-            xfer += iprot->readMapBegin(_ktype111, _vtype112, _size110);
-            uint32_t _i114;
-            for (_i114 = 0; _i114 < _size110; ++_i114)
+            uint32_t _size127;
+            ::apache::thrift::protocol::TType _ktype128;
+            ::apache::thrift::protocol::TType _vtype129;
+            xfer += iprot->readMapBegin(_ktype128, _vtype129, _size127);
+            uint32_t _i131;
+            for (_i131 = 0; _i131 < _size127; ++_i131)
             {
-              std::string _key115;
-              xfer += iprot->readString(_key115);
-              std::string& _val116 = this->success[_key115];
-              xfer += iprot->readString(_val116);
+              std::string _key132;
+              xfer += iprot->readString(_key132);
+              std::string& _val133 = this->success[_key132];
+              xfer += iprot->readString(_val133);
             }
             xfer += iprot->readMapEnd();
           }
@@ -3733,11 +4170,11 @@ uint32_t Sharp_reqAccountUpdates_result::write(::apache::thrift::protocol::TProt
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, std::string> ::const_iterator _iter117;
-      for (_iter117 = this->success.begin(); _iter117 != this->success.end(); ++_iter117)
+      std::map<std::string, std::string> ::const_iterator _iter134;
+      for (_iter134 = this->success.begin(); _iter134 != this->success.end(); ++_iter134)
       {
-        xfer += oprot->writeString(_iter117->first);
-        xfer += oprot->writeString(_iter117->second);
+        xfer += oprot->writeString(_iter134->first);
+        xfer += oprot->writeString(_iter134->second);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -3781,17 +4218,17 @@ uint32_t Sharp_reqAccountUpdates_presult::read(::apache::thrift::protocol::TProt
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size118;
-            ::apache::thrift::protocol::TType _ktype119;
-            ::apache::thrift::protocol::TType _vtype120;
-            xfer += iprot->readMapBegin(_ktype119, _vtype120, _size118);
-            uint32_t _i122;
-            for (_i122 = 0; _i122 < _size118; ++_i122)
+            uint32_t _size135;
+            ::apache::thrift::protocol::TType _ktype136;
+            ::apache::thrift::protocol::TType _vtype137;
+            xfer += iprot->readMapBegin(_ktype136, _vtype137, _size135);
+            uint32_t _i139;
+            for (_i139 = 0; _i139 < _size135; ++_i139)
             {
-              std::string _key123;
-              xfer += iprot->readString(_key123);
-              std::string& _val124 = (*(this->success))[_key123];
-              xfer += iprot->readString(_val124);
+              std::string _key140;
+              xfer += iprot->readString(_key140);
+              std::string& _val141 = (*(this->success))[_key140];
+              xfer += iprot->readString(_val141);
             }
             xfer += iprot->readMapEnd();
           }
@@ -3970,17 +4407,17 @@ uint32_t Sharp_reqPortfolio_result::read(::apache::thrift::protocol::TProtocol* 
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size125;
-            ::apache::thrift::protocol::TType _ktype126;
-            ::apache::thrift::protocol::TType _vtype127;
-            xfer += iprot->readMapBegin(_ktype126, _vtype127, _size125);
-            uint32_t _i129;
-            for (_i129 = 0; _i129 < _size125; ++_i129)
+            uint32_t _size142;
+            ::apache::thrift::protocol::TType _ktype143;
+            ::apache::thrift::protocol::TType _vtype144;
+            xfer += iprot->readMapBegin(_ktype143, _vtype144, _size142);
+            uint32_t _i146;
+            for (_i146 = 0; _i146 < _size142; ++_i146)
             {
-              int64_t _key130;
-              xfer += iprot->readI64(_key130);
-              Asset& _val131 = this->success[_key130];
-              xfer += _val131.read(iprot);
+              int64_t _key147;
+              xfer += iprot->readI64(_key147);
+              Asset& _val148 = this->success[_key147];
+              xfer += _val148.read(iprot);
             }
             xfer += iprot->readMapEnd();
           }
@@ -4019,11 +4456,11 @@ uint32_t Sharp_reqPortfolio_result::write(::apache::thrift::protocol::TProtocol*
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_I64, ::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::map<int64_t, Asset> ::const_iterator _iter132;
-      for (_iter132 = this->success.begin(); _iter132 != this->success.end(); ++_iter132)
+      std::map<int64_t, Asset> ::const_iterator _iter149;
+      for (_iter149 = this->success.begin(); _iter149 != this->success.end(); ++_iter149)
       {
-        xfer += oprot->writeI64(_iter132->first);
-        xfer += _iter132->second.write(oprot);
+        xfer += oprot->writeI64(_iter149->first);
+        xfer += _iter149->second.write(oprot);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -4067,17 +4504,17 @@ uint32_t Sharp_reqPortfolio_presult::read(::apache::thrift::protocol::TProtocol*
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size133;
-            ::apache::thrift::protocol::TType _ktype134;
-            ::apache::thrift::protocol::TType _vtype135;
-            xfer += iprot->readMapBegin(_ktype134, _vtype135, _size133);
-            uint32_t _i137;
-            for (_i137 = 0; _i137 < _size133; ++_i137)
+            uint32_t _size150;
+            ::apache::thrift::protocol::TType _ktype151;
+            ::apache::thrift::protocol::TType _vtype152;
+            xfer += iprot->readMapBegin(_ktype151, _vtype152, _size150);
+            uint32_t _i154;
+            for (_i154 = 0; _i154 < _size150; ++_i154)
             {
-              int64_t _key138;
-              xfer += iprot->readI64(_key138);
-              Asset& _val139 = (*(this->success))[_key138];
-              xfer += _val139.read(iprot);
+              int64_t _key155;
+              xfer += iprot->readI64(_key155);
+              Asset& _val156 = (*(this->success))[_key155];
+              xfer += _val156.read(iprot);
             }
             xfer += iprot->readMapEnd();
           }
@@ -4923,6 +5360,123 @@ void SharpClient::recv_getNextBar(RealTimeBar& _return)
     throw result.e;
   }
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getNextBar failed: unknown result");
+}
+
+void SharpClient::reqHistoricalData(std::map<int64_t, std::string> & _return, const HistoryRequest& request)
+{
+  send_reqHistoricalData(request);
+  recv_reqHistoricalData(_return);
+}
+
+void SharpClient::send_reqHistoricalData(const HistoryRequest& request)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("reqHistoricalData", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Sharp_reqHistoricalData_pargs args;
+  args.request = &request;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void SharpClient::recv_reqHistoricalData(std::map<int64_t, std::string> & _return)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("reqHistoricalData") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  Sharp_reqHistoricalData_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    // _return pointer has now been filled
+    return;
+  }
+  if (result.__isset.e) {
+    throw result.e;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "reqHistoricalData failed: unknown result");
+}
+
+void SharpClient::cancelHistoricalData(const int64_t tickerId)
+{
+  send_cancelHistoricalData(tickerId);
+  recv_cancelHistoricalData();
+}
+
+void SharpClient::send_cancelHistoricalData(const int64_t tickerId)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("cancelHistoricalData", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Sharp_cancelHistoricalData_pargs args;
+  args.tickerId = &tickerId;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void SharpClient::recv_cancelHistoricalData()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("cancelHistoricalData") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  Sharp_cancelHistoricalData_presult result;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.e) {
+    throw result.e;
+  }
+  return;
 }
 
 void SharpClient::reqStkPositions(std::map<std::string, StkPosition> & _return, const bool refresh)
@@ -6031,6 +6585,119 @@ void SharpProcessor::process_getNextBar(int32_t seqid, ::apache::thrift::protoco
 
   if (this->eventHandler_.get() != NULL) {
     this->eventHandler_->postWrite(ctx, "Sharp.getNextBar", bytes);
+  }
+}
+
+void SharpProcessor::process_reqHistoricalData(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("Sharp.reqHistoricalData", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Sharp.reqHistoricalData");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "Sharp.reqHistoricalData");
+  }
+
+  Sharp_reqHistoricalData_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "Sharp.reqHistoricalData", bytes);
+  }
+
+  Sharp_reqHistoricalData_result result;
+  try {
+    iface_->reqHistoricalData(result.success, args.request);
+    result.__isset.success = true;
+  } catch (Exception &e) {
+    result.e = e;
+    result.__isset.e = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "Sharp.reqHistoricalData");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("reqHistoricalData", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "Sharp.reqHistoricalData");
+  }
+
+  oprot->writeMessageBegin("reqHistoricalData", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "Sharp.reqHistoricalData", bytes);
+  }
+}
+
+void SharpProcessor::process_cancelHistoricalData(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("Sharp.cancelHistoricalData", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Sharp.cancelHistoricalData");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "Sharp.cancelHistoricalData");
+  }
+
+  Sharp_cancelHistoricalData_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "Sharp.cancelHistoricalData", bytes);
+  }
+
+  Sharp_cancelHistoricalData_result result;
+  try {
+    iface_->cancelHistoricalData(args.tickerId);
+  } catch (Exception &e) {
+    result.e = e;
+    result.__isset.e = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "Sharp.cancelHistoricalData");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("cancelHistoricalData", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "Sharp.cancelHistoricalData");
+  }
+
+  oprot->writeMessageBegin("cancelHistoricalData", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "Sharp.cancelHistoricalData", bytes);
   }
 }
 

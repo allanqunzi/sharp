@@ -92,6 +92,16 @@ class SharpHandler : virtual public SharpIf {
     printf("getNextBar\n");
   }
 
+  void reqHistoricalData(std::map<int64_t, std::string> & _return, const HistoryRequest& request) {
+    // Your implementation goes here
+    printf("reqHistoricalData\n");
+  }
+
+  void cancelHistoricalData(const int64_t tickerId) {
+    // Your implementation goes here
+    printf("cancelHistoricalData\n");
+  }
+
   void reqStkPositions(std::map<std::string, StkPosition> & _return, const bool refresh) {
     // Your implementation goes here
     printf("reqStkPositions\n");

@@ -38,6 +38,8 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
   print('  void removeFromWatchList( rm)')
   print('  void removeZombieSymbols( rm)')
   print('  RealTimeBar getNextBar(string symbol)')
+  print('   reqHistoricalData(HistoryRequest request)')
+  print('  void cancelHistoricalData(i64 tickerId)')
   print('   reqStkPositions(bool refresh)')
   print('   reqOptPositions(bool refresh)')
   print('  void cancelPositions()')
@@ -182,6 +184,18 @@ elif cmd == 'getNextBar':
     print('getNextBar requires 1 args')
     sys.exit(1)
   pp.pprint(client.getNextBar(args[0],))
+
+elif cmd == 'reqHistoricalData':
+  if len(args) != 1:
+    print('reqHistoricalData requires 1 args')
+    sys.exit(1)
+  pp.pprint(client.reqHistoricalData(eval(args[0]),))
+
+elif cmd == 'cancelHistoricalData':
+  if len(args) != 1:
+    print('cancelHistoricalData requires 1 args')
+    sys.exit(1)
+  pp.pprint(client.cancelHistoricalData(eval(args[0]),))
 
 elif cmd == 'reqStkPositions':
   if len(args) != 1:
