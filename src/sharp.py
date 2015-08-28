@@ -115,6 +115,11 @@ client.removeZombieSymbols([])
 
 hr = HistoryRequest();
 hr.symbol = "AAPL"
+hr.useRTH = 0
+hr.primaryExchange = "NYSE"
+hr.durationStr = "800 S";
+hr.barSizeSetting = "5 secs"
+hr.endDateTime = "20150804 10:10:45"
 
 m = client.reqHistoricalData(hr)
 
@@ -128,7 +133,7 @@ acnt = client.reqAccountUpdates(True, "DU224610", True)
 for (k, v) in acnt.iteritems():
   print(k, "---", v)
 '''
-time.sleep(90)
+time.sleep(300)
 
 client.addToWatchList(wlist)
 

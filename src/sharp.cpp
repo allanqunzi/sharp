@@ -301,6 +301,7 @@ void EWrapperImpl::error(const int id, const int errorCode, const IBString error
 }
 
 void EWrapperImpl::reqMarketSnapshot(){
+/*
 	Contract contract;
 	contract.symbol = "AMZN";
 	contract.secType = "STK";
@@ -316,9 +317,13 @@ void EWrapperImpl::reqMarketSnapshot(){
 	IBString durationStr = "2 D";
 	IBString barSizeSetting = "1 min";
 	IBString whatToShow = "TRADES";
-	// int useRTH = 0;
-	// int formatDate = 1;
-/*
+	int useRTH = 0;
+	int formatDate = 1;
+
+	std::cout<<", endDateTime"<<endDateTime<<", durationStr"<<durationStr<<
+	", barSizeSetting"<<barSizeSetting<<", whatToShow"<<whatToShow<<", useRTH"<<useRTH<<
+	", formatDate"<<formatDate<<std::endl;
+
 	m_pClient->reqHistoricalData( 0, contract, endDateTime, durationStr, barSizeSetting, whatToShow,
 		useRTH, formatDate, chartOptions);
 
@@ -364,9 +369,9 @@ void EWrapperImpl::reqMarketSnapshot(){
 	contract.right = "CALL";
 	contract.expiry = "201509";
 	contract.currency = "USD";
-*/
 	contract.conId = 202465243;
 	contract.exchange = "SMART";
+*/
 	// calling reqContractDetails can get all the info for an option chain
 	// m_pClient->reqContractDetails(0, contract);
 	// still need to check and make sure with IB on if they provide market data for options
@@ -414,7 +419,8 @@ void EWrapperImpl::historicalData(TickerId reqId, const IBString& date, double o
 					double high, double low, double close, int volume, int barCount,
 					double WAP, int hasGaps)
 {
-	LOG(info)<<"calling EWrapperImpl::historicalData";
+	//LOG(info)<<"calling EWrapperImpl::historicalData";
+
 	auto id = std::get<0>(hist_data_tuple);
 	auto & of = *(std::get<1>(hist_data_tuple));
 	if(!of){
@@ -427,7 +433,7 @@ void EWrapperImpl::historicalData(TickerId reqId, const IBString& date, double o
 	<<std::setw(26)<<date<<" "<<std::setw(10)<<open<<" "<<std::setw(10)<<low<<" "
 	<<std::setw(10)<<high<<" "<<std::setw(10)<<close<<" "<<std::setw(10)<<volume
 	<<" "<<std::setw(10)<<barCount<<" "<<std::setw(10)<<WAP<<" "<<std::setw(10)<<hasGaps
-	<<std::endl;
+	<<"\n";
 }
 
 void EWrapperImpl::realtimeBar(TickerId reqId, long time, double open, double high,
@@ -701,13 +707,18 @@ void EWrapperImpl::reqHistoricalData(const Contract &contract,
 	std::get<1>(hist_data_tuple) = std::unique_ptr<std::ofstream>(new std::ofstream());
 	auto & of = *(std::get<1>(hist_data_tuple));
 	std::string file_name = contract.symbol + "_duration" + durationStr +
-					"_endtime" + endDateTime + "_barsize" + barSizeSetting;
+					"_endtime" + endDateTime + "_barsize" + barSizeSetting + ".txt";
 	file_name.erase(std::remove(file_name.begin(), file_name.end(), ' '), file_name.end());
 	std::get<2>(hist_data_tuple) = file_name;
 	TagValueListSPtr chartOptions;
 
 	of.open(file_name.c_str());
 	LOG(info)<<"requesting historical data for "<<contract.symbol<<", reqId = "<<id;
+	/*
+	std::cout<<"id = "<<id<<", endDateTime"<<endDateTime<<", durationStr"<<durationStr<<
+	", barSizeSetting"<<barSizeSetting<<", whatToShow"<<whatToShow<<", useRTH"<<useRTH<<
+	", formatDate"<<formatDate<<std::endl;
+	*/
 	m_pClient->reqHistoricalData(id, contract, endDateTime, durationStr,
 		barSizeSetting, whatToShow, useRTH, formatDate, chartOptions);
 }

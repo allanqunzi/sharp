@@ -139,8 +139,8 @@ struct HistoryRequest{
     4:required string currency = "USD";
     5:required string primaryExchange = "NASDAQ";
     6:required string endDateTime = "20150824 17:00:00"
-    7:required string durationStr = "24 W"
-    8:required string barSizeSetting = "5 secs"
+    7:required string durationStr = "10 W"
+    8:required string barSizeSetting = "1 min"
     9:required string whatToShow = "TRADES"
     10:required i32 useRTH = 1
     11:required i32 formatDate = 1

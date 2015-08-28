@@ -306,6 +306,12 @@ public:
 		} );
 	}
 
+	// seems IB has duration limits for different barSizeSetting
+	// Bar size Max duration
+	// 1  sec  2000 S
+	// 5  sec 10000 S
+	// 15 sec 30000 S
+	// 30 sec 86400 S
 	void reqHistoricalData(std::map<int64_t, std::string> & m, const api::HistoryRequest & request){
 		protect( [this, &m, &request](){
 			Contract con;
@@ -314,7 +320,6 @@ public:
 			con.exchange = request.exchange;
 			con.currency = request.currency;
 			con.primaryExchange = request.primaryExchange;
-
 			trader.reqHistoricalData(con, request.endDateTime, request.durationStr,
 						request.barSizeSetting, request.whatToShow,
 						request.useRTH, request.formatDate);
@@ -499,7 +504,7 @@ void run_server (EWrapperImpl & ibtrader) {
 		++attempt;
 		ibtrader.connect( ibtrader.host.c_str(), ibtrader.port, ibtrader.clientId);
 
-		//ibtrader.reqAccountUpdates(true, "DU224610");
+		//ibtrader.reqMarketSnapshot();
 
 		while( ibtrader.isConnected() ){
 			ibtrader.monitor();
