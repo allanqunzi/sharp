@@ -78,7 +78,7 @@ class HistoricCSVDataHandler(DataHandler):
         from function EWrapperImpl::historicalData. Thus its format will
         be respected.
         """
-        # Load the CSV file with no header information, indexed on date
+        # Load the CSV file with no header information, indexed on 0,1,2,...
         self.symbol_data = pd.read_csv(
                                   self.csv_dir,
                                   header=None, index_col=None,
