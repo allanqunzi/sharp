@@ -430,10 +430,8 @@ void EWrapperImpl::historicalData(TickerId reqId, const IBString& date, double o
 	}
 	if(id != reqId){ return; }
 	of
-	<<std::setw(26)<<date<<" "<<std::setw(10)<<open<<" "<<std::setw(10)<<low<<" "
-	<<std::setw(10)<<high<<" "<<std::setw(10)<<close<<" "<<std::setw(10)<<volume
-	<<" "<<std::setw(10)<<barCount<<" "<<std::setw(10)<<WAP<<" "<<std::setw(10)<<hasGaps
-	<<"\n";
+	<<date<<","<<open<<","<<low<<","<<high<<","<<close<<","<<volume
+	<<","<<barCount<<","<<WAP<<","<<hasGaps<<"\n";
 }
 
 void EWrapperImpl::realtimeBar(TickerId reqId, long time, double open, double high,
