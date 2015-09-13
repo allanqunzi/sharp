@@ -21,15 +21,23 @@ logger = logger.createLogger("trader_")
 
 class AbstractTrader(object):
     """
+    the interface
     """
     __metaclass__ = ABCMeta
 
     @abstractmethod
     def trade(self):
         """
-        monior the data feed for watchlist and trade necessarily
+        monitor the data feed for watchlist and trade necessarily
         """
         raise NotImplementedError("Should implement trade()")
+
+    @abstractmethod
+    def stop(self):
+        """
+        stop self.trade()
+        """
+        raise NotImplementedError("Should implement stop()")
 
     @abstractmethod
     def status(self):
@@ -76,12 +84,16 @@ class BaseTrader(AbstractTrader):
         self._evnts = mp.Queue()
         self._sts = False   # check if trade() is running.
         self._ps = []       # processes list
+        self._stops = [mp.Event() for i in range(cores)] # events for IPC
 
     def trade(self):
         for i in range(cores):
             if i == 0:
-                # the main process only handles the queue self._evnts
-                self._evnts_handler()
+                # process 0 only handles the queue self._evnts
+                worker = mp.Process(target = self._evnts_handler, args = ())
+                self._ps.append(worker)
+                worker.daemon = True
+                worker.start()
             else:
                 # each worker process handles the bar feed and
                 # send decisions to self._evnts
@@ -91,10 +103,19 @@ class BaseTrader(AbstractTrader):
                 worker.start()
         self._sts = True
 
+    def stop(self):
+        if not self._sts:
+            return True
+        else:
+            for i in range(self.cores):
+                self._stops[i].set()
+                self._ps[i].join()
+        return True
+
     def status(self):    # check if trade() is running.
         return self._sts
 
-    def current_wl(self):# return the current watch list
+    def current_wl(self):# return the current watchlist
         return self.wl
 
     @abstractmethod
@@ -154,8 +175,6 @@ class LiveTrader(BaseTrader):
         self._protocol = TBinaryProtocol.TBinaryProtocol(self._transport)
         self._client = Sharp.Client(self._protocol)
         self._transport.open()
-
-
 
     def addToWatchList(symbols):
         if _check_wl(symbols):
