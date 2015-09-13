@@ -1,24 +1,11 @@
 # data.py
 
-import datetime
-import logging
+import logger
 import pandas as pd
 
 from abc import ABCMeta, abstractmethod
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-
-sh = logging.StreamHandler()
-fh = logging.FileHandler(__name__+datetime.date.today().strftime("%Y-%m-%d"))
-sh.setLevel(logging.DEBUG)
-fh.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-sh.setFormatter(formatter)
-fh.setFormatter(formatter)
-
-logger.addHandler(sh)
-logger.addHandler(fh)
+logger = logger.createLogger("data_")
 
 class DataHandler(object):
     """
