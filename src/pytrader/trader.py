@@ -86,10 +86,13 @@ class BaseTrader(AbstractTrader):
         self._ps = []       # processes list
         self._stops = [mp.Event() for i in range(cores)] # events for IPC
         self._new_wl_dict = {} # newly being added/removed watchlist which will be distributed to each process
-        if futurelist:      # if promised the possibility to add wl in the future
+        if futurelist:      # if promised the possibility to change wl in the future
             self._locks = [mp.Lock() for i in range(cores)]
 
     def trade(self):
+        if self._sts:
+            logger.error("trade() is already running.")
+            return
         for i in range(cores):
             if i == 0:
                 # process 0 only handles the queue self._evnts
