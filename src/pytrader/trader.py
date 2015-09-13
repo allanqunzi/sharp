@@ -75,7 +75,7 @@ class BaseTrader(AbstractTrader):
     process 0 - the process handling the order events
     cores-1 - the number of worker processes for handling the bars
     """
-    def __init__(self, wl = [], cores = 2):
+    def __init__(self, wl = [], cores = 2, futurelist = True):
         if self.check_values(wl, cores):
             self.wl = wl
             self.cores = cores
@@ -85,6 +85,9 @@ class BaseTrader(AbstractTrader):
         self._sts = False   # check if trade() is running.
         self._ps = []       # processes list
         self._stops = [mp.Event() for i in range(cores)] # events for IPC
+        self._new_wl_dict = {} # newly added watchlist which will be distributed to each process
+        if futurelist:      # if promised the possibility to add wl in the future
+            self._locks = [mp.Lock() for i in range(cores)]
 
     def trade(self):
         for i in range(cores):
@@ -125,6 +128,33 @@ class BaseTrader(AbstractTrader):
     @abstractmethod
     def _feed_handler(self):
         raise NotImplementedError("Should implement _feed_handler()")
+
+    def _spread_new_wl(self, newsbls):
+        if not newsbls:
+            logger.error("Are you adding empty watchlist?")
+            return False
+        for s in newsbls:
+            if not s.isupper() or len(s) > 4 or len(s) < 1:
+                logger.error("adding new wl: watchlist should be uppercase, len(symbol) should be less than 5.")
+                return False
+        dcopy = self._dict.copy()
+        wcopy = list(self.wl)
+        self._new_wl_dict.clear()
+        for s in newsbls:
+            if s not in wcopy:
+                hit = self._min_p(dcopy)
+                dcopy[hit].append(s)
+                wcopy.append(s)
+                if hit in self._new_wl_dict:
+                    self._new_wl_dict[hit].append(s)
+                else:
+                    self._new_wl_dict[hit] = [s]
+        self.wl = wcopy
+        return True
+
+    def _min_p(self, dict): # return the process id which has least symbols
+        temp = [len(v) for k, v in dict]
+        return temp.index(min(temp)) + 1
 
     def _check_values(wl, cores):
         if not wl:
@@ -167,8 +197,8 @@ class LiveTrader(BaseTrader):
     initialize LiveTrader with watchlist, number of cores and
     thrift client, and make connection to thrift server.
     """
-    def __init__(self, wl=[], cores = 2):
-        super(LiveTrader, self).__init__(wl, cores)
+    def __init__(self, wl=[], cores = 2, futurelist = True):
+        super(LiveTrader, self).__init__(wl, cores, futurelist)
 
         self._socket = TSocket.TSocket('localhost', 9090)
         self._transport = TTransport.TBufferedTransport(self._socket)
@@ -177,8 +207,18 @@ class LiveTrader(BaseTrader):
         self._transport.open()
 
     def addToWatchList(symbols):
-        if _check_wl(symbols):
-            pass
+        if futurelist:
+            if self._spread_new_wl(symbols):
+                for k, v in self._new_wl_dict:
+                    with self._locks[k]:
+                        self._dict[k].extend(v)
+                        self._client.addToWatchList(v)
+                return True
+            else:
+                return False
+        else:
+            logger.error("futurelist = False, you have promised not to add new watchlist.")
+            return False
 
     def removeFromWatchList(symbols):
         pass
@@ -186,5 +226,5 @@ class LiveTrader(BaseTrader):
 
 class TestTrader(BaseTrader):
     """docstring for TestTrader"""
-    def __init__(self, wl=[], cores = 2):
-        super(TestTrader, self).__init__(wl, cores)
+    def __init__(self, wl=[], cores = 2, futurelist = True):
+        super(TestTrader, self).__init__(wl, cores, futurelist)
