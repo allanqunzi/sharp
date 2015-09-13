@@ -85,7 +85,7 @@ class BaseTrader(AbstractTrader):
         self._sts = False   # check if trade() is running.
         self._ps = []       # processes list
         self._stops = [mp.Event() for i in range(cores)] # events for IPC
-        self._new_wl_dict = {} # newly added watchlist which will be distributed to each process
+        self._new_wl_dict = {} # newly being added/removed watchlist which will be distributed to each process
         if futurelist:      # if promised the possibility to add wl in the future
             self._locks = [mp.Lock() for i in range(cores)]
 
@@ -156,6 +156,34 @@ class BaseTrader(AbstractTrader):
         temp = [len(v) for k, v in dict]
         return temp.index(min(temp)) + 1
 
+    def _remove_wl(self, sbls):
+        if not sbls:
+            logger.error("Are you removing an empty list?")
+            return False
+        for s in sbls:
+            if not s.isupper() or len(s) > 4 or len(s) < 1:
+                logger.error("removing wl: watchlist should be uppercase, len(symbol) should be less than 5.")
+                return False
+        dcopy = self._dict.copy()
+        wcopy = list(self.wl)
+        self._new_wl_dict.clear()
+        for s in sbls:
+            if s in wcopy:
+                hit = self._locate_p(s, dcopy)
+                dcopy[hit].remove(s)
+                wcopy.remove(s)
+                if hit in self._new_wl_dict:
+                    self._new_wl_dict[hit].append(s)
+                else:
+                    self._new_wl_dict[hit] = [s]
+        self.wl = wcopy
+        return True
+
+    def _locate_p(self, sbl, dict): # return the process id which has sbl
+        for k, v in dict:
+            if sbl in v:
+                return k
+
     def _check_values(wl, cores):
         if not wl:
             logger.error("empty watchlist.")
@@ -217,11 +245,22 @@ class LiveTrader(BaseTrader):
             else:
                 return False
         else:
-            logger.error("futurelist = False, you have promised not to add new watchlist.")
+            logger.error("futurelist = False, you have promised not to add new symbols.")
             return False
 
     def removeFromWatchList(symbols):
-        pass
+        if futurelist:
+            if self._remove_wl(symbols):
+                for k, v in self._new_wl_dict:
+                    with self._locks[k]:
+                        for item in v:
+                            self._dict[k].remove(item)
+                return True
+            else:
+                return False
+        else:
+            logger.error("futurelist = False, you have promised not to remove new symbols.")
+            return False
 
 
 class TestTrader(BaseTrader):
