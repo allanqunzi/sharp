@@ -423,6 +423,12 @@ public:
 			auto & acnts = trader.accounts;
 			if(acnts.size() == 1){ // only one account, OK.
 				for(const auto & e : acnts){
+					if(e.first != acctCode){
+						LOG(error)<<"The requested acctCode = "<<acctCode<<", but the returned is "<<e.first;
+						return;
+					}else{
+						values["acctCode"] = acctCode;
+					}
 					auto & acnt = e.second;
 					for(const auto & v : acnt){
 						values[v.first] = v.second;
