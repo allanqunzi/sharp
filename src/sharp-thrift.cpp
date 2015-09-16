@@ -464,6 +464,10 @@ public:
 			auto & port = trader.portfolio;
 			if(port.size() == 1){ // only one account, OK.
 				for(const auto & e : port){
+					if(e.first != acctCode){
+						LOG(error)<<"reqPortfolio, the requested acctCode = "<<acctCode<<", but the returned is "<<e.first;
+						return;
+					}
 					auto & assets = e.second;
 					for(const auto & a : assets){
 						auto & p = pto[a.first];
@@ -789,8 +793,8 @@ public:
 
 };
 
-SharpClientService *make_client () {
-	return new SharpClientImpl();
+std::unique_ptr<SharpClientService> make_client(){
+	return std::unique_ptr<SharpClientService>(new SharpClientImpl());
 }
 
 

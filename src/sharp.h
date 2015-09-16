@@ -399,7 +399,7 @@ public:
 	virtual void getOrderStatus(ContractOrder & co, const int64_t o_id) = 0;
 };
 
-SharpClientService *make_client ();
+std::unique_ptr<SharpClientService> make_client();
 
 
 } // end of namespace sharp

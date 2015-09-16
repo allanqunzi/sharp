@@ -228,6 +228,7 @@ service Sharp{
     map<i64,OptPosition> reqOptPositions(1:required bool refresh) throws (1:Exception e);
     void cancelPositions() throws (1:Exception e);
     map<string, string> reqAccountUpdates(1:required bool subscribe, 2:required string acctCode, 3:required bool refresh) throws (1:Exception e);
+    // map<conId, Asset>
     map<i64, Asset> reqPortfolio(1:required bool subscribe, 2:required string acctCode, 3:required bool refresh) throws (1:Exception e);
 }
 

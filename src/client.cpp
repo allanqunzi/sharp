@@ -5,7 +5,7 @@ using namespace sharp;
 
 int main(int argc, char const *argv[])
 {
-    std::unique_ptr<SharpClientService> trader(make_client());
+    auto trader = make_client();
 
     Contract contract;
     Order order;
