@@ -22,7 +22,7 @@ class LivePortfolio(Portfolio):
 
     def __init__(self, acctCode, thrift_client):
         #super(LivePortfolio, self).__init__()
-        if not acctCode:
+        if acctCode:
             self.acctCode = acctCode
         else:
             raise ValueError("acctCode shouldn't be empty.")
@@ -61,7 +61,7 @@ class LivePortfolio(Portfolio):
 
     def _construct_current_assets(self, refresh = False): # only stock assets
         asts = self._client.reqPortfolio(True, self.acctCode, refresh)
-        if not asts:
+        if asts:
             d = {}
             for k, v in asts:
                 if v.accountName != self.acctCode:
