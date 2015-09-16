@@ -78,9 +78,13 @@ class LivePortfolio(Portfolio):
 
     def update_fill(self, event):
         if event.type == 'FILL':
-            self._construct_account()
-            self.all_assets.append(self.current_assets)
-            self.current_assets = self._construct_current_assets()
+            try:
+                self._construct_account()
+            except ValueError, v:
+                logger.error(v)
+            else:
+                self.all_assets.append(self.current_assets)
+                self.current_assets = self._construct_current_assets()
 
 
 
