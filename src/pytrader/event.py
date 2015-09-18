@@ -5,34 +5,14 @@ class Event(object):
     """
     pass
 
-class SignalEvent(Event):
-    """
-    """
-
-    def __init__(self, symbol, datetime, signal_type):
-        """
-        Initialises the SignalEvent.
-
-        Parameters:
-        symbol - The ticker symbol, e.g. 'GOOG'.
-        datetime - The timestamp at which the signal was generated.
-        signal_type - 'LONG' or 'SHORT'.
-        """
-
-        self.type = 'SIGNAL'
-        self.symbol = symbol
-        self.datetime = datetime
-        self.signal_type = signal_type
-
-
 class OrderEvent(Event):
     """
-    Handles the event of sending an Order to an execution system.
-    The order contains a symbol (e.g. GOOG), a type (market or limit),
-    quantity and a direction.
+    User defined strategy takes real time bars as input and outputs
+    OrderEvent to the event queue which trader._evnts_handler is
+    handling.
     """
 
-    def __init__(self, symbol, order_type, quantity, direction):
+    def __init__(self, symbol, direction, quantity, order_type, price):
         """
         Initialises the order type, setting whether it is
         a Market order ('MKT') or Limit order ('LMT'), has
@@ -40,25 +20,14 @@ class OrderEvent(Event):
         'SELL').
 
         Parameters:
-        symbol - The instrument to trade.
-        order_type - 'MKT' or 'LMT' for Market or Limit.
-        quantity - Non-negative integer for quantity.
-        direction - 'BUY' or 'SELL' for long or short.
+        symbol - The instrument to trade, e.g. 'AAPL'
+        direction - 'BUY' or 'SELL' for long or short
+        quantity - Non-negative integer for quantity
+        order_type - 'MKT' or 'LMT' for Market or Limit
+        price - the price limit for 'LMT' order_type
         """
-
-        self.type = 'ORDER'
-        self.symbol = symbol
-        self.order_type = order_type
-        self.quantity = quantity
-        self.direction = direction
-
-    def print_order(self):
-        """
-        Outputs the values within the Order.
-        """
-        print "Order: Symbol=%s, Type=%s, Quantity=%s, Direction=%s" % \
-            (self.symbol, self.order_type, self.quantity, self.direction)
-
+        self._cr = ContractRequest(symbol, 'STK', 'SMART', 'USD')
+        self._or = OrderRequest(direction, quantity, order_type, price)
 
 class FillEvent(Event):
     """
@@ -88,35 +57,3 @@ class FillEvent(Event):
         fill_cost - The holdings value in dollars.
         commission - An optional commission sent from IB.
         """
-
-        self.type = 'FILL'
-        self.timeindex = timeindex
-        self.symbol = symbol
-        self.exchange = exchange
-        self.quantity = quantity
-        self.direction = direction
-        self.fill_cost = fill_cost
-
-        # Calculate commission
-        if commission is None:
-            self.commission = self.calculate_ib_commission()
-        else:
-            self.commission = commission
-
-    def calculate_ib_commission(self):
-        """
-        Calculates the fees of trading based on an Interactive
-        Brokers fee structure for API, in USD.
-
-        This does not include exchange or ECN fees.
-
-        Based on "US API Directed Orders":
-        https://www.interactivebrokers.com/en/index.php?f=commission&p=stocks2
-        """
-        full_cost = 1.3
-        if self.quantity <= 500:
-            full_cost = max(1.3, 0.013 * self.quantity)
-        else: # Greater than 500
-            full_cost = max(1.3, 0.008 * self.quantity)
-        full_cost = min(full_cost, 0.5 / 100.0 * self.quantity * self.fill_cost)
-        return full_cost
