@@ -12,7 +12,7 @@ class OrderEvent(Event):
     handling.
     """
 
-    def __init__(self, symbol, direction, quantity, order_type, price):
+    def __init__(self, type, symbol, direction, quantity, order_type, price):
         """
         Initialises the order type, setting whether it is
         a Market order ('MKT') or Limit order ('LMT'), has
@@ -26,6 +26,7 @@ class OrderEvent(Event):
         order_type - 'MKT' or 'LMT' for Market or Limit
         price - the price limit for 'LMT' order_type
         """
+        self.type = 'ORDER'
         self._cr = ContractRequest(symbol, 'STK', 'SMART', 'USD')
         self._or = OrderRequest(direction, quantity, order_type, price)
 
@@ -57,3 +58,4 @@ class FillEvent(Event):
         fill_cost - The holdings value in dollars.
         commission - An optional commission sent from IB.
         """
+        self.type = 'FILL'
