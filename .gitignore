@@ -6,3 +6,4 @@ server
 client
 logs
 *csv
+trader_*

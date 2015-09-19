@@ -31,7 +31,8 @@ class SignalEvent(Event):
 
 class OrderEvent(Event):
     """
-
+    trader._evnts_handler handles the SignalEvent poped from the event queue,
+    and takes self.portfolio as input, and generates OrderEvent or None.
     """
 
     def __init__(self, type, symbol, direction, quantity, order_type, price):
@@ -49,35 +50,5 @@ class OrderEvent(Event):
         price - the price limit for 'LMT' order_type
         """
         self.type = 'ORDER'
-        self._cr = ContractRequest(symbol, 'STK', 'SMART', 'USD')
-        self._or = OrderRequest(direction, quantity, order_type, price)
-
-class FillEvent(Event):
-    """
-    Encapsulates the notion of a Filled Order, as returned
-    from a brokerage. Stores the quantity of an instrument
-    actually filled and at what price. In addition, stores
-    the commission of the trade from the brokerage.
-    """
-
-    def __init__(self, timeindex, symbol, exchange, quantity,
-                 direction, fill_cost, commission=None):
-        """
-        Initialises the FillEvent object. Sets the symbol, exchange,
-        quantity, direction, cost of fill and an optional
-        commission.
-
-        If commission is not provided, the Fill object will
-        calculate it based on the trade size and Interactive
-        Brokers fees.
-
-        Parameters:
-        timeindex - The bar-resolution when the order was filled.
-        symbol - The instrument which was filled.
-        exchange - The exchange where the order was filled.
-        quantity - The filled quantity.
-        direction - The direction of fill ('BUY' or 'SELL')
-        fill_cost - The holdings value in dollars.
-        commission - An optional commission sent from IB.
-        """
-        self.type = 'FILL'
+        self._c = ContractRequest(symbol, 'STK', 'SMART', 'USD')
+        self._o = OrderRequest(direction, quantity, order_type, price)

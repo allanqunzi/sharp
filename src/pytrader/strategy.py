@@ -41,14 +41,13 @@ class NaiveStrategy(Strategy):
     NaiveStrategy is a demonstration of how to implement your own
     Strategy.
     """
-    def __init__(self, arg):
+    def __init__(self, arg = None):
         """
         Your initialization goes in this method
         """
         self.arg = arg
 
     def generate_signal(self, bar):
-        pass
         """
         if you want to generate a signal:
             construct your signal based on bar
@@ -56,9 +55,9 @@ class NaiveStrategy(Strategy):
         else:
             return None
         """
+        return None
 
     def generate_order(self, signal, portifolio):
-        pass
         """
         if you want to generate an order:
             construct your order based on signal and
@@ -67,5 +66,6 @@ class NaiveStrategy(Strategy):
         else:
             return None
         """
+        return None
 
 

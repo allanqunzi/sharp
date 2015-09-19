@@ -63,7 +63,7 @@ class LivePortfolio(Portfolio):
         asts = self._client.reqPortfolio(True, self.acctCode, refresh)
         if asts:
             d = {}
-            for k, v in asts:
+            for k, v in asts.items():
                 if v.accountName != self.acctCode:
                     raise ValueError("The returned acctCode from self._client.reqPortfolio is not the same as self.acctCode.")
                 if v.symbol not in d:
@@ -76,15 +76,14 @@ class LivePortfolio(Portfolio):
     def _construct_all_assets(self):
         return [self.current_assets]
 
-    def update_fill(self, event):
-        if event.type == 'FILL':
-            try:
-                self._construct_account()
-            except ValueError, v:
-                logger.error(v)
-            else:
-                self.all_assets.append(self.current_assets)
-                self.current_assets = self._construct_current_assets()
+    def update_fill(self):
+        try:
+            self._construct_account()
+        except ValueError, v:
+            logger.error(v)
+        else:
+            self.all_assets.append(self.current_assets)
+            self.current_assets = self._construct_current_assets()
 
 
 

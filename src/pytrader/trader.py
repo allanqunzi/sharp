@@ -5,8 +5,6 @@ from abc import ABCMeta, abstractmethod
 sys.path.append('/home/qunzi/sharp/src/py2.7_thrift/')
 sys.path.insert(0, glob.glob('/home/qunzi/Downloads/thrift-0.9.2/lib/py/build/lib.linux-x86_64-2.7')[0])
 
-import logger
-
 from ib import Sharp
 from ib.ttypes import *
 from ib.constants import *
@@ -15,6 +13,11 @@ from thrift import Thrift
 from thrift.transport import TSocket
 from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol
+
+import logger
+import event
+import strategy
+import portfolio
 
 
 logger = logger.createLogger("trader_")
@@ -75,7 +78,7 @@ class BaseTrader(AbstractTrader):
     process 0 - the process handling the order events
     cores-1 - the number of worker processes for handling the bars
     """
-    def __init__(self, wl = [], cores = 2, futurelist = True, strategy):
+    def __init__(self, strategy, wl = [], cores = 2, futurelist = True):
         if self._check_values(wl, cores):
             self.wl = wl
             self.cores = cores
@@ -98,14 +101,14 @@ class BaseTrader(AbstractTrader):
             if i == 0:
                 # process 0 only handles the queue self._evnts
                 self._pre_trade()
-                worker = mp.Process(target = self._evnts_handler, args = ())
+                worker = mp.Process(target = self._evnts_handler, args = ((i),))
                 self._ps.append(worker)
                 worker.daemon = True
                 worker.start()
             else:
                 # each worker process handles the bar feed and
                 # send decisions to self._evnts
-                worker = mp.Process(target = self._feed_handler, args = ((self._dict[i]),))
+                worker = mp.Process(target = self._feed_handler, args = ((i),))
                 self._ps.append(worker)
                 worker.daemon = True
                 worker.start()
@@ -151,11 +154,11 @@ class BaseTrader(AbstractTrader):
         return self.wl
 
     @abstractmethod
-    def _evnts_handler(self):
+    def _evnts_handler(self, p_id):
         raise NotImplementedError("Should implement _evnts_handler().")
 
     @abstractmethod
-    def _feed_handler(self):
+    def _feed_handler(self, p_id): # p_id, process id
         raise NotImplementedError("Should implement _feed_handler().")
 
     def _spread_new_wl(self, newsbls):
@@ -164,7 +167,8 @@ class BaseTrader(AbstractTrader):
             return False
         for s in newsbls:
             if not s.isupper() or len(s) > 4 or len(s) < 1:
-                logger.error("adding new wl: watchlist should be uppercase, len(symbol) should be less than 5.")
+                logger.error("adding new wl: watchlist should be uppercase, "
+                            "len(symbol) should be less than 5.")
                 return False
         dcopy = self._dict.copy()
         wcopy = list(self.wl)
@@ -182,7 +186,7 @@ class BaseTrader(AbstractTrader):
         return True
 
     def _min_p(self, dict): # return the process id which has least symbols
-        temp = [len(v) for k, v in dict]
+        temp = [len(v) for k, v in dict.items()]
         return temp.index(min(temp)) + 1
 
     def _remove_wl(self, sbls):
@@ -191,7 +195,8 @@ class BaseTrader(AbstractTrader):
             return False
         for s in sbls:
             if not s.isupper() or len(s) > 4 or len(s) < 1:
-                logger.error("removing wl: watchlist should be uppercase, len(symbol) should be less than 5.")
+                logger.error("removing wl: watchlist should be uppercase, "
+                            "len(symbol) should be less than 5.")
                 return False
         dcopy = self._dict.copy()
         wcopy = list(self.wl)
@@ -209,7 +214,7 @@ class BaseTrader(AbstractTrader):
         return True
 
     def _locate_p(self, sbl, dict): # return the process id which has sbl
-        for k, v in dict:
+        for k, v in dict.items():
             if sbl in v:
                 return k
 
@@ -220,13 +225,15 @@ class BaseTrader(AbstractTrader):
         for s in wl:
             if not s.isupper() or len(s) > 4 or len(s) < 1:
                 #logger.error("watchlist should be uppercase, len(symbol) should be less than 5.")
-                raise ValueError("watchlist should be uppercase, len(symbol) should be less than 5.")
+                raise ValueError("watchlist should be uppercase, "
+                                "len(symbol) should be less than 5.")
         if cores < 2:
             #logger.error("the number of cores should be at least two.")
             raise ValueError("the number of cores should be at least two.")
         if cores-1 > len(wl):
             #logger.error("cores-1 shouldn't be greater than the number of symbols in the watchlist.")
-            raise ValueError("cores-1 shouldn't be greater than the number of symbols in the watchlist.")
+            raise ValueError("cores-1 shouldn't be greater than the number "
+                            "of symbols in the watchlist.")
         return True
 
     def _spread_wl(self):
@@ -254,8 +261,8 @@ class LiveTrader(BaseTrader):
     initialize LiveTrader with watchlist, number of cores and
     thrift client, and make connection to thrift server.
     """
-    def __init__(self, wl=[], cores = 2, futurelist = True, strategy):
-        super(LiveTrader, self).__init__(wl, cores, futurelist, strategy)
+    def __init__(self, acctCode, strategy, wl=[], cores = 2, futurelist = True):
+        super(LiveTrader, self).__init__(strategy, wl, cores, futurelist)
 
         self._socket = TSocket.TSocket('localhost', 9090)
         self._transport = TTransport.TBufferedTransport(self._socket)
@@ -263,11 +270,15 @@ class LiveTrader(BaseTrader):
         self._client = Sharp.Client(self._protocol)
         #self._transport.open()
         #self._client.removeZombieSymbols([])
+        #self.pfo = portfolio.LivePortfolio(acctCode, self._client)
+        self.open_odrs = {}
+        self.fill_odrs = {}
+        self._odr_lk = mp.Lock()
 
     def addToWatchList(self, symbols):
         if self.futurelist and self._sts:
             if self._spread_new_wl(symbols):
-                for k, v in self._new_wl_dict:
+                for k, v in self._new_wl_dict.items():
                     with self._locks[k]:
                         self._dict[k].extend(v)
                         self._client.addToWatchList(v)
@@ -275,14 +286,15 @@ class LiveTrader(BaseTrader):
             else:
                 return False
         else:
-            logger.error("futurelist = False, you have promised not to add new symbols; or trade() is not running.")
+            logger.error("futurelist = False, you have promised not "
+                        "to add new symbols; or trade() is not running.")
             return False
 
     def removeFromWatchList(self, symbols):
         if self.futurelist and self._sts:
             if self._remove_wl(symbols):
                 self._client.removeFromWatchList(self.wl)
-                for k, v in self._new_wl_dict:
+                for k, v in self._new_wl_dict.items():
                     with self._locks[k]:
                         for item in v:
                             self._dict[k].remove(item)
@@ -290,7 +302,8 @@ class LiveTrader(BaseTrader):
             else:
                 return False
         else:
-            logger.error("futurelist = False, you have promised not to remove new symbols; or trade() is not running.")
+            logger.error("futurelist = False, you have promised not to "
+                        "remove new symbols; or trade() is not running.")
             return False
 
     def _pre_trade(self):
@@ -299,19 +312,69 @@ class LiveTrader(BaseTrader):
     def _post_trade(self):
         pass
 
-    def _evnts_handler(self):
-        pass
+    def _evnts_handler(self, p_id):
+        prev_time = time.time()
+        while True:
+            filled_flag = False
+            if not self._stops[p_id].isSet():
+                try:
+                    evnt = self._evnts.get()
+                except mp.Queue.Empty:
+                    pass
+                else:
+                    if evnt.type == 'SIGNAL':
+                        co = self.strategy.generate_order(evnt, self.pfo)
+                        if co is not None:
+                            # placing order
+                            o_resp = self._client.placeOrder(co._c, co._o)
+                            self.open_odrs[o_resp.orderId] = o_resp
+                finally:
+                    # when self.open_odrs is not empty, check if there is a fill event
+                    # every 300 seconds (i.e. 5 minutes)
+                    if int(time.time()-prev_time) > 300:
+                        with self._odr_lk:
+                            for i in self.open_odrs:
+                                o_stus = self._client.getOrderStatus(i)
+                                self.open_odrs[i] = o_stus
+                                if o_stus.status == 'Filled':
+                                    filled_flag = True
+                                    self.fill_odrs[i] = o_stus
+                                    self.open_odrs.pop(i)
+                                    logger.info("Order %d is filled, symbol = %s, "
+                                                "action = %s, quantity = %d, "
+                                                "avgFillPrice = %f, lastFillPrice = %f, ",
+                                                o_stus.orderId, o_stus.symbol,
+                                                o_stus.action, o_stus.totalQuantity,
+                                                o_stus.avgFillPrice, o_stus.lastFillPrice)
+                        if filled_flag:
+                            self.pfo.update()
+                        prev_time = time.time()
 
-    def _feed_handler(self):
-        pass
+    def _feed_handler(self, p_id):
+        if futurelist and (not self._stops[p_id].isSet()):
+            with self._locks[p_id]:
+                for s in self._dict[p_id]:
+                    feed = self._client.getNextBar(s)
+                    signal = self.strategy.generate_signal(feed)
+                    if signal is not None:
+                        self._evnts.put(signal)
+        if (not futurelist) and (not self._stops[p_id].isSet()):
+            for s in self._dict[p_id]:
+                feed = self._client.getNextBar(s)
+                signal = self.strategy.generate_signal(feed)
+                if signal is not None:
+                    self._evnts.put(signal)
+
 
 class TestTrader(BaseTrader):
     """docstring for TestTrader"""
-    def __init__(self, wl=[], cores = 2, futurelist = True):
-        super(TestTrader, self).__init__(wl, cores, futurelist)
+    def __init__(self, strategy, wl=[], cores = 2, futurelist = True):
+        super(TestTrader, self).__init__(strategy, wl, cores, futurelist)
 
 
 if __name__ == '__main__':
 
     watchlist = ['AAPL', 'AMZN']
-    trader = LiveTrader(watchlist)
+    acct = 'DU224610'
+    naive_strategy = strategy.NaiveStrategy()
+    trader = LiveTrader(acct, naive_strategy, watchlist)
