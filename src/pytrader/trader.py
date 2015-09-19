@@ -329,7 +329,7 @@ class LiveTrader(BaseTrader):
                             o_resp = self._client.placeOrder(co._c, co._o)
                             self.open_odrs[o_resp.orderId] = o_resp
                 finally:
-                    # when self.open_odrs is not empty, check if there is a fill event
+                    # when self.open_odrs is not empty, check if some order is filled
                     # every 300 seconds (i.e. 5 minutes)
                     if int(time.time()-prev_time) > 300:
                         with self._odr_lk:
@@ -351,20 +351,13 @@ class LiveTrader(BaseTrader):
                         prev_time = time.time()
 
     def _feed_handler(self, p_id):
-        if futurelist and (not self._stops[p_id].isSet()):
-            with self._locks[p_id]:
+        if not self._stops[p_id].isSet():
+            with (not futurelist) or self._locks[p_id]:
                 for s in self._dict[p_id]:
                     feed = self._client.getNextBar(s)
                     signal = self.strategy.generate_signal(feed)
                     if signal is not None:
                         self._evnts.put(signal)
-        if (not futurelist) and (not self._stops[p_id].isSet()):
-            for s in self._dict[p_id]:
-                feed = self._client.getNextBar(s)
-                signal = self.strategy.generate_signal(feed)
-                if signal is not None:
-                    self._evnts.put(signal)
-
 
 class TestTrader(BaseTrader):
     """docstring for TestTrader"""
