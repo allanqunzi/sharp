@@ -5,11 +5,33 @@ class Event(object):
     """
     pass
 
-class OrderEvent(Event):
+class SignalEvent(Event):
     """
     User defined strategy takes real time bars as input and outputs
-    OrderEvent to the event queue which trader._evnts_handler is
-    handling.
+    SignalEvent(if necessary) to the event queue which trader._evnts_handler
+    is handling.
+    """
+
+    def __init__(self, symbol, datetime, signal_type, strength):
+        """
+        Initialises the SignalEvent.
+
+        Parameters:
+        symbol - The ticker symbol, e.g. 'GOOG'.
+        datetime - The timestamp at which the signal was generated.
+        signal_type - 1(LONG) or 0(SHORT).
+        strength - a float number in the range of [0, 10] or user defined
+        """
+
+        self.type = 'SIGNAL'
+        self.symbol = symbol
+        self.datetime = datetime
+        self.signal_type = signal_type
+        self.strength = strength
+
+class OrderEvent(Event):
+    """
+
     """
 
     def __init__(self, type, symbol, direction, quantity, order_type, price):

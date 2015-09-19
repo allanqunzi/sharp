@@ -75,7 +75,7 @@ class BaseTrader(AbstractTrader):
     process 0 - the process handling the order events
     cores-1 - the number of worker processes for handling the bars
     """
-    def __init__(self, wl = [], cores = 2, futurelist = True):
+    def __init__(self, wl = [], cores = 2, futurelist = True, strategy):
         if self._check_values(wl, cores):
             self.wl = wl
             self.cores = cores
@@ -88,6 +88,7 @@ class BaseTrader(AbstractTrader):
         self._new_wl_dict = {} # newly being added/removed watchlist which will be distributed to each process
         #if futurelist:      # if promised the possibility to change wl in the future
         self._locks = [mp.Lock() for i in range(cores)]
+        self.strategy = strategy
 
     def trade(self):
         if self._sts:
@@ -253,8 +254,8 @@ class LiveTrader(BaseTrader):
     initialize LiveTrader with watchlist, number of cores and
     thrift client, and make connection to thrift server.
     """
-    def __init__(self, wl=[], cores = 2, futurelist = True):
-        super(LiveTrader, self).__init__(wl, cores, futurelist)
+    def __init__(self, wl=[], cores = 2, futurelist = True, strategy):
+        super(LiveTrader, self).__init__(wl, cores, futurelist, strategy)
 
         self._socket = TSocket.TSocket('localhost', 9090)
         self._transport = TTransport.TBufferedTransport(self._socket)
