@@ -20,7 +20,7 @@ import strategy
 import portfolio
 
 
-logger = logger.createLogger("trader_")
+logger = logger.createLogger("trader")
 
 class AbstractTrader(object):
     """
@@ -102,17 +102,17 @@ class BaseTrader(AbstractTrader):
             if i == 0:
                 # process 0 only handles the queue self._evnts
                 self._pre_trade()
-                worker = mp.Process(target = self._evnts_handler, args = ((i),))
+                worker = mp.Process(target = self._evnts_handler, args = (i,))
                 self._ps.append(worker)
-                worker.daemon = True
-                worker.start()
+                self._ps[-1].daemon = True
+                self._ps[-1].start()
             else:
                 # each worker process handles the bar feed and
                 # send decisions to self._evnts
-                worker = mp.Process(target = self._feed_handler, args = ((i),))
+                worker = mp.Process(target = self._feed_handler, args = (i,))
                 self._ps.append(worker)
-                worker.daemon = True
-                worker.start()
+                self._ps[-1].daemon = True
+                self._ps[-1].start()
         self._sts = True
 
     def stop(self):
@@ -337,10 +337,11 @@ class LiveTrader(BaseTrader):
                     if co is not None:
                         # placing order
                         logger.info("Placing order, symbol = %s, action = %s, quantity = %d, "
-                                    "price = &f, order_type = %s",
+                                    "price = %f, order_type = %s",
                                     co._c.symbol, co._o.action, co._o.totalQuantity,
                                     co._o.lmtPrice, co._o.orderType)
                         o_resp = self._client.placeOrder(co._c, co._o)
+                        logger.info("o_resp.orderId = %d", o_resp.orderId)
                         self.open_odrs[o_resp.orderId] = o_resp
             finally:
                 # when self.open_odrs is not empty, check if some order is filled
@@ -356,7 +357,7 @@ class LiveTrader(BaseTrader):
                                 self.open_odrs.pop(i)
                                 logger.info("Order %d is filled, symbol = %s, "
                                             "action = %s, quantity = %d, "
-                                            "avgFillPrice = %f, lastFillPrice = %f, ",
+                                            "avgFillPrice = %f, lastFillPrice = %f",
                                             o_stus.orderId, o_stus.symbol,
                                             o_stus.action, o_stus.totalQuantity,
                                             o_stus.avgFillPrice, o_stus.lastFillPrice)
@@ -365,7 +366,7 @@ class LiveTrader(BaseTrader):
                     prev_time = time.time()
 
     def _feed_handler(self, p_id):
-        if not self._stops[p_id].is_set():
+        while not self._stops[p_id].is_set():
             with (not self.futurelist) or self._locks[p_id]:
                 for s in self._dict[p_id]:
                     feed = self._client.getNextBar(s)

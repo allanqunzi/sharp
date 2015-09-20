@@ -4,6 +4,10 @@ from event import SignalEvent, OrderEvent
 
 random.seed(10)
 
+import logger
+
+logger_s = logger.createLogger("strategy")
+
 class Strategy(object):
     """
     Strategy is an abstract base class providing an interface for
@@ -57,7 +61,9 @@ class NaiveStrategy(Strategy):
         else:
             return None
         """
-        if random.random() > 0.20:
+        b = random.random()
+        #logger_s.info("inside generate_signal, b = %f", b)
+        if  b > 0.20:
             return SignalEvent('AAPL','2015','LONG', 0.50)
         else:
             return None
@@ -71,8 +77,8 @@ class NaiveStrategy(Strategy):
         else:
             return None
         """
-        a = random.randint()
-        logger.info("inside generate_order, a = %f", a)
+        a = random.random()
+        #logger_s.info("inside generate_order, a = %f", a)
         if a > 0.70:
             return OrderEvent('AAPL','BUY',100,'MKT',random.random())
         else:
