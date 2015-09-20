@@ -1,5 +1,9 @@
 # event.py
 
+from ib import Sharp
+from ib.ttypes import *
+from ib.constants import *
+
 class Event(object):
     """
     """
@@ -35,7 +39,7 @@ class OrderEvent(Event):
     and takes self.portfolio as input, and generates OrderEvent or None.
     """
 
-    def __init__(self, type, symbol, direction, quantity, order_type, price):
+    def __init__(self, symbol, direction, quantity, order_type, price):
         """
         Initialises the order type, setting whether it is
         a Market order ('MKT') or Limit order ('LMT'), has

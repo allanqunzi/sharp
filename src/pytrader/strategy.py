@@ -1,6 +1,8 @@
 from abc import ABCMeta, abstractmethod
-
+import random
 from event import SignalEvent, OrderEvent
+
+random.seed(10)
 
 class Strategy(object):
     """
@@ -55,7 +57,10 @@ class NaiveStrategy(Strategy):
         else:
             return None
         """
-        return None
+        if random.random() > 0.20:
+            return SignalEvent('AAPL','2015','LONG', 0.50)
+        else:
+            return None
 
     def generate_order(self, signal, portifolio):
         """
@@ -66,6 +71,11 @@ class NaiveStrategy(Strategy):
         else:
             return None
         """
-        return None
+        a = random.randint()
+        logger.info("inside generate_order, a = %f", a)
+        if a > 0.70:
+            return OrderEvent('AAPL','BUY',100,'MKT',random.random())
+        else:
+            return None
 
 

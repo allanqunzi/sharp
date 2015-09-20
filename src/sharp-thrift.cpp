@@ -376,7 +376,7 @@ public:
 				}
 			}
 			auto & opts = trader.opt_positions;
-			if(opts.size() == 1){ // only one account, OK.
+			if(opts.size() <= 1){ // only one account, OK.
 				for(const auto & e : opts){
 					auto & first = e.first;
 					auto & second = e.second;
@@ -421,7 +421,7 @@ public:
 				}
 			}
 			auto & acnts = trader.accounts;
-			if(acnts.size() == 1){ // only one account, OK.
+			if(acnts.size() <= 1){ // only one account, OK.
 				for(const auto & e : acnts){
 					if(e.first != acctCode){
 						LOG(error)<<"The requested acctCode = "<<acctCode<<", but the returned is "<<e.first;
@@ -462,7 +462,7 @@ public:
 				}
 			}
 			auto & port = trader.portfolio;
-			if(port.size() == 1){ // only one account, OK.
+			if(port.size() <= 1){ // only one account, OK.
 				for(const auto & e : port){
 					if(e.first != acctCode){
 						LOG(error)<<"reqPortfolio, the requested acctCode = "<<acctCode<<", but the returned is "<<e.first;
@@ -477,7 +477,7 @@ public:
 				}
 				return;
 			}else{                //  more than one account, why?
-				LOG(warning)<<"Why portfolio has several accounts ? These accounts are: ";
+				LOG(warning)<<"Why portfolio has several accounts? These accounts are: ";
 				for(const auto & e : port){
 					LOG(warning)<<"account ----- "<<e.first;
 				}

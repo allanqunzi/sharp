@@ -51,8 +51,8 @@ class LivePortfolio(Portfolio):
         self.CashBalance = float(self._accnt_updates["CashBalance"].split(':')[1])
         self.StockMarketValue = float(self._accnt_updates["StockMarketValue"].split(':')[1])
         self.OptionMarketValue = float(self._accnt_updates["OptionMarketValue"].split(':')[1])
-        self.LongOptionValue = float(self._accnt_updates["LongOptionValue"].split(':')[1])
-        self.ShortOptionValue = float(self._accnt_updates["ShortOptionValue"].split(':')[1])
+        #self.LongOptionValue = float(self._accnt_updates["LongOptionValue"].split(':')[1])
+        #self.ShortOptionValue = float(self._accnt_updates["ShortOptionValue"].split(':')[1])
         self.DayTradesRemaining = int(self._accnt_updates["DayTradesRemaining"].split(':')[1])
         self.timeStamp = time.strftime('%Y%m%d') + self._accnt_updates["timeStamp"]
 
@@ -61,8 +61,8 @@ class LivePortfolio(Portfolio):
 
     def _construct_current_assets(self, refresh = False): # only stock assets
         asts = self._client.reqPortfolio(True, self.acctCode, refresh)
+        d = {}
         if asts:
-            d = {}
             for k, v in asts.items():
                 if v.accountName != self.acctCode:
                     raise ValueError("The returned acctCode from self._client.reqPortfolio is not the same as self.acctCode.")
@@ -71,7 +71,7 @@ class LivePortfolio(Portfolio):
                 else:
                     raise ValueError("An identical symbol reoccurs in assets.")
             d["timeStamp"] = self.timeStamp
-            return d
+        return d
 
     def _construct_all_assets(self):
         return [self.current_assets]
