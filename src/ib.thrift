@@ -22,16 +22,16 @@ struct OrderRequest{
 
 struct OrderResponse{
     1:required i64 orderId;
-    2:required i16 state;
-    3:optional i32 clientId = 0;
-    4:optional i32 permId = 0;
-    5:optional i32 parentId = 0;
-    6:optional i32 filled = 0;
-    7:optional i32 remaining = 0;
-    8:optional double avgFillPrice = 0.0;
-    9:optional double lastFillPrice = 0.0;
-    10:optional string status = "";
-    11:optional string whyHeld = "";
+    2:required i32 state;
+    3:required i32 clientId = 0;
+    4:required i32 permId = 0;
+    5:required i32 parentId = 0;
+    6:required i32 filled = 0;
+    7:required i32 remaining = 0;
+    8:required double avgFillPrice = 0.0;
+    9:required double lastFillPrice = 0.0;
+    10:required string status = "";
+    11:required string whyHeld = "";
 }
 
 /* asking about order status only returning OrderResponse in not sufficient,

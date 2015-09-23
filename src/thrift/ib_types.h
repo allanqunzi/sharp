@@ -215,24 +215,12 @@ class OrderRequest {
 
 void swap(OrderRequest &a, OrderRequest &b);
 
-typedef struct _OrderResponse__isset {
-  _OrderResponse__isset() : clientId(true), permId(true), parentId(true), filled(true), remaining(true), avgFillPrice(true), lastFillPrice(true), status(true), whyHeld(true) {}
-  bool clientId :1;
-  bool permId :1;
-  bool parentId :1;
-  bool filled :1;
-  bool remaining :1;
-  bool avgFillPrice :1;
-  bool lastFillPrice :1;
-  bool status :1;
-  bool whyHeld :1;
-} _OrderResponse__isset;
 
 class OrderResponse {
  public:
 
-  static const char* ascii_fingerprint; // = "680EE22116C370C060704223BB0B5482";
-  static const uint8_t binary_fingerprint[16]; // = {0x68,0x0E,0xE2,0x21,0x16,0xC3,0x70,0xC0,0x60,0x70,0x42,0x23,0xBB,0x0B,0x54,0x82};
+  static const char* ascii_fingerprint; // = "D4A0A1C18D8C4F4E3250111F0A1699FF";
+  static const uint8_t binary_fingerprint[16]; // = {0xD4,0xA0,0xA1,0xC1,0x8D,0x8C,0x4F,0x4E,0x32,0x50,0x11,0x1F,0x0A,0x16,0x99,0xFF};
 
   OrderResponse(const OrderResponse&);
   OrderResponse& operator=(const OrderResponse&);
@@ -241,7 +229,7 @@ class OrderResponse {
 
   virtual ~OrderResponse() throw();
   int64_t orderId;
-  int16_t state;
+  int32_t state;
   int32_t clientId;
   int32_t permId;
   int32_t parentId;
@@ -252,11 +240,9 @@ class OrderResponse {
   std::string status;
   std::string whyHeld;
 
-  _OrderResponse__isset __isset;
-
   void __set_orderId(const int64_t val);
 
-  void __set_state(const int16_t val);
+  void __set_state(const int32_t val);
 
   void __set_clientId(const int32_t val);
 
@@ -282,41 +268,23 @@ class OrderResponse {
       return false;
     if (!(state == rhs.state))
       return false;
-    if (__isset.clientId != rhs.__isset.clientId)
+    if (!(clientId == rhs.clientId))
       return false;
-    else if (__isset.clientId && !(clientId == rhs.clientId))
+    if (!(permId == rhs.permId))
       return false;
-    if (__isset.permId != rhs.__isset.permId)
+    if (!(parentId == rhs.parentId))
       return false;
-    else if (__isset.permId && !(permId == rhs.permId))
+    if (!(filled == rhs.filled))
       return false;
-    if (__isset.parentId != rhs.__isset.parentId)
+    if (!(remaining == rhs.remaining))
       return false;
-    else if (__isset.parentId && !(parentId == rhs.parentId))
+    if (!(avgFillPrice == rhs.avgFillPrice))
       return false;
-    if (__isset.filled != rhs.__isset.filled)
+    if (!(lastFillPrice == rhs.lastFillPrice))
       return false;
-    else if (__isset.filled && !(filled == rhs.filled))
+    if (!(status == rhs.status))
       return false;
-    if (__isset.remaining != rhs.__isset.remaining)
-      return false;
-    else if (__isset.remaining && !(remaining == rhs.remaining))
-      return false;
-    if (__isset.avgFillPrice != rhs.__isset.avgFillPrice)
-      return false;
-    else if (__isset.avgFillPrice && !(avgFillPrice == rhs.avgFillPrice))
-      return false;
-    if (__isset.lastFillPrice != rhs.__isset.lastFillPrice)
-      return false;
-    else if (__isset.lastFillPrice && !(lastFillPrice == rhs.lastFillPrice))
-      return false;
-    if (__isset.status != rhs.__isset.status)
-      return false;
-    else if (__isset.status && !(status == rhs.status))
-      return false;
-    if (__isset.whyHeld != rhs.__isset.whyHeld)
-      return false;
-    else if (__isset.whyHeld && !(whyHeld == rhs.whyHeld))
+    if (!(whyHeld == rhs.whyHeld))
       return false;
     return true;
   }
@@ -848,7 +816,7 @@ class HistoryRequest {
 
   HistoryRequest(const HistoryRequest&);
   HistoryRequest& operator=(const HistoryRequest&);
-  HistoryRequest() : symbol(""), secType("STK"), exchange("SMART"), currency("USD"), primaryExchange("NASDAQ"), endDateTime("20150824 17:00:00"), durationStr("24 W"), barSizeSetting("5 secs"), whatToShow("TRADES"), useRTH(1), formatDate(1) {
+  HistoryRequest() : symbol(""), secType("STK"), exchange("SMART"), currency("USD"), primaryExchange("NASDAQ"), endDateTime("20150824 17:00:00"), durationStr("10 W"), barSizeSetting("1 min"), whatToShow("TRADES"), useRTH(1), formatDate(1) {
   }
 
   virtual ~HistoryRequest() throw();

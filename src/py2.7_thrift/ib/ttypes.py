@@ -352,7 +352,7 @@ class OrderResponse:
   thrift_spec = (
     None, # 0
     (1, TType.I64, 'orderId', None, None, ), # 1
-    (2, TType.I16, 'state', None, None, ), # 2
+    (2, TType.I32, 'state', None, None, ), # 2
     (3, TType.I32, 'clientId', None, 0, ), # 3
     (4, TType.I32, 'permId', None, 0, ), # 4
     (5, TType.I32, 'parentId', None, 0, ), # 5
@@ -392,8 +392,8 @@ class OrderResponse:
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.I16:
-          self.state = iprot.readI16();
+        if ftype == TType.I32:
+          self.state = iprot.readI32();
         else:
           iprot.skip(ftype)
       elif fid == 3:
@@ -456,8 +456,8 @@ class OrderResponse:
       oprot.writeI64(self.orderId)
       oprot.writeFieldEnd()
     if self.state is not None:
-      oprot.writeFieldBegin('state', TType.I16, 2)
-      oprot.writeI16(self.state)
+      oprot.writeFieldBegin('state', TType.I32, 2)
+      oprot.writeI32(self.state)
       oprot.writeFieldEnd()
     if self.clientId is not None:
       oprot.writeFieldBegin('clientId', TType.I32, 3)
@@ -503,6 +503,24 @@ class OrderResponse:
       raise TProtocol.TProtocolException(message='Required field orderId is unset!')
     if self.state is None:
       raise TProtocol.TProtocolException(message='Required field state is unset!')
+    if self.clientId is None:
+      raise TProtocol.TProtocolException(message='Required field clientId is unset!')
+    if self.permId is None:
+      raise TProtocol.TProtocolException(message='Required field permId is unset!')
+    if self.parentId is None:
+      raise TProtocol.TProtocolException(message='Required field parentId is unset!')
+    if self.filled is None:
+      raise TProtocol.TProtocolException(message='Required field filled is unset!')
+    if self.remaining is None:
+      raise TProtocol.TProtocolException(message='Required field remaining is unset!')
+    if self.avgFillPrice is None:
+      raise TProtocol.TProtocolException(message='Required field avgFillPrice is unset!')
+    if self.lastFillPrice is None:
+      raise TProtocol.TProtocolException(message='Required field lastFillPrice is unset!')
+    if self.status is None:
+      raise TProtocol.TProtocolException(message='Required field status is unset!')
+    if self.whyHeld is None:
+      raise TProtocol.TProtocolException(message='Required field whyHeld is unset!')
     return
 
 
@@ -1781,8 +1799,8 @@ class HistoryRequest:
     (4, TType.STRING, 'currency', None, "USD", ), # 4
     (5, TType.STRING, 'primaryExchange', None, "NASDAQ", ), # 5
     (6, TType.STRING, 'endDateTime', None, "20150824 17:00:00", ), # 6
-    (7, TType.STRING, 'durationStr', None, "24 W", ), # 7
-    (8, TType.STRING, 'barSizeSetting', None, "5 secs", ), # 8
+    (7, TType.STRING, 'durationStr', None, "10 W", ), # 7
+    (8, TType.STRING, 'barSizeSetting', None, "1 min", ), # 8
     (9, TType.STRING, 'whatToShow', None, "TRADES", ), # 9
     (10, TType.I32, 'useRTH', None, 1, ), # 10
     (11, TType.I32, 'formatDate', None, 1, ), # 11

@@ -474,57 +474,48 @@ void OrderResponse::__set_orderId(const int64_t val) {
   this->orderId = val;
 }
 
-void OrderResponse::__set_state(const int16_t val) {
+void OrderResponse::__set_state(const int32_t val) {
   this->state = val;
 }
 
 void OrderResponse::__set_clientId(const int32_t val) {
   this->clientId = val;
-__isset.clientId = true;
 }
 
 void OrderResponse::__set_permId(const int32_t val) {
   this->permId = val;
-__isset.permId = true;
 }
 
 void OrderResponse::__set_parentId(const int32_t val) {
   this->parentId = val;
-__isset.parentId = true;
 }
 
 void OrderResponse::__set_filled(const int32_t val) {
   this->filled = val;
-__isset.filled = true;
 }
 
 void OrderResponse::__set_remaining(const int32_t val) {
   this->remaining = val;
-__isset.remaining = true;
 }
 
 void OrderResponse::__set_avgFillPrice(const double val) {
   this->avgFillPrice = val;
-__isset.avgFillPrice = true;
 }
 
 void OrderResponse::__set_lastFillPrice(const double val) {
   this->lastFillPrice = val;
-__isset.lastFillPrice = true;
 }
 
 void OrderResponse::__set_status(const std::string& val) {
   this->status = val;
-__isset.status = true;
 }
 
 void OrderResponse::__set_whyHeld(const std::string& val) {
   this->whyHeld = val;
-__isset.whyHeld = true;
 }
 
-const char* OrderResponse::ascii_fingerprint = "680EE22116C370C060704223BB0B5482";
-const uint8_t OrderResponse::binary_fingerprint[16] = {0x68,0x0E,0xE2,0x21,0x16,0xC3,0x70,0xC0,0x60,0x70,0x42,0x23,0xBB,0x0B,0x54,0x82};
+const char* OrderResponse::ascii_fingerprint = "D4A0A1C18D8C4F4E3250111F0A1699FF";
+const uint8_t OrderResponse::binary_fingerprint[16] = {0xD4,0xA0,0xA1,0xC1,0x8D,0x8C,0x4F,0x4E,0x32,0x50,0x11,0x1F,0x0A,0x16,0x99,0xFF};
 
 uint32_t OrderResponse::read(::apache::thrift::protocol::TProtocol* iprot) {
 
@@ -539,6 +530,15 @@ uint32_t OrderResponse::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   bool isset_orderId = false;
   bool isset_state = false;
+  bool isset_clientId = false;
+  bool isset_permId = false;
+  bool isset_parentId = false;
+  bool isset_filled = false;
+  bool isset_remaining = false;
+  bool isset_avgFillPrice = false;
+  bool isset_lastFillPrice = false;
+  bool isset_status = false;
+  bool isset_whyHeld = false;
 
   while (true)
   {
@@ -557,8 +557,8 @@ uint32_t OrderResponse::read(::apache::thrift::protocol::TProtocol* iprot) {
         }
         break;
       case 2:
-        if (ftype == ::apache::thrift::protocol::T_I16) {
-          xfer += iprot->readI16(this->state);
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->state);
           isset_state = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -567,7 +567,7 @@ uint32_t OrderResponse::read(::apache::thrift::protocol::TProtocol* iprot) {
       case 3:
         if (ftype == ::apache::thrift::protocol::T_I32) {
           xfer += iprot->readI32(this->clientId);
-          this->__isset.clientId = true;
+          isset_clientId = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -575,7 +575,7 @@ uint32_t OrderResponse::read(::apache::thrift::protocol::TProtocol* iprot) {
       case 4:
         if (ftype == ::apache::thrift::protocol::T_I32) {
           xfer += iprot->readI32(this->permId);
-          this->__isset.permId = true;
+          isset_permId = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -583,7 +583,7 @@ uint32_t OrderResponse::read(::apache::thrift::protocol::TProtocol* iprot) {
       case 5:
         if (ftype == ::apache::thrift::protocol::T_I32) {
           xfer += iprot->readI32(this->parentId);
-          this->__isset.parentId = true;
+          isset_parentId = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -591,7 +591,7 @@ uint32_t OrderResponse::read(::apache::thrift::protocol::TProtocol* iprot) {
       case 6:
         if (ftype == ::apache::thrift::protocol::T_I32) {
           xfer += iprot->readI32(this->filled);
-          this->__isset.filled = true;
+          isset_filled = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -599,7 +599,7 @@ uint32_t OrderResponse::read(::apache::thrift::protocol::TProtocol* iprot) {
       case 7:
         if (ftype == ::apache::thrift::protocol::T_I32) {
           xfer += iprot->readI32(this->remaining);
-          this->__isset.remaining = true;
+          isset_remaining = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -607,7 +607,7 @@ uint32_t OrderResponse::read(::apache::thrift::protocol::TProtocol* iprot) {
       case 8:
         if (ftype == ::apache::thrift::protocol::T_DOUBLE) {
           xfer += iprot->readDouble(this->avgFillPrice);
-          this->__isset.avgFillPrice = true;
+          isset_avgFillPrice = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -615,7 +615,7 @@ uint32_t OrderResponse::read(::apache::thrift::protocol::TProtocol* iprot) {
       case 9:
         if (ftype == ::apache::thrift::protocol::T_DOUBLE) {
           xfer += iprot->readDouble(this->lastFillPrice);
-          this->__isset.lastFillPrice = true;
+          isset_lastFillPrice = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -623,7 +623,7 @@ uint32_t OrderResponse::read(::apache::thrift::protocol::TProtocol* iprot) {
       case 10:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readString(this->status);
-          this->__isset.status = true;
+          isset_status = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -631,7 +631,7 @@ uint32_t OrderResponse::read(::apache::thrift::protocol::TProtocol* iprot) {
       case 11:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readString(this->whyHeld);
-          this->__isset.whyHeld = true;
+          isset_whyHeld = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -649,6 +649,24 @@ uint32_t OrderResponse::read(::apache::thrift::protocol::TProtocol* iprot) {
     throw TProtocolException(TProtocolException::INVALID_DATA);
   if (!isset_state)
     throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_clientId)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_permId)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_parentId)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_filled)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_remaining)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_avgFillPrice)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_lastFillPrice)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_status)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_whyHeld)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
   return xfer;
 }
 
@@ -661,55 +679,46 @@ uint32_t OrderResponse::write(::apache::thrift::protocol::TProtocol* oprot) cons
   xfer += oprot->writeI64(this->orderId);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("state", ::apache::thrift::protocol::T_I16, 2);
-  xfer += oprot->writeI16(this->state);
+  xfer += oprot->writeFieldBegin("state", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32(this->state);
   xfer += oprot->writeFieldEnd();
 
-  if (this->__isset.clientId) {
-    xfer += oprot->writeFieldBegin("clientId", ::apache::thrift::protocol::T_I32, 3);
-    xfer += oprot->writeI32(this->clientId);
-    xfer += oprot->writeFieldEnd();
-  }
-  if (this->__isset.permId) {
-    xfer += oprot->writeFieldBegin("permId", ::apache::thrift::protocol::T_I32, 4);
-    xfer += oprot->writeI32(this->permId);
-    xfer += oprot->writeFieldEnd();
-  }
-  if (this->__isset.parentId) {
-    xfer += oprot->writeFieldBegin("parentId", ::apache::thrift::protocol::T_I32, 5);
-    xfer += oprot->writeI32(this->parentId);
-    xfer += oprot->writeFieldEnd();
-  }
-  if (this->__isset.filled) {
-    xfer += oprot->writeFieldBegin("filled", ::apache::thrift::protocol::T_I32, 6);
-    xfer += oprot->writeI32(this->filled);
-    xfer += oprot->writeFieldEnd();
-  }
-  if (this->__isset.remaining) {
-    xfer += oprot->writeFieldBegin("remaining", ::apache::thrift::protocol::T_I32, 7);
-    xfer += oprot->writeI32(this->remaining);
-    xfer += oprot->writeFieldEnd();
-  }
-  if (this->__isset.avgFillPrice) {
-    xfer += oprot->writeFieldBegin("avgFillPrice", ::apache::thrift::protocol::T_DOUBLE, 8);
-    xfer += oprot->writeDouble(this->avgFillPrice);
-    xfer += oprot->writeFieldEnd();
-  }
-  if (this->__isset.lastFillPrice) {
-    xfer += oprot->writeFieldBegin("lastFillPrice", ::apache::thrift::protocol::T_DOUBLE, 9);
-    xfer += oprot->writeDouble(this->lastFillPrice);
-    xfer += oprot->writeFieldEnd();
-  }
-  if (this->__isset.status) {
-    xfer += oprot->writeFieldBegin("status", ::apache::thrift::protocol::T_STRING, 10);
-    xfer += oprot->writeString(this->status);
-    xfer += oprot->writeFieldEnd();
-  }
-  if (this->__isset.whyHeld) {
-    xfer += oprot->writeFieldBegin("whyHeld", ::apache::thrift::protocol::T_STRING, 11);
-    xfer += oprot->writeString(this->whyHeld);
-    xfer += oprot->writeFieldEnd();
-  }
+  xfer += oprot->writeFieldBegin("clientId", ::apache::thrift::protocol::T_I32, 3);
+  xfer += oprot->writeI32(this->clientId);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("permId", ::apache::thrift::protocol::T_I32, 4);
+  xfer += oprot->writeI32(this->permId);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("parentId", ::apache::thrift::protocol::T_I32, 5);
+  xfer += oprot->writeI32(this->parentId);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("filled", ::apache::thrift::protocol::T_I32, 6);
+  xfer += oprot->writeI32(this->filled);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("remaining", ::apache::thrift::protocol::T_I32, 7);
+  xfer += oprot->writeI32(this->remaining);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("avgFillPrice", ::apache::thrift::protocol::T_DOUBLE, 8);
+  xfer += oprot->writeDouble(this->avgFillPrice);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("lastFillPrice", ::apache::thrift::protocol::T_DOUBLE, 9);
+  xfer += oprot->writeDouble(this->lastFillPrice);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("status", ::apache::thrift::protocol::T_STRING, 10);
+  xfer += oprot->writeString(this->status);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("whyHeld", ::apache::thrift::protocol::T_STRING, 11);
+  xfer += oprot->writeString(this->whyHeld);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   oprot->decrementRecursionDepth();
@@ -729,7 +738,6 @@ void swap(OrderResponse &a, OrderResponse &b) {
   swap(a.lastFillPrice, b.lastFillPrice);
   swap(a.status, b.status);
   swap(a.whyHeld, b.whyHeld);
-  swap(a.__isset, b.__isset);
 }
 
 OrderResponse::OrderResponse(const OrderResponse& other8) {
@@ -744,7 +752,6 @@ OrderResponse::OrderResponse(const OrderResponse& other8) {
   lastFillPrice = other8.lastFillPrice;
   status = other8.status;
   whyHeld = other8.whyHeld;
-  __isset = other8.__isset;
 }
 OrderResponse& OrderResponse::operator=(const OrderResponse& other9) {
   orderId = other9.orderId;
@@ -758,7 +765,6 @@ OrderResponse& OrderResponse::operator=(const OrderResponse& other9) {
   lastFillPrice = other9.lastFillPrice;
   status = other9.status;
   whyHeld = other9.whyHeld;
-  __isset = other9.__isset;
   return *this;
 }
 std::ostream& operator<<(std::ostream& out, const OrderResponse& obj) {
@@ -766,15 +772,15 @@ std::ostream& operator<<(std::ostream& out, const OrderResponse& obj) {
   out << "OrderResponse(";
   out << "orderId=" << to_string(obj.orderId);
   out << ", " << "state=" << to_string(obj.state);
-  out << ", " << "clientId="; (obj.__isset.clientId ? (out << to_string(obj.clientId)) : (out << "<null>"));
-  out << ", " << "permId="; (obj.__isset.permId ? (out << to_string(obj.permId)) : (out << "<null>"));
-  out << ", " << "parentId="; (obj.__isset.parentId ? (out << to_string(obj.parentId)) : (out << "<null>"));
-  out << ", " << "filled="; (obj.__isset.filled ? (out << to_string(obj.filled)) : (out << "<null>"));
-  out << ", " << "remaining="; (obj.__isset.remaining ? (out << to_string(obj.remaining)) : (out << "<null>"));
-  out << ", " << "avgFillPrice="; (obj.__isset.avgFillPrice ? (out << to_string(obj.avgFillPrice)) : (out << "<null>"));
-  out << ", " << "lastFillPrice="; (obj.__isset.lastFillPrice ? (out << to_string(obj.lastFillPrice)) : (out << "<null>"));
-  out << ", " << "status="; (obj.__isset.status ? (out << to_string(obj.status)) : (out << "<null>"));
-  out << ", " << "whyHeld="; (obj.__isset.whyHeld ? (out << to_string(obj.whyHeld)) : (out << "<null>"));
+  out << ", " << "clientId=" << to_string(obj.clientId);
+  out << ", " << "permId=" << to_string(obj.permId);
+  out << ", " << "parentId=" << to_string(obj.parentId);
+  out << ", " << "filled=" << to_string(obj.filled);
+  out << ", " << "remaining=" << to_string(obj.remaining);
+  out << ", " << "avgFillPrice=" << to_string(obj.avgFillPrice);
+  out << ", " << "lastFillPrice=" << to_string(obj.lastFillPrice);
+  out << ", " << "status=" << to_string(obj.status);
+  out << ", " << "whyHeld=" << to_string(obj.whyHeld);
   out << ")";
   return out;
 }

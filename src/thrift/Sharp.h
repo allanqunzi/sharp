@@ -419,8 +419,8 @@ typedef struct _Sharp_placeOrder_result__isset {
 class Sharp_placeOrder_result {
  public:
 
-  static const char* ascii_fingerprint; // = "B3A23C3400EEC8FB2AD7AE457642A6E3";
-  static const uint8_t binary_fingerprint[16]; // = {0xB3,0xA2,0x3C,0x34,0x00,0xEE,0xC8,0xFB,0x2A,0xD7,0xAE,0x45,0x76,0x42,0xA6,0xE3};
+  static const char* ascii_fingerprint; // = "04BB4E61359F5B3D8BEC07153389034E";
+  static const uint8_t binary_fingerprint[16]; // = {0x04,0xBB,0x4E,0x61,0x35,0x9F,0x5B,0x3D,0x8B,0xEC,0x07,0x15,0x33,0x89,0x03,0x4E};
 
   Sharp_placeOrder_result(const Sharp_placeOrder_result&);
   Sharp_placeOrder_result& operator=(const Sharp_placeOrder_result&);
@@ -466,8 +466,8 @@ typedef struct _Sharp_placeOrder_presult__isset {
 class Sharp_placeOrder_presult {
  public:
 
-  static const char* ascii_fingerprint; // = "B3A23C3400EEC8FB2AD7AE457642A6E3";
-  static const uint8_t binary_fingerprint[16]; // = {0xB3,0xA2,0x3C,0x34,0x00,0xEE,0xC8,0xFB,0x2A,0xD7,0xAE,0x45,0x76,0x42,0xA6,0xE3};
+  static const char* ascii_fingerprint; // = "04BB4E61359F5B3D8BEC07153389034E";
+  static const uint8_t binary_fingerprint[16]; // = {0x04,0xBB,0x4E,0x61,0x35,0x9F,0x5B,0x3D,0x8B,0xEC,0x07,0x15,0x33,0x89,0x03,0x4E};
 
 
   virtual ~Sharp_placeOrder_presult() throw();
@@ -541,8 +541,8 @@ typedef struct _Sharp_cancelOrder_result__isset {
 class Sharp_cancelOrder_result {
  public:
 
-  static const char* ascii_fingerprint; // = "B3A23C3400EEC8FB2AD7AE457642A6E3";
-  static const uint8_t binary_fingerprint[16]; // = {0xB3,0xA2,0x3C,0x34,0x00,0xEE,0xC8,0xFB,0x2A,0xD7,0xAE,0x45,0x76,0x42,0xA6,0xE3};
+  static const char* ascii_fingerprint; // = "04BB4E61359F5B3D8BEC07153389034E";
+  static const uint8_t binary_fingerprint[16]; // = {0x04,0xBB,0x4E,0x61,0x35,0x9F,0x5B,0x3D,0x8B,0xEC,0x07,0x15,0x33,0x89,0x03,0x4E};
 
   Sharp_cancelOrder_result(const Sharp_cancelOrder_result&);
   Sharp_cancelOrder_result& operator=(const Sharp_cancelOrder_result&);
@@ -588,8 +588,8 @@ typedef struct _Sharp_cancelOrder_presult__isset {
 class Sharp_cancelOrder_presult {
  public:
 
-  static const char* ascii_fingerprint; // = "B3A23C3400EEC8FB2AD7AE457642A6E3";
-  static const uint8_t binary_fingerprint[16]; // = {0xB3,0xA2,0x3C,0x34,0x00,0xEE,0xC8,0xFB,0x2A,0xD7,0xAE,0x45,0x76,0x42,0xA6,0xE3};
+  static const char* ascii_fingerprint; // = "04BB4E61359F5B3D8BEC07153389034E";
+  static const uint8_t binary_fingerprint[16]; // = {0x04,0xBB,0x4E,0x61,0x35,0x9F,0x5B,0x3D,0x8B,0xEC,0x07,0x15,0x33,0x89,0x03,0x4E};
 
 
   virtual ~Sharp_cancelOrder_presult() throw();
