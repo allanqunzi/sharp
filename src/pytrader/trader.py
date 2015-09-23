@@ -377,7 +377,7 @@ class LiveTrader(BaseTrader):
                                         o_stus.action, o_stus.totalQuantity,
                                         o_stus.avgFillPrice, o_stus.lastFillPrice)
                     if filled_flag:
-                        self.pfo.update()
+                        self.pfo.update_fill()
                     prev_time = time.time()
 
     def _feed_handler(self, p_id):
