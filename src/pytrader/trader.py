@@ -78,11 +78,16 @@ class BaseTrader(AbstractTrader):
     process 0 - the process handling the order events
     cores-1 - the number of worker processes for handling the bars
     """
-    def __init__(self, strategy, wl = [], cores = 2, futurelist = True):
+    def __init__(self, strategy, wl = None, cores = 2, futurelist = True):
         if self._check_values(wl, cores):
             self.wl = wl
             self.cores = cores
-        self._dict = {}    # key: the process index; value: list of symbols
+        self.futurelist = futurelist
+        self._mgr = mp.Manager()
+        if self.futurelist: # if promised the possibility to change wl in the future
+            self._dict = self._mgr.dict()    # key: the process index; value: list of symbols
+        else:
+            self._dict = {}
         self._spread_wl()  # spread the symbols as evenly as possible among the worker processes
         self._evnts = mp.Queue()
         self._sts = False   # check if trade() is running.
@@ -90,30 +95,11 @@ class BaseTrader(AbstractTrader):
         self._stops = [mp.Event() for i in range(cores)] # events for IPC
         self._new_wl_dict = {} # newly being added/removed watchlist which will be distributed to each process
         #if futurelist:      # if promised the possibility to change wl in the future
-        self._locks = [mp.Lock() for i in range(cores)]
-        self.strategy = strategy
-        self.futurelist = futurelist
+        self.strategies = [strategy for i in range(cores)]
 
+    @abstractmethod
     def trade(self):
-        if self._sts:
-            logger.error("trade() is already running.")
-            return
-        for i in range(self.cores):
-            if i == 0:
-                # process 0 only handles the queue self._evnts
-                self._pre_trade()
-                worker = mp.Process(target = self._evnts_handler, args = (i,))
-                self._ps.append(worker)
-                self._ps[-1].daemon = True
-                self._ps[-1].start()
-            else:
-                # each worker process handles the bar feed and
-                # send decisions to self._evnts
-                worker = mp.Process(target = self._feed_handler, args = (i,))
-                self._ps.append(worker)
-                self._ps[-1].daemon = True
-                self._ps[-1].start()
-        self._sts = True
+        raise NotImplementedError("Should implement trade().")
 
     def stop(self):
         if not self._sts:
@@ -262,27 +248,53 @@ class LiveTrader(BaseTrader):
     initialize LiveTrader with watchlist, number of cores and
     thrift client, and make connection to thrift server.
     """
-    def __init__(self, acctCode, strategy, wl=[], cores = 2, futurelist = True):
+    def __init__(self, acctCode, strategy, wl = None, cores = 2, futurelist = True):
         super(LiveTrader, self).__init__(strategy, wl, cores, futurelist)
 
-        self._socket = TSocket.TSocket('localhost', 9090)
-        self._transport = TTransport.TBufferedTransport(self._socket)
-        self._protocol = TBinaryProtocol.TBinaryProtocol(self._transport)
-        self._client = Sharp.Client(self._protocol)
-        self._transport.open()
-        self._client.removeZombieSymbols([])
-        self.pfo = portfolio.LivePortfolio(acctCode, self._client)
-        self.open_odrs = {}
-        self.fill_odrs = {}
+        self._sockets = [TSocket.TSocket('localhost', 9090) for i in range(cores)]
+        self._transports = [TTransport.TBufferedTransport(self._sockets[i]) for i in range(cores)]
+        self._protocols = [TBinaryProtocol.TBinaryProtocol(self._transports[i]) for i in range (cores)]
+        self._clients = [Sharp.Client(self._protocols[i]) for i in range(cores)]
+        for t in self._transports:
+            t.open()
+        self._clients[0].removeZombieSymbols([])
+        self.pfo = portfolio.LivePortfolio(acctCode, self._clients[0])
+        self.open_odrs = self._mgr.dict()
+        self.fill_odrs = self._mgr.dict()
         self._odr_lk = mp.Lock()
+
+    def trade(self):
+        if self._sts:
+            logger.error("trade() is already running.")
+            return
+        for stp in self._stops:
+            stp.clear()
+        for i in range(self.cores):
+            if i == 0:
+                # process 0 only handles the queue self._evnts
+                self._pre_trade()
+                worker = mp.Process(target = self._evnts_handler, args = (i,))
+                self._ps.append(worker)
+                self._ps[-1].daemon = True
+                self._ps[-1].start()
+            else:
+                # each worker process handles the bar feed and
+                # send decisions to self._evnts
+                worker = mp.Process(target = self._feed_handler, args = (i,))
+                self._ps.append(worker)
+                self._ps[-1].daemon = True
+                self._ps[-1].start()
+        self._sts = True
 
     def addToWatchList(self, symbols):
         if self.futurelist and self._sts:
             if self._spread_new_wl(symbols):
-                for k, v in self._new_wl_dict.items():
-                    with self._locks[k]:
-                        self._dict[k].extend(v)
-                        self._client.addToWatchList(v)
+                with self._odr_lk:
+                    for k, v in self._new_wl_dict.items():
+                        old_list = self._dict[k]
+                        old_list.extend(v)
+                        self._dict[k] = old_list
+                        self._clients[0].addToWatchList(v)
                 return True
             else:
                 return False
@@ -294,11 +306,13 @@ class LiveTrader(BaseTrader):
     def removeFromWatchList(self, symbols):
         if self.futurelist and self._sts:
             if self._remove_wl(symbols):
-                self._client.removeFromWatchList(self.wl)
+                with self._odr_lk:
+                    self._client.removeFromWatchList(self.wl)
                 for k, v in self._new_wl_dict.items():
-                    with self._locks[k]:
-                        for item in v:
-                            self._dict[k].remove(item)
+                    old_list = self._dict[k]
+                    for item in v:
+                        old_list.remove(item)
+                    self._dict[k] = old_list
                 return True
             else:
                 return False
@@ -308,19 +322,19 @@ class LiveTrader(BaseTrader):
             return False
 
     def _pre_trade(self):
-        self._client.addToWatchList(self.wl)
+        self._clients[0].addToWatchList(self.wl)
 
     def _post_trade(self):
-        self._client.removeFromWatchList([])
+        self._clients[0].removeFromWatchList([])
 
     def get_open_odrs(self):
-        with self._odr_lk:
-            return self.open_odrs
+        #with self._odr_lk:
+        return self.open_odrs
 
-    def reqGlobalCancel(self):
+    def reqGlobalCancel(self): # better call this function when trade() is not running.
         logger.warn("calling reqGlobalCancel: cancel all open orders")
-        self._client.reqGlobalCancel()
         with self._odr_lk:
+            self._clients[0].reqGlobalCancel()
             self.open_odrs.clear()
 
     def _evnts_handler(self, p_id):
@@ -333,50 +347,51 @@ class LiveTrader(BaseTrader):
                 pass
             else:
                 if evnt.type == 'SIGNAL':
-                    co = self.strategy.generate_order(evnt, self.pfo)
+                    co = self.strategies[p_id].generate_order(evnt, self.pfo)
                     if co is not None:
                         # placing order
                         logger.info("Placing order, symbol = %s, action = %s, quantity = %d, "
                                     "price = %f, order_type = %s",
                                     co._c.symbol, co._o.action, co._o.totalQuantity,
                                     co._o.lmtPrice, co._o.orderType)
-                        o_resp = self._client.placeOrder(co._c, co._o)
+                        with (not self.futurelist) or self._odr_lk:
+                            o_resp = self._clients[p_id].placeOrder(co._c, co._o)
                         logger.info("o_resp.orderId = %d", o_resp.orderId)
                         self.open_odrs[o_resp.orderId] = o_resp
             finally:
                 # when self.open_odrs is not empty, check if some order is filled
                 # every 300 seconds (i.e. 5 minutes)
                 if int(time.time()-prev_time) > 300:
-                    with self._odr_lk:
-                        for i in self.open_odrs:
-                            o_stus = self._client.getOrderStatus(i)
-                            self.open_odrs[i] = o_stus
-                            if o_stus.status == 'Filled':
-                                filled_flag = True
-                                self.fill_odrs[i] = o_stus
-                                self.open_odrs.pop(i)
-                                logger.info("Order %d is filled, symbol = %s, "
-                                            "action = %s, quantity = %d, "
-                                            "avgFillPrice = %f, lastFillPrice = %f",
-                                            o_stus.orderId, o_stus.symbol,
-                                            o_stus.action, o_stus.totalQuantity,
-                                            o_stus.avgFillPrice, o_stus.lastFillPrice)
+                    for i, v in self.open_odrs.items():
+                        with (not self.futurelist) or self._odr_lk:
+                            o_stus = self._clients[p_id].getOrderStatus(i)
+                        self.open_odrs[i] = o_stus
+                        if o_stus.status == 'Filled':
+                            filled_flag = True
+                            self.fill_odrs[i] = o_stus
+                            self.open_odrs.pop(i)
+                            logger.info("Order %d is filled, symbol = %s, "
+                                        "action = %s, quantity = %d, "
+                                        "avgFillPrice = %f, lastFillPrice = %f",
+                                        o_stus.orderId, o_stus.symbol,
+                                        o_stus.action, o_stus.totalQuantity,
+                                        o_stus.avgFillPrice, o_stus.lastFillPrice)
                     if filled_flag:
                         self.pfo.update()
                     prev_time = time.time()
 
     def _feed_handler(self, p_id):
         while not self._stops[p_id].is_set():
-            with (not self.futurelist) or self._locks[p_id]:
-                for s in self._dict[p_id]:
-                    feed = self._client.getNextBar(s)
-                    signal = self.strategy.generate_signal(feed)
-                    if signal is not None:
-                        self._evnts.put(signal)
+            #with (not self.futurelist) or self._locks[p_id]:
+            for s in self._dict[p_id]:
+                feed = self._clients[p_id].getNextBar(s)
+                signal = self.strategies[p_id].generate_signal(feed)
+                if signal is not None:
+                    self._evnts.put(signal)
 
 class TestTrader(BaseTrader):
     """docstring for TestTrader"""
-    def __init__(self, strategy, wl=[], cores = 2, futurelist = True):
+    def __init__(self, strategy, wl = None, cores = 2, futurelist = True):
         super(TestTrader, self).__init__(strategy, wl, cores, futurelist)
 
 '''

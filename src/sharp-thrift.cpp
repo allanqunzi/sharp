@@ -88,6 +88,7 @@ public:
 
 			assert(m_req.orderId == resp.orderId && "error: assert in SharpHandler::placeOrder: m_req.orderId == resp.orderId failed." );
 			o_response.orderId = m_req.orderId;
+			// std::cout<<"m_req.orderId = "<<m_req.orderId<<std::endl;
 			o_response.state = resp.state;
 
 			if(o_response.state == 0){

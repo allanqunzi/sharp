@@ -69,19 +69,19 @@ def monitor(dict, list, threads):
     threads.append(worker)
     worker.setDaemon(True)
     worker.start()
-'''
+
 c_req = ContractRequest('V', 'STK', 'SMART', 'USD')
 o_req = OrderRequest('BUY', 1000, 'LMT', 0.12)
 place_resp = client.placeOrder(c_req, o_req)
 o_id1 = place_resp.orderId
-print('place_resp.state =', place_resp.state)
+print('place_resp.state =', place_resp.state, o_id1)
 
 
 c_req = ContractRequest('GOOG', 'STK', 'SMART', 'USD')
 o_req = OrderRequest('BUY', 500, 'LMT', 0.15)
 place_resp = client.placeOrder(c_req, o_req)
 o_id2 = place_resp.orderId
-print('place_resp.state =', place_resp.state)
+print('place_resp.state =', place_resp.state, o_id2)
 
 os = client.getOrderStatus(o_id1)
 print("os.symbol =", os.symbol, "os.status", os.status)
@@ -89,8 +89,12 @@ print("os.symbol =", os.symbol, "os.status", os.status)
 os = client.getOrderStatus(o_id2)
 print("os.symbol =", os.symbol, "os.status", os.status)
 
-time.sleep(10)
+time.sleep(250)
 
+
+
+
+'''
 opens = client.reqOpenOrders()
 
 for o in opens:
