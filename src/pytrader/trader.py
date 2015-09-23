@@ -133,6 +133,14 @@ class BaseTrader(AbstractTrader):
             logger.info("futurelist is set to be", bl)
             self.futurelist = bl;
             return True
+        if bl:
+            self._dict = self._mgr.dict(self._dict)
+            self.futurelist = bl
+            return True
+        else:
+            self._dict = dict(self._dict)
+            self.futurelist = bl
+            return True
 
     def status(self):    # check if trade() is running.
         return self._sts
