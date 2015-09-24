@@ -9,7 +9,7 @@ sharp is an automated trading system developed in connection with the C++ API pr
 an easy-to-use Python interface, by which users can write their own strategies, explore and apply their own creative ideas
 both in the simulated and real live trading enviroments. With sharp, you can trade easily, interactively and algorithmically.
 
-sharp has two major components. The first one is interfacing with the IB Trader Workstation (TWS) and it is written in modern 
+sharp has two major components. The first one is interfacing with the IB Trader Workstation (TWS) and it is written in modern
 C++ (C++11) and has used the Boost library and Apache Thrift framework to implement a multithreaded server; the second component
 is the client talking to the thrift server and written in Python 2.7, the python code has multiprocessing support to monitor and trade multiple stocks at the same time, and provides an easy and customizable interface for the users of sharp.
 
@@ -46,12 +46,12 @@ the second is the time stamp for the balance value.
 ```python
 >>> balance = ib_trader.get_accnt_balance()
 ```
-Get the current open orders, the returned is a python dictionary, 
-key is `orderId`, value is an `OrderStatus` class instance.
+Get the current open orders, the returned is a python dictionary,
+keys are `orderId`s, values are instances of the class `OrderStatus`.
 ```python
 >>> open_orders = ib_trader.get_open_odrs()
 ```
-Get the filled orders, the returned is a python dictionary, 
+Get the filled orders, the returned is a python dictionary,
 keys are `orderId`s, values are instances of the class `OrderStatus`.
 ```python
 >>> fill_orders = ib_trader.get_fill_odrs()
