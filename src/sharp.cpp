@@ -648,6 +648,12 @@ bool EWrapperImpl::addToWatchList( const std::vector<std::string> & wl){
 			m_pClient->reqRealTimeBars(id, contract, 5, whatToShow, false, realTimeBarsOptions);
 		}
 	}
+
+	for ( unsigned i = 0; i < watch_list.bucket_count(); ++i){
+		if(watch_list.bucket_size(i) > 1){
+			LOG(warning)<<"Some bucket has more than 1 element, don't call removeFromWatchList().";
+		}
+	}
 	return true;
 }
 

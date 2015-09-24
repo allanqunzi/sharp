@@ -234,6 +234,11 @@ public:
 	void addToWatchList(const std::vector<std::string> & wl){
 		protect( [this, &wl](){
 			trader.addToWatchList(wl);
+			for( unsigned i = 0; i < trader.watch_list.bucket_count(); ++i){
+				if(trader.watch_list.bucket_size(i) > 1){
+					LOG(warning)<<"Some bucket has more than 1 element, don't call removeFromWatchList().";
+				}
+			}
 		} );
 	}
 

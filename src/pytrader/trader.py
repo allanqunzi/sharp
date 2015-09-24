@@ -165,7 +165,7 @@ class BaseTrader(AbstractTrader):
                 logger.error("adding new wl: watchlist should be uppercase, "
                             "len(symbol) should be less than 5.")
                 return False
-        dcopy = self._dict.copy()
+        dcopy = dict(self._dict)
         wcopy = list(self.wl)
         self._new_wl_dict.clear()
         for s in newsbls:
@@ -193,7 +193,7 @@ class BaseTrader(AbstractTrader):
                 logger.error("removing wl: watchlist should be uppercase, "
                             "len(symbol) should be less than 5.")
                 return False
-        dcopy = self._dict.copy()
+        dcopy = dict(self._dict)
         wcopy = list(self.wl)
         self._new_wl_dict.clear()
         for s in sbls:
@@ -266,7 +266,7 @@ class LiveTrader(BaseTrader):
         self._clients = [Sharp.Client(self._protocols[i]) for i in range(cores)]
         for t in self._transports:
             t.open()
-        self._clients[0].removeZombieSymbols([])
+        self._clients[0].removeZombieSymbols(self.wl)
         self.pfo = portfolio.LivePortfolio(acctCode, self._clients[0])
         self.open_odrs = self._mgr.dict()
         self.fill_odrs = self._mgr.dict()
@@ -300,11 +300,13 @@ class LiveTrader(BaseTrader):
         if self.futurelist and self._sts:
             if self._spread_new_wl(symbols):
                 with self._odr_lk:
+                    to_be_added = []
                     for k, v in self._new_wl_dict.items():
                         old_list = self._dict[k]
                         old_list.extend(v)
+                        to_be_added.extend(v)
                         self._dict[k] = old_list
-                        self._clients[0].addToWatchList(v)
+                    self._clients[0].addToWatchList(to_be_added)
                 return True
             else:
                 return False
@@ -316,13 +318,18 @@ class LiveTrader(BaseTrader):
     def removeFromWatchList(self, symbols):
         if self.futurelist and self._sts:
             if self._remove_wl(symbols):
-                with self._odr_lk:
-                    self._client.removeFromWatchList(self.wl)
+                #with self._odr_lk:
+                #    self._clients[0].removeFromWatchList(self.wl)
+                to_be_removed = []
                 for k, v in self._new_wl_dict.items():
                     old_list = self._dict[k]
+                    to_be_removed.extend(v)
                     for item in v:
                         old_list.remove(item)
                     self._dict[k] = old_list
+                time.sleep(2) # make sure getNextBar() is no longer called
+                with self._odr_lk:
+                    self._clients[0].removeFromWatchList(to_be_removed)
                 return True
             else:
                 return False
