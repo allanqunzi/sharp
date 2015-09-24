@@ -277,6 +277,7 @@ class LiveTrader(BaseTrader):
             return
         for stp in self._stops:
             stp.clear()
+        logger.warn("trade() starts running ...")
         for i in range(self.cores):
             if i == 0:
                 # process 0 only handles the queue self._evnts
@@ -337,13 +338,22 @@ class LiveTrader(BaseTrader):
 
     def get_open_odrs(self):
         #with self._odr_lk:
-        return self.open_odrs
+        return dict(self.open_odrs)
+
+    def terminate(self):
+        if self._sts:
+            logger.warn("stop() must be called first to terminate.")
+            return False
+        for t in self._transports:
+            t.close()
+        return True
 
     def reqGlobalCancel(self): # better call this function when trade() is not running.
         logger.warn("calling reqGlobalCancel: cancel all open orders")
         with self._odr_lk:
             self._clients[0].reqGlobalCancel()
             self.open_odrs.clear()
+        return True
 
     def _evnts_handler(self, p_id):
         prev_time = time.time()

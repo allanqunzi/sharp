@@ -6,6 +6,6 @@ server
 client
 logs
 *csv
-trader201*
-strategy201*
+trader_201*
+strategy_201*
 test

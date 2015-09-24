@@ -6,7 +6,7 @@ def createLogger(name):
     logger.setLevel(logging.DEBUG)
 
     #sh = logging.StreamHandler()
-    fh = logging.FileHandler(name+datetime.date.today().strftime("%Y-%m-%d"))
+    fh = logging.FileHandler(name + '_' + datetime.date.today().strftime("%Y-%m-%d"))
     #sh.setLevel(logging.DEBUG)
     fh.setLevel(logging.DEBUG)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
