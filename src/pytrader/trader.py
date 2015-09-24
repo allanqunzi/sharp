@@ -146,7 +146,7 @@ class BaseTrader(AbstractTrader):
         return self._sts
 
     def current_wl(self):# return the current watchlist
-        return self.wl
+        return list(self.wl)
 
     @abstractmethod
     def _evnts_handler(self, p_id):
@@ -258,6 +258,7 @@ class LiveTrader(BaseTrader):
     """
     def __init__(self, acctCode, strategy, wl = None, cores = 2, futurelist = True):
         super(LiveTrader, self).__init__(strategy, wl, cores, futurelist)
+        self.accnt = acctCode
 
         self._sockets = [TSocket.TSocket('localhost', 9090) for i in range(cores)]
         self._transports = [TTransport.TBufferedTransport(self._sockets[i]) for i in range(cores)]
@@ -339,6 +340,14 @@ class LiveTrader(BaseTrader):
     def get_open_odrs(self):
         #with self._odr_lk:
         return dict(self.open_odrs)
+
+    def get_fill_odrs(self):
+        #with self._odr_lk:
+        return dict(self.fill_odrs)
+
+    def get_accnt_balance(self):
+        #with self._odr_lk:
+        return list((self.pfo.CashBalance, self.pfo.timeStamp))
 
     def terminate(self):
         if self._sts:
