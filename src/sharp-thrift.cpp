@@ -231,14 +231,19 @@ public:
 		}
 	}
 
-	void addToWatchList(const std::vector<std::string> & wl){
-		protect( [this, &wl](){
+	void addToWatchList(std::vector<int32_t> & _return, const std::vector<std::string> & wl){
+		protect( [this, &_return, &wl](){
 			trader.addToWatchList(wl);
+			_return.push_back(1);
 			for( unsigned i = 0; i < trader.watch_list.bucket_count(); ++i){
 				if(trader.watch_list.bucket_size(i) > 1){
+					_return.push_back(0);
 					LOG(warning)<<"Some bucket has more than 1 element, don't call removeFromWatchList().";
+					break;
 				}
 			}
+			if(_return.size() < 2)_return.push_back(1);
+			return;
 		} );
 	}
 

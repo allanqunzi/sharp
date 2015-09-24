@@ -216,7 +216,9 @@ service Sharp{
     list<ExecutedContract> reqExecutions(1:required ExecutionFilter ef) throws (1:Exception e);
 
     void reqRealTimeBars() throws (1:Exception e);
-    void addToWatchList(1:required list<string> wl) throws (1:Exception e);
+    // two-element list, the first element, 1 or 0; the second element: 1 or 0, meaning if
+    // the unordered_map has more than one element in any bucket
+    list<i32> addToWatchList(1:required list<string> wl) throws (1:Exception e);
     void removeFromWatchList(1:required list<string> rm) throws (1:Exception e);
     void removeZombieSymbols(1:required list<string> rm) throws (1:Exception e);
     RealTimeBar getNextBar(1:required string symbol) throws (1:Exception e);

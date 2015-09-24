@@ -271,6 +271,8 @@ class LiveTrader(BaseTrader):
         self.open_odrs = self._mgr.dict()
         self.fill_odrs = self._mgr.dict()
         self._odr_lk = mp.Lock()
+        self._rm_flag = True
+        self._terminated = False
 
     def trade(self):
         if self._sts:
@@ -316,33 +318,41 @@ class LiveTrader(BaseTrader):
             return False
 
     def removeFromWatchList(self, symbols):
-        if self.futurelist and self._sts:
-            if self._remove_wl(symbols):
-                #with self._odr_lk:
-                #    self._clients[0].removeFromWatchList(self.wl)
-                to_be_removed = []
-                for k, v in self._new_wl_dict.items():
-                    old_list = self._dict[k]
-                    to_be_removed.extend(v)
-                    for item in v:
-                        old_list.remove(item)
-                    self._dict[k] = old_list
-                time.sleep(2) # make sure getNextBar() is no longer called
-                with self._odr_lk:
-                    self._clients[0].removeFromWatchList(to_be_removed)
-                return True
-            else:
-                return False
-        else:
+        if not self.futurelist:
             logger.error("futurelist = False, you have promised not to "
-                        "remove new symbols; or trade() is not running.")
+                        "remove new symbols;")
+            return False
+        if self._terminated:
+            logger.error("this trader is already terminated.")
+            return False
+        if (not self._rm_flag) and self._sts:
+            logger.error("To avoid data race, you should call stop()"
+                        " first before calling removeFromWatchList()")
+            return False
+        if self._remove_wl(symbols):
+            #with self._odr_lk:
+            #    self._clients[0].removeFromWatchList(self.wl)
+            to_be_removed = []
+            for k, v in self._new_wl_dict.items():
+                old_list = self._dict[k]
+                to_be_removed.extend(v)
+                for item in v:
+                    old_list.remove(item)
+                self._dict[k] = old_list
+            time.sleep(2) # make sure getNextBar() is no longer called
+            with self._odr_lk:
+                self._clients[0].removeFromWatchList(to_be_removed)
+            return True
+        else:
             return False
 
     def _pre_trade(self):
-        self._clients[0].addToWatchList(self.wl)
+        l = self._clients[0].addToWatchList(self.wl)
+        if l[1] == 0:
+            self._rm_flag = False
 
     def _post_trade(self):
-        self._clients[0].removeFromWatchList([])
+        self._clients[0].removeFromWatchList(self.wl)
 
     def get_open_odrs(self):
         #with self._odr_lk:
@@ -362,6 +372,7 @@ class LiveTrader(BaseTrader):
             return False
         for t in self._transports:
             t.close()
+        self._terminated = True
         return True
 
     def reqGlobalCancel(self): # better call this function when trade() is not running.

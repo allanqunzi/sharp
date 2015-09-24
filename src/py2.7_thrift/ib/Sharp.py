@@ -459,7 +459,7 @@ class Client(Iface):
      - wl
     """
     self.send_addToWatchList(wl)
-    self.recv_addToWatchList()
+    return self.recv_addToWatchList()
 
   def send_addToWatchList(self, wl):
     self._oprot.writeMessageBegin('addToWatchList', TMessageType.CALL, self._seqid)
@@ -480,9 +480,11 @@ class Client(Iface):
     result = addToWatchList_result()
     result.read(iprot)
     iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
     if result.e is not None:
       raise result.e
-    return
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "addToWatchList failed: unknown result");
 
   def removeFromWatchList(self, rm):
     """
@@ -991,7 +993,7 @@ class Processor(Iface, TProcessor):
     iprot.readMessageEnd()
     result = addToWatchList_result()
     try:
-      self._handler.addToWatchList(args.wl)
+      result.success = self._handler.addToWatchList(args.wl)
     except Exception, e:
       result.e = e
     oprot.writeMessageBegin("addToWatchList", TMessageType.REPLY, seqid)
@@ -2563,15 +2565,17 @@ class addToWatchList_args:
 class addToWatchList_result:
   """
   Attributes:
+   - success
    - e
   """
 
   thrift_spec = (
-    None, # 0
+    (0, TType.LIST, 'success', (TType.I32,None), None, ), # 0
     (1, TType.STRUCT, 'e', (Exception, Exception.thrift_spec), None, ), # 1
   )
 
-  def __init__(self, e=None,):
+  def __init__(self, success=None, e=None,):
+    self.success = success
     self.e = e
 
   def read(self, iprot):
@@ -2583,7 +2587,17 @@ class addToWatchList_result:
       (fname, ftype, fid) = iprot.readFieldBegin()
       if ftype == TType.STOP:
         break
-      if fid == 1:
+      if fid == 0:
+        if ftype == TType.LIST:
+          self.success = []
+          (_etype31, _size28) = iprot.readListBegin()
+          for _i32 in xrange(_size28):
+            _elem33 = iprot.readI32();
+            self.success.append(_elem33)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 1:
         if ftype == TType.STRUCT:
           self.e = Exception()
           self.e.read(iprot)
@@ -2599,6 +2613,13 @@ class addToWatchList_result:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
     oprot.writeStructBegin('addToWatchList_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.LIST, 0)
+      oprot.writeListBegin(TType.I32, len(self.success))
+      for iter34 in self.success:
+        oprot.writeI32(iter34)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
     if self.e is not None:
       oprot.writeFieldBegin('e', TType.STRUCT, 1)
       self.e.write(oprot)
@@ -2612,6 +2633,7 @@ class addToWatchList_result:
 
   def __hash__(self):
     value = 17
+    value = (value * 31) ^ hash(self.success)
     value = (value * 31) ^ hash(self.e)
     return value
 
@@ -2652,10 +2674,10 @@ class removeFromWatchList_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.rm = []
-          (_etype31, _size28) = iprot.readListBegin()
-          for _i32 in xrange(_size28):
-            _elem33 = iprot.readString();
-            self.rm.append(_elem33)
+          (_etype38, _size35) = iprot.readListBegin()
+          for _i39 in xrange(_size35):
+            _elem40 = iprot.readString();
+            self.rm.append(_elem40)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -2672,8 +2694,8 @@ class removeFromWatchList_args:
     if self.rm is not None:
       oprot.writeFieldBegin('rm', TType.LIST, 1)
       oprot.writeListBegin(TType.STRING, len(self.rm))
-      for iter34 in self.rm:
-        oprot.writeString(iter34)
+      for iter41 in self.rm:
+        oprot.writeString(iter41)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -2793,10 +2815,10 @@ class removeZombieSymbols_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.rm = []
-          (_etype38, _size35) = iprot.readListBegin()
-          for _i39 in xrange(_size35):
-            _elem40 = iprot.readString();
-            self.rm.append(_elem40)
+          (_etype45, _size42) = iprot.readListBegin()
+          for _i46 in xrange(_size42):
+            _elem47 = iprot.readString();
+            self.rm.append(_elem47)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -2813,8 +2835,8 @@ class removeZombieSymbols_args:
     if self.rm is not None:
       oprot.writeFieldBegin('rm', TType.LIST, 1)
       oprot.writeListBegin(TType.STRING, len(self.rm))
-      for iter41 in self.rm:
-        oprot.writeString(iter41)
+      for iter48 in self.rm:
+        oprot.writeString(iter48)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -3150,11 +3172,11 @@ class reqHistoricalData_result:
       if fid == 0:
         if ftype == TType.MAP:
           self.success = {}
-          (_ktype43, _vtype44, _size42 ) = iprot.readMapBegin()
-          for _i46 in xrange(_size42):
-            _key47 = iprot.readI64();
-            _val48 = iprot.readString();
-            self.success[_key47] = _val48
+          (_ktype50, _vtype51, _size49 ) = iprot.readMapBegin()
+          for _i53 in xrange(_size49):
+            _key54 = iprot.readI64();
+            _val55 = iprot.readString();
+            self.success[_key54] = _val55
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
@@ -3177,9 +3199,9 @@ class reqHistoricalData_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.MAP, 0)
       oprot.writeMapBegin(TType.I64, TType.STRING, len(self.success))
-      for kiter49,viter50 in self.success.items():
-        oprot.writeI64(kiter49)
-        oprot.writeString(viter50)
+      for kiter56,viter57 in self.success.items():
+        oprot.writeI64(kiter56)
+        oprot.writeString(viter57)
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
     if self.e is not None:
@@ -3438,12 +3460,12 @@ class reqStkPositions_result:
       if fid == 0:
         if ftype == TType.MAP:
           self.success = {}
-          (_ktype52, _vtype53, _size51 ) = iprot.readMapBegin()
-          for _i55 in xrange(_size51):
-            _key56 = iprot.readString();
-            _val57 = StkPosition()
-            _val57.read(iprot)
-            self.success[_key56] = _val57
+          (_ktype59, _vtype60, _size58 ) = iprot.readMapBegin()
+          for _i62 in xrange(_size58):
+            _key63 = iprot.readString();
+            _val64 = StkPosition()
+            _val64.read(iprot)
+            self.success[_key63] = _val64
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
@@ -3466,9 +3488,9 @@ class reqStkPositions_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.MAP, 0)
       oprot.writeMapBegin(TType.STRING, TType.STRUCT, len(self.success))
-      for kiter58,viter59 in self.success.items():
-        oprot.writeString(kiter58)
-        viter59.write(oprot)
+      for kiter65,viter66 in self.success.items():
+        oprot.writeString(kiter65)
+        viter66.write(oprot)
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
     if self.e is not None:
@@ -3594,12 +3616,12 @@ class reqOptPositions_result:
       if fid == 0:
         if ftype == TType.MAP:
           self.success = {}
-          (_ktype61, _vtype62, _size60 ) = iprot.readMapBegin()
-          for _i64 in xrange(_size60):
-            _key65 = iprot.readI64();
-            _val66 = OptPosition()
-            _val66.read(iprot)
-            self.success[_key65] = _val66
+          (_ktype68, _vtype69, _size67 ) = iprot.readMapBegin()
+          for _i71 in xrange(_size67):
+            _key72 = iprot.readI64();
+            _val73 = OptPosition()
+            _val73.read(iprot)
+            self.success[_key72] = _val73
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
@@ -3622,9 +3644,9 @@ class reqOptPositions_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.MAP, 0)
       oprot.writeMapBegin(TType.I64, TType.STRUCT, len(self.success))
-      for kiter67,viter68 in self.success.items():
-        oprot.writeI64(kiter67)
-        viter68.write(oprot)
+      for kiter74,viter75 in self.success.items():
+        oprot.writeI64(kiter74)
+        viter75.write(oprot)
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
     if self.e is not None:
@@ -3892,11 +3914,11 @@ class reqAccountUpdates_result:
       if fid == 0:
         if ftype == TType.MAP:
           self.success = {}
-          (_ktype70, _vtype71, _size69 ) = iprot.readMapBegin()
-          for _i73 in xrange(_size69):
-            _key74 = iprot.readString();
-            _val75 = iprot.readString();
-            self.success[_key74] = _val75
+          (_ktype77, _vtype78, _size76 ) = iprot.readMapBegin()
+          for _i80 in xrange(_size76):
+            _key81 = iprot.readString();
+            _val82 = iprot.readString();
+            self.success[_key81] = _val82
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
@@ -3919,9 +3941,9 @@ class reqAccountUpdates_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.MAP, 0)
       oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.success))
-      for kiter76,viter77 in self.success.items():
-        oprot.writeString(kiter76)
-        oprot.writeString(viter77)
+      for kiter83,viter84 in self.success.items():
+        oprot.writeString(kiter83)
+        oprot.writeString(viter84)
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
     if self.e is not None:
@@ -4077,12 +4099,12 @@ class reqPortfolio_result:
       if fid == 0:
         if ftype == TType.MAP:
           self.success = {}
-          (_ktype79, _vtype80, _size78 ) = iprot.readMapBegin()
-          for _i82 in xrange(_size78):
-            _key83 = iprot.readI64();
-            _val84 = Asset()
-            _val84.read(iprot)
-            self.success[_key83] = _val84
+          (_ktype86, _vtype87, _size85 ) = iprot.readMapBegin()
+          for _i89 in xrange(_size85):
+            _key90 = iprot.readI64();
+            _val91 = Asset()
+            _val91.read(iprot)
+            self.success[_key90] = _val91
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
@@ -4105,9 +4127,9 @@ class reqPortfolio_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.MAP, 0)
       oprot.writeMapBegin(TType.I64, TType.STRUCT, len(self.success))
-      for kiter85,viter86 in self.success.items():
-        oprot.writeI64(kiter85)
-        viter86.write(oprot)
+      for kiter92,viter93 in self.success.items():
+        oprot.writeI64(kiter92)
+        viter93.write(oprot)
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
     if self.e is not None:

@@ -25,7 +25,7 @@ class SharpIf {
   virtual void reqGlobalCancel() = 0;
   virtual void reqExecutions(std::vector<ExecutedContract> & _return, const ExecutionFilter& ef) = 0;
   virtual void reqRealTimeBars() = 0;
-  virtual void addToWatchList(const std::vector<std::string> & wl) = 0;
+  virtual void addToWatchList(std::vector<int32_t> & _return, const std::vector<std::string> & wl) = 0;
   virtual void removeFromWatchList(const std::vector<std::string> & rm) = 0;
   virtual void removeZombieSymbols(const std::vector<std::string> & rm) = 0;
   virtual void getNextBar(RealTimeBar& _return, const std::string& symbol) = 0;
@@ -96,7 +96,7 @@ class SharpNull : virtual public SharpIf {
   void reqRealTimeBars() {
     return;
   }
-  void addToWatchList(const std::vector<std::string> & /* wl */) {
+  void addToWatchList(std::vector<int32_t> & /* _return */, const std::vector<std::string> & /* wl */) {
     return;
   }
   void removeFromWatchList(const std::vector<std::string> & /* rm */) {
@@ -1347,15 +1347,16 @@ class Sharp_addToWatchList_pargs {
 };
 
 typedef struct _Sharp_addToWatchList_result__isset {
-  _Sharp_addToWatchList_result__isset() : e(false) {}
+  _Sharp_addToWatchList_result__isset() : success(false), e(false) {}
+  bool success :1;
   bool e :1;
 } _Sharp_addToWatchList_result__isset;
 
 class Sharp_addToWatchList_result {
  public:
 
-  static const char* ascii_fingerprint; // = "0A23AF95FD017F7C6C78570E7E17112A";
-  static const uint8_t binary_fingerprint[16]; // = {0x0A,0x23,0xAF,0x95,0xFD,0x01,0x7F,0x7C,0x6C,0x78,0x57,0x0E,0x7E,0x17,0x11,0x2A};
+  static const char* ascii_fingerprint; // = "85B890866CB92B3F2297CB1464724D63";
+  static const uint8_t binary_fingerprint[16]; // = {0x85,0xB8,0x90,0x86,0x6C,0xB9,0x2B,0x3F,0x22,0x97,0xCB,0x14,0x64,0x72,0x4D,0x63};
 
   Sharp_addToWatchList_result(const Sharp_addToWatchList_result&);
   Sharp_addToWatchList_result& operator=(const Sharp_addToWatchList_result&);
@@ -1363,14 +1364,19 @@ class Sharp_addToWatchList_result {
   }
 
   virtual ~Sharp_addToWatchList_result() throw();
+  std::vector<int32_t>  success;
   Exception e;
 
   _Sharp_addToWatchList_result__isset __isset;
+
+  void __set_success(const std::vector<int32_t> & val);
 
   void __set_e(const Exception& val);
 
   bool operator == (const Sharp_addToWatchList_result & rhs) const
   {
+    if (!(success == rhs.success))
+      return false;
     if (!(e == rhs.e))
       return false;
     return true;
@@ -1388,18 +1394,20 @@ class Sharp_addToWatchList_result {
 };
 
 typedef struct _Sharp_addToWatchList_presult__isset {
-  _Sharp_addToWatchList_presult__isset() : e(false) {}
+  _Sharp_addToWatchList_presult__isset() : success(false), e(false) {}
+  bool success :1;
   bool e :1;
 } _Sharp_addToWatchList_presult__isset;
 
 class Sharp_addToWatchList_presult {
  public:
 
-  static const char* ascii_fingerprint; // = "0A23AF95FD017F7C6C78570E7E17112A";
-  static const uint8_t binary_fingerprint[16]; // = {0x0A,0x23,0xAF,0x95,0xFD,0x01,0x7F,0x7C,0x6C,0x78,0x57,0x0E,0x7E,0x17,0x11,0x2A};
+  static const char* ascii_fingerprint; // = "85B890866CB92B3F2297CB1464724D63";
+  static const uint8_t binary_fingerprint[16]; // = {0x85,0xB8,0x90,0x86,0x6C,0xB9,0x2B,0x3F,0x22,0x97,0xCB,0x14,0x64,0x72,0x4D,0x63};
 
 
   virtual ~Sharp_addToWatchList_presult() throw();
+  std::vector<int32_t> * success;
   Exception e;
 
   _Sharp_addToWatchList_presult__isset __isset;
@@ -2670,9 +2678,9 @@ class SharpClient : virtual public SharpIf {
   void reqRealTimeBars();
   void send_reqRealTimeBars();
   void recv_reqRealTimeBars();
-  void addToWatchList(const std::vector<std::string> & wl);
+  void addToWatchList(std::vector<int32_t> & _return, const std::vector<std::string> & wl);
   void send_addToWatchList(const std::vector<std::string> & wl);
-  void recv_addToWatchList();
+  void recv_addToWatchList(std::vector<int32_t> & _return);
   void removeFromWatchList(const std::vector<std::string> & rm);
   void send_removeFromWatchList(const std::vector<std::string> & rm);
   void recv_removeFromWatchList();
@@ -2888,13 +2896,14 @@ class SharpMultiface : virtual public SharpIf {
     ifaces_[i]->reqRealTimeBars();
   }
 
-  void addToWatchList(const std::vector<std::string> & wl) {
+  void addToWatchList(std::vector<int32_t> & _return, const std::vector<std::string> & wl) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->addToWatchList(wl);
+      ifaces_[i]->addToWatchList(_return, wl);
     }
-    ifaces_[i]->addToWatchList(wl);
+    ifaces_[i]->addToWatchList(_return, wl);
+    return;
   }
 
   void removeFromWatchList(const std::vector<std::string> & rm) {

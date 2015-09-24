@@ -72,7 +72,7 @@ class SharpHandler : virtual public SharpIf {
     printf("reqRealTimeBars\n");
   }
 
-  void addToWatchList(const std::vector<std::string> & wl) {
+  void addToWatchList(std::vector<int32_t> & _return, const std::vector<std::string> & wl) {
     // Your implementation goes here
     printf("addToWatchList\n");
   }
