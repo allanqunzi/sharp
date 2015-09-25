@@ -363,7 +363,7 @@ class LiveTrader(BaseTrader):
         return dict(self.fill_odrs)
 
     def get_accnt_balance(self):
-        #with self._odr_lk:
+        with self._odr_lk:
         return list((self.pfo.CashBalance, self.pfo.timeStamp))
 
     def terminate(self):
@@ -446,4 +446,8 @@ if __name__ == '__main__':
     acct = 'DU224610'
     naive_strategy = strategy.NaiveStrategy()
     trader = LiveTrader(acct, naive_strategy, watchlist)
+'''
+
+'''
+TODO - how to use lock for self._clients[0] which is processing the queue and python interpreter at the same time.
 '''
