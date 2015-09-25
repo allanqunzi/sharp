@@ -364,7 +364,7 @@ class LiveTrader(BaseTrader):
 
     def get_accnt_balance(self):
         with self._odr_lk:
-        return list((self.pfo.CashBalance, self.pfo.timeStamp))
+            return list((self.pfo.CashBalance, self.pfo.timeStamp))
 
     def terminate(self):
         if self._sts:
